@@ -1,0 +1,10 @@
+python bayes-losvd_run.py -f ../preproc_data/testcase_Gaussian_Mixed_SNR50-No_prior.hdf5   -i 2500 -c 3   -p 1
+python bayes-losvd_run.py -f ../preproc_data/testcase_Gaussian_Mixed_SNR50-Border1.hdf5    -i 2500 -c 3   -p 1
+python bayes-losvd_run.py -f ../preproc_data/testcase_Gaussian_Mixed_SNR50-Border2.hdf5    -i 2500 -c 3   -p 1
+python bayes-losvd_run.py -f ../preproc_data/testcase_Gaussian_Mixed_SNR50-Border3.hdf5    -i 2500 -c 3   -p 1
+python bayes-losvd_run.py -f ../preproc_data/testcase_Gaussian_Mixed_SNR50-Border4.hdf5    -i 2500 -c 3   -p 1
+python bayes-losvd_run.py -f ../preproc_data/testcase_Gaussian_Mixed_SNR100-No_prior.hdf5  -i 2500 -c 3   -p 1
+python bayes-losvd_run.py -f ../preproc_data/testcase_Gaussian_Mixed_SNR100-Border1.hdf5   -i 2500 -c 3   -p 1
+python bayes-losvd_run.py -f ../preproc_data/testcase_Gaussian_Mixed_SNR100-Border2.hdf5   -i 2500 -c 3   -p 1
+python bayes-losvd_run.py -f ../preproc_data/testcase_Gaussian_Mixed_SNR100-Border3.hdf5   -i 2500 -c 3   -p 1
+python bayes-losvd_run.py -f ../preproc_data/testcase_Gaussian_Mixed_SNR100-Border4.hdf5   -i 2500 -c 3   -p 1

@@ -1,0 +1,10 @@
+data/
+results*/
+scripts/stan_model/cache*.pkl
+scripts/stan_model/old/
+preproc_data/
+sync_denso.sh
+sync_deimos.sh
+paper_figures/
+.excludes
+
