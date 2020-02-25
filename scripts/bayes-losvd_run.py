@@ -63,8 +63,11 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
         struct = h5py.File("../preproc_data/"+runname+".hdf5","r")
         if (struct['in/border'] == 0):
            codefile = 'stan_model/bayes-losvd_model_no_regularisation.stan'
-        else:
+        elif (struct['in/border'] > 0):
            codefile = 'stan_model/bayes-losvd_model_Bsplines.stan'
+        elif (struct['in/border'] < 0):
+           codefile = 'stan_model/bayes-losvd_model_Bsplines_penalised.stan'
+
         if not os.path.exists(codefile):
            misc.printFAILED(codefile+" does not exist.")
            exit()
@@ -94,9 +97,10 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
                 'sigma_obs':     np.array(struct['in/sigma_obs'][:,idx]), 
                 'templates':     np.array(struct['in/templates']),
                 'mean_template': np.array(struct['in/mean_template']),
-                'spline_degree': np.array(struct['in/border']),
-                'xvel':          -1.0*np.array(struct['in/xvel'])}
-        
+                'spline_degree': np.abs(np.array(struct['in/border']))-1,
+                'xvel':          np.array(struct['in/xvel']),
+                'num_knots':     np.array(struct['in/nvel'])}
+     
         # Running the model
         with open(codefile, 'r') as myfile:
            code = myfile.read()
@@ -118,12 +122,13 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
         print("")
         print("# Saving Stan summary: "+summary_filename)         
         unwanted = {'spec','conv_spec','poly','bestfit','a','losvd_'}
-        misc.save_stan_summary(fit, unwanted=unwanted, verbose=verbose,summary_filename=summary_filename)
+        misc.save_stan_summary(fit, unwanted=unwanted, verbose=verbose, summary_filename=summary_filename)
 
         # Processing output and saving results
         print("")
         print("# Processing and saving results: "+outhdf5)
-        misc.process_stan_output(struct,samples,outhdf5,stridx)
+        # misc.process_stan_output_per(struct,samples,outhdf5,stridx)
+        misc.process_stan_output_hdp(struct,samples,outhdf5,stridx)
 
         # Creating diagnostic plots
         if (save_plots == True):

@@ -21,12 +21,6 @@ def create_testdata(tab, idx):
     losvd_file = '../losvd/'+tab['LOSVD_FILE'][idx]
     outfits    = '../data/'+tab['OUTNAME'][idx]
 
-    # print("# Preparing testcase: ")
-    # print("")
-    # print("  - Filename: "+filename)
-    # print("  - SNR:      "+str(snr))
-    # print("  - LOSVD:    "+losvd_file)
-
     # Reading the input spectrum
     hdu   = fits.open(filename)
     hdr   = hdu[0].header
@@ -47,17 +41,13 @@ def create_testdata(tab, idx):
     lspec, lwave, dummy = cap.log_rebin(lamRange, spec, velscale=velscale)
 
     # Convolving the input spectrum with the LOSVD
-    lspec_conv = convolve(lspec, losvd, boundary='fill', fill_value=0.0)
-
-    # Rebinning back to linear space
-    lamRange = np.array([np.amin(lwave),np.amax(lwave)])
-    spec, wave = misc.log_unbinning(lamRange,lspec_conv, flux=False)
-    npix = wave.shape[0]
+    lspec = convolve(lspec, losvd, boundary='fill', fill_value=0.0)
+    npix  = lwave.shape[0]
 
     # Estimating noise based on SNR and adding it
-    sig   = (1.0/snr)
-    espec = sig*np.ones_like(spec)
-    spec  = spec + np.random.normal(loc=0.0,scale=sig,size=len(spec))
+    sig    = (1.0/snr)
+    lespec = sig*np.ones_like(lspec)
+    lspec  = lspec + np.random.normal(loc=0.0,scale=sig,size=len(lspec))
 
     if not os.path.exists("../data"):
           os.mkdir("../data")
@@ -66,9 +56,9 @@ def create_testdata(tab, idx):
     
     print("  - Saving result: "+outfits)
     print("")
-    c1 = fits.Column(name='WAVE',  format='D', array=wave)
-    c2 = fits.Column(name='SPEC',  format='D', array=spec)
-    c3 = fits.Column(name='ESPEC', format='D', array=espec)
+    c1 = fits.Column(name='WAVE',  format='D', array=lwave)
+    c2 = fits.Column(name='SPEC',  format='D', array=lspec)
+    c3 = fits.Column(name='ESPEC', format='D', array=lespec)
     t  = fits.BinTableHDU.from_columns([c1, c2, c3])
     t.writeto(outfits)
     fits.setval(outfits, 'VELSCALE', value=velscale)

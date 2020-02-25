@@ -33,10 +33,10 @@ def load_templates(struct,idx,data_struct):
    print(" - "+str(ntemp)+" templates found in "+temp_name+" library")
 
    hdu  = fits.open(list[0])
-   tmp  = hdu[0].data
+   tmp  = np.ravel(hdu[0].data)
    hdr  = hdu[0].header
    wave = hdr['CRVAL1']+np.arange(len(tmp))*hdr['CDELT1']
-   dwav = wave[1]-wave[0]
+   dwav = hdr['CDELT1']
    
    # Defining pixels to cut in wavelength as the input +-50A either side
    # This avoids border effects when convolving the templates to the data LSF
@@ -56,7 +56,7 @@ def load_templates(struct,idx,data_struct):
         
        # Reading, trimming and scaling the spectra 
        hdu        = fits.open(list[i])
-       tmp        = hdu[0].data
+       tmp        = np.ravel(hdu[0].data)
        temp[:,i]  = tmp[idx]
        scale[i]   = np.mean(temp[:,i])
        temp[:,i] /= scale[i]       
@@ -74,6 +74,13 @@ def load_templates(struct,idx,data_struct):
    print("  "+str(npca)+" PCA components explain {:7.3f}".format(cumsum_pca_variance[npca]*100)+"% of the variance in the input library")
    pca_models = np.zeros((npix,npca))
    pca_models = PC_tmp[:,0:npca]
+
+
+#    plt.semilogy(cumsum_pca_variance,'.-')
+#    plt.axhline(y=0.9999,color='k')
+#    plt.axhline(y=0.9998,color='k')
+#    plt.show()
+#    exit()
 
    # Z-score Normalization to aid in the minimization
    for i in range(npca):

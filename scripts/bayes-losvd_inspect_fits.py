@@ -38,10 +38,11 @@ def run_inspect_fits(filename,idx, losvd_file=None, norm=0, save=0):
    losvd    = np.array(f['out/'+stridx+'/losvd'])
    poly     = np.array(f['out/'+stridx+'/poly'])+1.0
    nbins    = len(xbin)
-
+  
    # Normalizing LOSVDs if requested ----------------------------------------------------------
    if (norm == 1):
-      norm_factor = np.trapz(losvd[2,:],-xvel)
+      # norm_factor = np.trapz(losvd[2,:],-xvel)
+      norm_factor = np.sum(losvd[2,:])
       for i in range(5):
           losvd[i,:] /= norm_factor              
 
@@ -66,10 +67,23 @@ def run_inspect_fits(filename,idx, losvd_file=None, norm=0, save=0):
    ax1.fill_between(xvel,losvd[1,:],losvd[3,:], color='blue', alpha=0.50, step='mid')
    ax1.plot(xvel,losvd[2,:],'k.-', ds='steps-mid')
    if not (losvd_file == None):
-      ax1.plot(input_xvel, input_losvd/np.trapz(input_losvd,input_xvel),'r.-', ds='steps-mid') 
+      ax1.plot(input_xvel, input_losvd,'r.-', ds='steps-mid') 
    ax1.axhline(y=0.0,color='k', linestyle='--')
    ax1.axvline(x=0.0, color='k', linestyle=":")
    ax1.set_xlabel("Velocity (km s$^{-1}$)")
+
+   # from astropy.modeling import models, fitting
+   # g_init = models.Gaussian1D(amplitude=1., mean=0, stddev=100.)
+   # fit_g = fitting.LevMarLSQFitter()
+   # g = fit_g(g_init, xvel, losvd[2,:])
+   # ax1.plot(xvel,g(xvel))
+   # print(g)
+
+   # fit_g = fitting.LevMarLSQFitter()
+   # g = fit_g(g_init, input_xvel, input_losvd)
+   # ax1.plot(input_xvel,g(input_xvel))
+   # print(g)
+
 
    # Spectral fit
    mx  = 1.1*np.amax(spec_obs)

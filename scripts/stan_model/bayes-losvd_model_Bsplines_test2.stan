@@ -120,10 +120,11 @@ data {
 }
 //=============================================================================
 transformed data{
-
+  
   // Building the Legendre polynomials
-  vector[npix_obs]          vect     = create_vector(npix_obs);
-  vector[npix_obs]          scl_vect = scale_vector(vect,npix_obs);
+  real                      dvel     = fabs(xvel[2]-xvel[1]);
+  vector[npix_obs]          vect1    = create_vector(npix_obs);
+  vector[npix_obs]          scl_vect = scale_vector(vect1,npix_obs);
   matrix[npix_obs,porder+1] leg_pols = legendre(scl_vect,porder,npix_obs);
 
   // Building the B-Splines
@@ -137,42 +138,50 @@ transformed data{
 
   ext_knots_temp = append_row(rep_vector(knots[1], spline_degree), knots);
   ext_knots      = append_row(ext_knots_temp, rep_vector(knots[num_knots], spline_degree));
-  for (ind in 1:num_basis)
+  for (ind in 1:num_basis){
     B[ind,:] = to_row_vector(build_b_spline(to_array_1d(xvel), to_array_1d(ext_knots), ind, spline_degree + 1));
+  }
   B[num_knots + spline_degree - 1, nvel] = 1;
   B_transposed = B';
-
+  
 }    
 //=============================================================================
 parameters {
 
   // Parameters for main model
-  vector<lower=-2.0,upper=2.0>[ntemp]    weights;  // Weights for each PC component 
-  vector<lower=-2.0,upper=2.0>[porder+1] coefs;    // Coefficients of the Legendre polynomials
-  simplex[num_basis]                     a;        // B-splines coefficients
+  vector<lower=-2.0,upper=2.0>[ntemp]        weights;     // Weights for each PC component 
+  vector<lower=-2.0,upper=2.0>[porder+1]     coefs;       // Coefficients of the Legendre polynomials
+  simplex[num_basis]                         a;           // B-splines coefficients
+  real<lower=-3.0,upper=20.0>                log10_alpha; // Smoothing parameter
  
 }
 //=============================================================================
 transformed parameters {
 
-  vector<lower=0.0>[nvel] losvd_ = B_transposed*a;       // B-splines LOSVD
-  simplex[nvel]           losvd  = losvd_ / sum(losvd_);  // Normalised LOSVD                   
+  vector<lower=0.0>[nvel] losvd_ =  B_transposed*a;       // B-splines LOSVD
+  simplex[nvel]           losvd  = losvd_ / sum(losvd_);  // Normalised LOSVD  
 
 }
 //=============================================================================
 model {
 
-  // Defining model  
+  // Defining the model  
   vector[npix_temp] spec       = mean_template + templates * weights;       
   vector[npix_obs]  conv_spec  = convolve_data(spec,losvd,npix_temp,nvel);
   vector[npix_obs]  model_spec = leg_pols * coefs + conv_spec;
+  real lp = 0.0;  // Variable that will contain the penalty term
 
   // Weakly informative priors on PCA weights, Leg. and B-splines coefficients
-  weights ~ normal(0.0,1.0);
-  coefs   ~ normal(0.0,1.0);
-
+  weights     ~ normal(0.0,1.0);
+  coefs       ~ normal(0.0,1.0);
+  log10_alpha ~ normal(12.0,1.0);
+  
   // Inference
   spec_obs[mask] ~ normal(model_spec[mask],sigma_obs[mask]);
+  for (i in 2:nvel-2){
+    lp += square(-log(losvd[i-1]) + 3*log(losvd[i]) - 3*log(losvd[i+1]) + log(losvd[i+2])); 
+  }
+  target += -1.0*pow(10.0,log10_alpha) * pow(dvel,-5.0) * lp;
 
 }
 //=============================================================================

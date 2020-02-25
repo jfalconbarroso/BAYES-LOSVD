@@ -2,6 +2,7 @@ import os
 import sys
 import glob
 import h5py
+import arviz                 as az
 import numpy                 as np
 import matplotlib.pyplot     as plt
 from   astropy.io            import fits, ascii
@@ -215,7 +216,7 @@ def save_stan_chains(samples, chains_filename=None):
 
     return
 #==============================================================================
-def process_stan_output(struct, samples, outhdf5=None, stridx=None):
+def process_stan_output_per(struct, samples, outhdf5=None, stridx=None):
 
     lims = [0.1,15.9,50.0,84.1,99.9] # Saving 1-sigma, 3-sigma, and median
 
@@ -230,7 +231,7 @@ def process_stan_output(struct, samples, outhdf5=None, stridx=None):
     if not (struct.get('out') == None):
        struct.copy('out',f)
     #------------
-    for key, val in samples.items():
+    for key in samples.keys():
         if np.ndim(samples[key]) == 1:
            result = np.percentile(np.array(samples[key]), q=lims)
         elif np.ndim(samples[key]) > 1:
@@ -243,6 +244,65 @@ def process_stan_output(struct, samples, outhdf5=None, stridx=None):
 
     return
 
+#==============================================================================
+def process_stan_output_hdp(struct, samples, outhdf5=None, stridx=None):
+
+    lims = [0.50, 0.68, 0.999] # Saving 1-sigma, 3-sigma, and median
+
+    if os.path.exists(outhdf5):
+       os.remove(outhdf5)
+
+    f = h5py.File(outhdf5, "w")
+    #------------
+    struct.copy('in',f)
+
+    # If structure already contains results from a previous step, copy results also
+    if not (struct.get('out') == None):
+       struct.copy('out',f)
+    #------------
+    for key in samples.keys():
+        result = compute_hdp(np.array(samples[key]), lims)
+        if not (key == 'lp__'):
+           f.create_dataset("out/"+stridx+"/"+key, data=result, compression="gzip")
+    #------------
+    f.close()
+
+    return
+#==============================================================================
+def compute_hdp(samples,lims):
+    
+    ndim = np.ndim(samples)
+    if ndim == 1:
+       result = np.zeros(5)
+    else:
+       size   = samples.shape 
+       result = np.zeros((5,size[1]))
+
+    if ndim == 1:
+       for i in range(len(lims)):
+           kk = az.hpd(samples, credible_interval=lims[i])
+           if i == 0:
+               result[2] = np.mean(kk)
+           elif i == 1:
+               result[1] = kk[0]
+               result[3] = kk[1]
+           elif i == 2:
+               result[0] = kk[0]
+               result[4] = kk[1]
+    else:
+       for j in range(size[1]): 
+           for i in range(len(lims)):
+               kk = az.hpd(samples[:,j], credible_interval=lims[i])
+               if i == 0:
+                   result[2,j] = np.mean(kk)
+               elif i == 1:
+                   result[1,j] = kk[0]
+                   result[3,j] = kk[1]
+               elif i == 2:
+                   result[0,j] = kk[0]
+                   result[4,j] = kk[1]
+
+    return result
 #==============================================================================
 def delete_files(inputfile, extension=None):
 

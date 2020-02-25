@@ -174,7 +174,7 @@ def load_data(struct,idx):
    npix_log = len(dummy)
    lspec, lespec = np.zeros([npix_log,nbins]), np.zeros([npix_log,nbins])
    
-   for i in range(0, nbins):
+   for i in range(nbins):
        
       #Log-rebinning the spectra 
       lspec[:,i],  dummy , dummy = cap.log_rebin(lamRange, bin_spec[:,i],  velscale=velscale)

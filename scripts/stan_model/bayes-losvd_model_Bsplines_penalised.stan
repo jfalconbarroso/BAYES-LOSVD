@@ -150,6 +150,7 @@ parameters {
   vector<lower=-2.0,upper=2.0>[ntemp]    weights;  // Weights for each PC component 
   vector<lower=-2.0,upper=2.0>[porder+1] coefs;    // Coefficients of the Legendre polynomials
   simplex[num_basis]                     a;        // B-splines coefficients
+  real<lower=0.0>                        sigma;    // Smoothing for RW prior           
  
 }
 //=============================================================================
@@ -170,6 +171,9 @@ model {
   // Weakly informative priors on PCA weights, Leg. and B-splines coefficients
   weights ~ normal(0.0,1.0);
   coefs   ~ normal(0.0,1.0);
+  sigma   ~ cauchy(0.0,1.0);
+  a[1]    ~ normal(0.0,sigma);
+  a[2:num_basis-1] ~ normal(a[1:(num_basis-2)],sigma);
 
   // Inference
   spec_obs[mask] ~ normal(model_spec[mask],sigma_obs[mask]);

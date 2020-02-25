@@ -13,7 +13,6 @@ def load_testdata(struct,idx):
    targ_snr   = struct['SNR'][idx]
    lmin       = struct['Lmin'][idx]
    lmax       = struct['Lmax'][idx]
-   redshift   = struct['Redshift'][idx]
    porder     = struct['Porder'][idx]
    border     = struct['Border'][idx]
    vmax       = struct['Vmax'][idx]
@@ -27,40 +26,40 @@ def load_testdata(struct,idx):
    hdr  = hdu[0].header
    data = hdu[1].data
    #---------------------------
-   spec     = data['SPEC']
-   espec    = data['ESPEC']
-   wave     = data['WAVE']
-   npix     = spec.shape[0]
-   nspec    = 1
-   nbins    = 1
+   lspec  = data['SPEC']
+   lespec = data['ESPEC']
+   lwave  = data['WAVE']
+   npix   = lspec.shape[0]
+   nspec  = 1
+   nbins  = 1
 
-   # Correcting the data for redshift
-   print(" - Correcting data for redshift")
-   wave /= (1.0 + redshift)
-   
    # Checking the desired wavelength range is within data wavelength limits
-   if (wave[0] > lmin):
-       lmin = wave[0]
-   if (wave[-1] < lmax):
-       lmax = wave[-1]
+   if (np.exp(lwave[0]) > lmin):
+       lmin = np.exp(lwave[0])
+   if (np.exp(lwave[-1]) < lmax):
+       lmax = np.exp(lwave[-1])
 
    # Cutting the data to the desired wavelength range
    print(" - Cutting data to desired wavelength range")
-   idx   = (wave >= lmin) & (wave <= lmax)
-   wave  = wave[idx]
-   spec  = spec[idx]
-   espec = espec[idx]
+   idx   = (np.exp(lwave) >= lmin) & (np.exp(lwave) <= lmax)
+   lwave  = lwave[idx]
+   lspec  = lspec[idx]
+   lespec = lespec[idx]
    npix  = np.sum(idx)
       
    # SNR 
    bin_snr = hdr['SNR']
             
-   # Log-rebinning the data to the input Velscale
-   print(" - Log-rebinning and normalizing the spectra")
-   lamRange = np.array([np.amin(wave),np.amax(wave)])
-   lspec,  lwave,   _    = cap.log_rebin(lamRange, spec,  velscale=velscale)
-   lespec, dummy , dummy = cap.log_rebin(lamRange, espec, velscale=velscale)
+#    # Log-rebinning the data to the input Velscale
+#    print(" - Log-rebinning and normalizing the spectra")
+#    lamRange = np.array([np.amin(wave),np.amax(wave)])
+#    lspec,  lwave,   _    = cap.log_rebin(lamRange, spec,  velscale=velscale)
+#    lespec, dummy , dummy = cap.log_rebin(lamRange, espec, velscale=velscale)
    npix_log = len(lspec)
+
+   # Normalizing the observed and error spectra respecting the SNR of each bin
+   lespec /= np.nanmedian(lspec)
+   lspec  /= np.nanmedian(lspec) 
 
    # Defining the mask
    print(" - Defining the data mask")
@@ -80,7 +79,7 @@ def load_testdata(struct,idx):
                   'spec_obs':  lspec.reshape(len(lspec),1),
                   'sigma_obs': lespec.reshape(len(lespec),1),
                   'wave_obs':  lwave,
-                  'wave':      wave,
+                #   'wave':      wave,
                   'velscale':  velscale,
                   'mask':      np.ravel(mask),
                   'nmask':     len(mask),
