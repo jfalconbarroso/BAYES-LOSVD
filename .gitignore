@@ -5,6 +5,6 @@ scripts/stan_model/old/
 preproc_data/
 sync_denso.sh
 sync_deimos.sh
-paper_figures/
+analysis_scripts/
 .excludes
 

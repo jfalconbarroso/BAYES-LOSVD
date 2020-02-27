@@ -1,4 +1,10 @@
-python3 bayes-losvd_run.py -f ../preproc_data/NGC4210_WAVE3800.0-4550.0_VELSCALE60.0_SNR40.0_POL7.hdf5         -i 2500 -c 3 -p 1
-python3 bayes-losvd_run.py -f ../preproc_data/NGC4550_E3D_WAVE4825.0-5300.0_VELSCALE60.0_SNR150.0_POL6.hdf5    -i 2500 -c 3 -p 1
-python3 bayes-losvd_run.py -f ../preproc_data/FCC167_F3D_WAVE4750.0-5400.0_VELSCALE60.0_SNR200.0_POL7.hdf5     -i 2500 -c 3 -p 1
-python3 bayes-losvd_run.py -f ../preproc_data/NGC1300_TIMER_WAVE4750.0-5400.0_VELSCALE60.0_SNR200.0_POL7.hdf5  -i 2500 -c 3 -p 1
+python3 bayes-losvd_run.py -f ../preproc_data/NGC4550_SAURON-Border0.hdf5              -p 1 -b 0,169,189
+python3 bayes-losvd_run.py -f ../preproc_data/NGC4550_SAURON-free_Border1.hdf5         -p 1 -b 0,169,189
+python3 bayes-losvd_run.py -f ../preproc_data/NGC4550_SAURON-free_Border2.hdf5         -p 1 -b 0,169,189
+python3 bayes-losvd_run.py -f ../preproc_data/NGC4550_SAURON-free_Border3.hdf5         -p 1 -b 0,169,189
+python3 bayes-losvd_run.py -f ../preproc_data/NGC4550_SAURON-free_Border4.hdf5         -p 1 -b 0,169,189
+python3 bayes-losvd_run.py -f ../preproc_data/NGC4550_SAURON-penalised_Border1.hdf5    -p 1 -b 0,169,189
+python3 bayes-losvd_run.py -f ../preproc_data/NGC4550_SAURON-penalised_Border2.hdf5    -p 1 -b 0,169,189
+python3 bayes-losvd_run.py -f ../preproc_data/NGC4550_SAURON-penalised_Border3.hdf5    -p 1 -b 0,169,189
+python3 bayes-losvd_run.py -f ../preproc_data/NGC4550_SAURON-penalised_Border4.hdf5    -p 1 -b 0,169,189
+

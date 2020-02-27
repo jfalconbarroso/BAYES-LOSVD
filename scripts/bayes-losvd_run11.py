@@ -73,12 +73,12 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
            exit()
 
         # Defining output names and directories
-        outdir           = "../results/"+runname
-        pdf_filename     = outdir+"/"+runname+"_diagnostics_bin"+str(idx)+".pdf"
-        summary_filename = outdir+"/"+runname+"_Stan_summary_bin"+str(idx)+".txt"
-        chains_filename  = outdir+"/"+runname+"_chains_bin"+str(idx)+".hdf5"
-        sample_filename  = outdir+"/"+runname+"_progress_bin"+str(idx)+".csv"
-        outhdf5          = outdir+"/"+runname+"_results_bin"+str(idx)+".hdf5"
+        outdir           = "../results/"+runname+"_11"
+        pdf_filename     = outdir+"/"+runname+"_11_diagnostics_bin"+str(idx)+".pdf"
+        summary_filename = outdir+"/"+runname+"_11_Stan_summary_bin"+str(idx)+".txt"
+        chains_filename  = outdir+"/"+runname+"_11_chains_bin"+str(idx)+".hdf5"
+        sample_filename  = outdir+"/"+runname+"_11_progress_bin"+str(idx)+".csv"
+        outhdf5          = outdir+"/"+runname+"_11_results_bin"+str(idx)+".hdf5"
 
         if not os.path.exists("../results"):
            os.mkdir("../results")
@@ -99,7 +99,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
                 'mean_template': np.array(struct['in/mean_template']),
                 'spline_degree': np.abs(np.array(struct['in/border']))-1,
                 'xvel':          np.array(struct['in/xvel']),
-                'num_knots':     np.array(struct['in/nvel'])}
+                'num_knots':     11}
      
         # Running the model
         with open(codefile, 'r') as myfile:

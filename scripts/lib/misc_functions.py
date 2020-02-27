@@ -330,13 +330,25 @@ def pack_results(rootname,suffix=''):
 
     # Preparing outputfile
     outfile = "../results/"+rootname+"/"+rootname+suffix+"_results.hdf5"
+    if os.path.exists(outfile):
+       os.remove(outfile)
     g = h5py.File(outfile,'w')
 
+    print(" - Copying contents to output file")
     for infile in input_list:
-       f = h5py.File(infile,'r')        
+       f = h5py.File(infile,'r')
+
+       # Copying the input data       
        if (infile == input_list[0]):
           f.copy("in",g)
-       f.copy("out",g)
+       
+       # Copying the output results
+       members = []
+       f.visit(members.append)
+       for i in range(len(members)):
+           check = members[i].split("/")
+           if (check[0] == 'out') & (len(check) == 3):
+              f.copy(members[i],g,name=members[i])
        f.close()
     g.close()
 
@@ -358,7 +370,7 @@ def print_attrs(name,obj):
         print("    %s: %s" % (key, val))
  
     return
- 
+  
  #============================================================================== 
 def check_hdf5_tree(filename):
         
