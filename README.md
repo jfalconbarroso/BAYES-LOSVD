@@ -20,11 +20,11 @@ python bayes-losvd_preproc_data.py -c ../config_files/default.conf
 
 - Run code
 
-python bayes-losvd_run.py -r \<runname in config file\> -b <bin number or list> -v <verbose> -p <flag to save diagnostic plots> -s <flag to save chains>
+python bayes-losvd_run.py -r \<runname in config file\> -b \<bin number or list\> -v \<verbose\> -p \<flag to save diagnostic plots\> -s \<flag to save chains\>
 
 - Inspect results
 
-python bayes-losvd_inspect_fits.py -r <runname in config file> -b <bin number or list> -s <flag to save plot>
+python bayes-losvd_inspect_fits.py -r \<runname in config file\> -b \<bin number or list\> -s \<flag to save plot\>
 
 *Notes*
 
