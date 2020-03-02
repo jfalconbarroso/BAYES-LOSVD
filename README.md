@@ -15,6 +15,7 @@ python create_testdata.py -c ../config_files/default_testdata.conf
 - Preprocess data
 
 python bayes-losvd_preproc_data.py -c ../config_files/default_testcases.conf
+
 python bayes-losvd_preproc_data.py -c ../config_files/default.conf
 
 - Run code
