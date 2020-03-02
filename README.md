@@ -20,7 +20,7 @@ python bayes-losvd_preproc_data.py -c ../config_files/default.conf
 
 - Run code
 
-python bayes-losvd_run.py -r <runname in config file> -b <bin number or list> -v <verbose> -p <flag to save diagnostic plots> -s <flag to save chains>
+python bayes-losvd_run.py -r \<runname in config file\> -b <bin number or list> -v <verbose> -p <flag to save diagnostic plots> -s <flag to save chains>
 
 - Inspect results
 
@@ -28,8 +28,11 @@ python bayes-losvd_inspect_fits.py -r <runname in config file> -b <bin number or
 
 *Notes*
 
-You will see that results are stored differently in the results directory
-Data is sotred in HDF5 files with a different structure that allows to collect all the info of the individual bins into a single file
+You will see that results are stored differently in the results directory.
+
+Data is sotred in HDF5 files with a different structure that allows to collect all the info of the individual bins into a single file.
+
 The analysis scripts contains the scripts to generate the plots I've been sending you. It takes the results I've generated in the machine 'denso' at the IAC. You need to chage directory accordingly.
+
 
 
