@@ -324,6 +324,7 @@ def pack_results(rootname,suffix=''):
     if nlist == 0:
        print(" - Nothing to pack!")
        print("")
+       print("../results/"+rootname+"/"+rootname+suffix+"_results_bin*.hdf5")
        return 
     else:   
        print(" - "+str(nlist)+" files found.")

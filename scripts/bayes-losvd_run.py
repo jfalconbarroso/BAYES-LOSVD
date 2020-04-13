@@ -63,7 +63,8 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
         struct = h5py.File("../preproc_data/"+runname+".hdf5","r")
         if (np.array(struct['in/border']) == 0):
            codefile = 'stan_model/bayes-losvd_model_no_regularisation.stan'
-        #    codefile = 'stan_model/old/bayes-losvd_model_simplex_RW.stan'
+        elif (np.array(struct['in/border']) == -100):   
+           codefile = 'stan_model/bayes-losvd_model_simplex_RW.stan'
         elif (np.array(struct['in/border']) > 0):
            codefile = 'stan_model/bayes-losvd_model_Bsplines.stan'
         elif (np.array(struct['in/border']) < 0):

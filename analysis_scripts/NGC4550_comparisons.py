@@ -20,9 +20,9 @@ if (__name__ == '__main__'):
 
    for i in range(len(border)):
        
-       rname     = rootname+"-free_Border"+border[i]
+       rname     = rootname+"-free_Border"+border[i]+"_11"
        filename1 = outdir+rname+"/"+rname+"_results.hdf5"
-       rname     = rootname+"-penalised_Border"+border[i]
+       rname     = rootname+"-penalised_Border"+border[i]+"_11"
        filename2 = outdir+rname+"/"+rname+"_results.hdf5"
 
        f1 = h5py.File(filename1,'r')
@@ -57,4 +57,4 @@ if (__name__ == '__main__'):
    ax[0,-1].legend(fontsize=8)
 
 #    plt.show()   
-   fig.savefig("NGC4550_comparison.pdf",dpi=300)
+   fig.savefig("NGC4550_comparison_11.pdf",dpi=300)
