@@ -140,6 +140,8 @@ if (__name__ == '__main__'):
     parser.add_option("-l", "--losvd", dest="losvd",    type="str",    default=None,   help="(Optional) Filename of the input LOSVD")
     parser.add_option("-s", "--save",  dest="save",     type="int",    default=0,      help="(Optional) Save figure")
     parser.add_option("-n", "--norm",  dest="norm",     type="int",    default=0,      help="(Optional) Normalizing LOSVD")
+    parser.add_option("-d", "--dir",   dest="dir",      type="string", default='../results/', help="(Optional) The directory with results")
+
 
     (options, args) = parser.parse_args()
     runname    = options.runname
@@ -147,7 +149,8 @@ if (__name__ == '__main__'):
     losvd_file = options.losvd
     save       = options.save
     norm       = options.norm
-    filename   = "../results/"+runname+"/"+runname+"_results.hdf5"
+    dir        = options.dir
+    filename   = dir+runname+"/"+runname+"_results.hdf5"
 
     if not os.path.exists(filename):
        misc.printFAILED(filename+" does not exist.")

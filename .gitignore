@@ -6,4 +6,4 @@ preproc_data/
 sync_denso.sh
 sync_deimos.sh
 .excludes
-
+analysis_scripts/Figures/
