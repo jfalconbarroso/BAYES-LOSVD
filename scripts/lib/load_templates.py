@@ -64,44 +64,42 @@ def load_templates(struct,idx,data_struct):
        misc.printProgress(i+1, ntemp, suffix = 'Complete', barLength = 50) 
      
    # Running PCA on the input models
-   print(" - Running PCA on the templates...")
-   mean_temp = np.mean(temp,axis=1)
-   pca       = PCA(n_components=ntemp)
-   PC_tmp    = pca.fit_transform(temp)
+   if npca > 0:
+       print(" - Running PCA on the templates...")
+       mean_temp = np.mean(temp,axis=1)
+       pca       = PCA(n_components=ntemp)
+       PC_tmp    = pca.fit_transform(temp)
 
-   # Extracting the desired number of PCA components
-   cumsum_pca_variance = np.cumsum(pca.explained_variance_ratio_)
-   print("  "+str(npca)+" PCA components explain {:7.3f}".format(cumsum_pca_variance[npca]*100)+"% of the variance in the input library")
-   pca_models = np.zeros((npix,npca))
-   pca_models = PC_tmp[:,0:npca]
+       # Extracting the desired number of PCA components
+       cumsum_pca_variance = np.cumsum(pca.explained_variance_ratio_)
+       print("  "+str(npca)+" PCA components explain {:7.3f}".format(cumsum_pca_variance[npca]*100)+"% of the variance in the input library")
+       templates = np.zeros((npix,npca))
+       templates = PC_tmp[:,0:npca]
+       ntemplates = npca
 
+       # Z-score Normalization to aid in the minimization
+       for i in range(npca):
+          templates[:,i] /= np.std(templates[:,i])
+   else:
+       mean_temp  = np.zeros(npix)
+       templates  = temp
+       ntemplates = ntemp
 
-#    plt.semilogy(cumsum_pca_variance,'.-')
-#    plt.axhline(y=0.9999,color='k')
-#    plt.axhline(y=0.9998,color='k')
+#    fig, ax = plt.subplots(nrows=7,ncols=1, sharex=True, sharey=False, figsize=(8,8))    
+#    ax = ax.ravel()
+#    fig.subplots_adjust(left=0.1, bottom=0.1, right=0.98, top=0.98, wspace=0.0, hspace=0.0)
+#    col = ['blue','orange','green','red','magenta','brown']
+
+#    ax[0].plot(wave,mean_temp/np.std(mean_temp), color='black', label='Mean spectrum')
+#    ax[0].legend()
+#    for i in range(6):
+#        ax[i+1].plot(wave,templates[:,i],color=col[i], label='PC'+str(i+1))
+#        ax[i+1].set_xlim([4750.0,5450.0])
+#        ax[i+1].set_ylim([-3.5,5.9])
+#        ax[i+1].legend()
+#    ax[6].set_xlabel("Wavelength ($\mathrm{\AA}$)")    
 #    plt.show()
 #    exit()
-
-   # Z-score Normalization to aid in the minimization
-   for i in range(npca):
-      pca_models[:,i] /= np.std(pca_models[:,i])
-
-
-   #fig, ax = plt.subplots(nrows=7,ncols=1, sharex=True, sharey=False, figsize=(8,8))    
-   #ax = ax.ravel()
-   #fig.subplots_adjust(left=0.1, bottom=0.1, right=0.98, top=0.98, wspace=0.0, hspace=0.0)
-   #col = ['blue','orange','green','red','magenta','brown']
-
-   #ax[0].plot(wave,mean_temp/np.std(mean_temp), color='black', label='Mean spectrum')
-   #ax[0].legend()
-   #for i in range(6):
-       #ax[i+1].plot(wave,pca_models[:,i],color=col[i], label='PC'+str(i+1))
-       #ax[i+1].set_xlim([4750.0,5450.0])
-       #ax[i+1].set_ylim([-3.5,5.9])
-       #ax[i+1].legend()
-   #ax[6].set_xlabel("Wavelength ($\mathrm{\AA}$)")    
-   #plt.show()
-   #exit()
    
    # Convolving the templates to match the data's LSF
    if not (survey == 'TEST'):
@@ -113,9 +111,9 @@ def load_templates(struct,idx,data_struct):
       sigma_diff = fwhm_diff/2.355/dwav
   
       mean_temp = cap.gaussian_filter1d(mean_temp,sigma_diff)
-      for i in range(npca):
-         pca_models[:,i] = cap.gaussian_filter1d(pca_models[:,i], sigma_diff)  # convolution with variable sigma
-         misc.printProgress(i+1, npca, prefix = '   Progress:', suffix = 'Complete', barLength = 50) 
+      for i in range(ntemplates):
+         templates[:,i] = cap.gaussian_filter1d(templates[:,i], sigma_diff)  # convolution with variable sigma
+         misc.printProgress(i+1, ntemplates, prefix = '   Progress:', suffix = 'Complete', barLength = 50) 
    
 
    # Log-rebinning the PCA spectra using the data's velscale
@@ -123,10 +121,10 @@ def load_templates(struct,idx,data_struct):
    lamRange = np.array([np.amin(wave),np.amax(wave)])
    mean_temp, lwave, dummy = cap.log_rebin(lamRange, mean_temp, velscale=velscale)
    npix    = mean_temp.shape[0]
-   tmp_pca = np.zeros((npix,npca))
-   for i in range(npca):
-       tmp_pca[:,i], dummy, dummy = cap.log_rebin(lamRange, pca_models[:,i], velscale=velscale) 
-   pca_models = tmp_pca
+   tmp_temp = np.zeros((npix,ntemplates))
+   for i in range(ntemplates):
+       tmp_temp[:,i], dummy, dummy = cap.log_rebin(lamRange, templates[:,i], velscale=velscale) 
+   templates = tmp_temp
 
    # Cutting the templates so that only nvel/2 pixels are below the Lmin wavelength
    # This is the equivalent of zero-padding the spectra to center the LOSVD in the
@@ -139,28 +137,28 @@ def load_templates(struct,idx,data_struct):
       exit()
    idx        = (lwave >= lwave0) & (lwave <= lwave1)
    mean_temp  = mean_temp[idx]
-   pca_models = pca_models[idx,:]
+   templates  = templates[idx,:]
    lwave      = lwave[idx]
    npix_temp  = len(lwave)
    
    diff = npix_temp-(data_struct['npix_obs']+nvel-1)
    if (diff == -1):       
        mean_temp  = np.pad(mean_temp, pad_width=(0,1),         mode='edge')
-       pca_models = np.pad(pca_models,pad_width=((0,1),(0,0)), mode='edge')
+       templates = np.pad(templates,pad_width=((0,1),(0,0)), mode='edge')
        lwave      = np.pad(lwave, pad_width=(0,1), mode='constant', constant_values=lwave[-1]+(lwave[1]-lwave[0]))
        npix_temp  = len(lwave)       
    elif (diff == 1):
        mean_temp  = mean_temp[0:-2]
-       pca_models = pca_models[0:-2,:]
+       templates = templates[0:-2,:]
        lwave      = lwave[0:-2]
        npix_temp  = len(lwave)
              
    print(" - Storing everything in templates structure")
    struct = {'lwave_temp':    lwave,
              'mean_template': mean_temp,
-             'templates':     pca_models,
+             'templates':     templates,
              'npix_temp':     npix_temp,
-             'ntemp':         npca,
+             'ntemp':         ntemplates,
              'nvel':          nvel,
              'xvel':          xvel
             }

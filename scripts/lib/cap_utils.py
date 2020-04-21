@@ -805,10 +805,8 @@ def log_rebin(lamRange, spec, oversample=False, velscale=None, flux=False):
 #       MC, Lexington, 31 March 2015
 #   V2.0.3: Includes `width` keyword after suggestion by George Privon (Univ. Florida).
 #       MC, Oxford, 2 July 2018
-#   V3.0.0: New weyword added
-#      JFB, MIAPP, 16 August 2019
 
-def determine_goodpixels(logLam, lamRangeTemp, z, width=800, vmax=900):
+def determine_goodpixels(logLam, lamRangeTemp, z, width=800.):
     """
     Generates a list of goodpixels to mask a given set of gas emission
     lines. This is meant to be used as input for PPXF.
@@ -831,8 +829,8 @@ def determine_goodpixels(logLam, lamRangeTemp, z, width=800, vmax=900):
         flag |= (np.exp(logLam) > line*(1 + z)*(1 - dvj/c)) \
               & (np.exp(logLam) < line*(1 + z)*(1 + dvj/c))
 
-    flag |= np.exp(logLam) > lamRangeTemp[1]*(1 + z)*(1 - vmax/c)   # Mask edges of
-    flag |= np.exp(logLam) < lamRangeTemp[0]*(1 + z)*(1 + vmax/c)   # stellar library
+    flag |= np.exp(logLam) > lamRangeTemp[1]*(1 + z)*(1 - 900.0/c)   # Mask edges of
+    flag |= np.exp(logLam) < lamRangeTemp[0]*(1 + z)*(1 + 900.0/c)   # stellar library
 
     return np.flatnonzero(~flag)
 

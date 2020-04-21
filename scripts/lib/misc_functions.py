@@ -118,7 +118,7 @@ def read_lsf(wave,survey):
 #==============================================================================
 def load_configfile(file=''):
 
-    colnames = ["Runname","Survey","Redshift","Lmin","Lmax","Vmax","Velscale","SNR","SNR_min","Porder","Border","Templates","NPCA","Mask","Mask_width"]
+    colnames = ["Runname","Survey","Redshift","Lmin","Lmax","Vmax","Velscale","SNR","SNR_min","Porder","Templates","NPCA","Mask","Mask_width"]
 
     tab = ascii.read(file, names=colnames, comment="#")
 

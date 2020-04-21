@@ -15,8 +15,8 @@ if (__name__ == '__main__'):
     ssp    = ['Mixed','Old','Young']
     # ftype  = ['Border0_free','Border0_penalised','Border1_penalised','Border2_penalised','Border3_penalised','Border4_penalised']
     # labels = ['Simplex','Simplex AR','B-spline 1','B-spline 2','B-spline 3','B-spline 4']
-    ftype  = ['Border0_free','Border0_penalised','Border3_penalised','Border4_penalised']
-    labels = ['Simplex','Simplex AR','B-spline 3','B-spline 4']
+    ftype  = ['Border0_free','Border0_penalised','Border3_free','Border3_penalised','Border4_free','Border4_penalised']
+    labels = ['Simplex','Simplex RW','B-spline 3f','B-spline 3p','B-spline 4f','B-spline 4p']
     ncases = len(cases)
     nsnr   = len(snr)
     nssp   = len(ssp)
@@ -35,6 +35,7 @@ if (__name__ == '__main__'):
             fig, ax = plt.subplots(nrows=nsnr, ncols=nftype, sharex=True, sharey=True, figsize=(12,8))
             plt.subplots_adjust(left=0.025, bottom=0.06, right=0.99, top=0.97, wspace=0.0, hspace=0.0)
      
+            print('# Plotting: testcase_'+cases[i]+'_'+ssp[j])     
             for k in range(nsnr):
                 for o in range(nftype):
                     basename = 'testcase_'+cases[i]+'_'+ssp[j]+'_SNR'+snr[k]+'-'+ftype[o]
@@ -54,9 +55,9 @@ if (__name__ == '__main__'):
                         ax[k,o].set_ylim([0,1.5*np.amax(tab['col2'])])
                         ax[k,o].fill_between(xvel,losvd_3s_lo,losvd_3s_hi, color='blue', alpha=0.15, step='mid')
                         ax[k,o].fill_between(xvel,losvd_1s_lo,losvd_1s_hi, color='blue', alpha=0.50, step='mid')
-                        ax[k,o].plot(xvel,losvd_med,'k.-', ds='steps-mid')
-                        ax[k,o].plot(tab['col1'], tab['col2'],'r.-', ds='steps-mid') 
-                        ax[k,o].axvline(x=0.0, color='k', linestyle="--")
+                        ax[k,o].plot(xvel,losvd_med,'k-', ds='steps-mid')
+                        ax[k,o].plot(tab['col1'], tab['col2'],'r-', ds='steps-mid') 
+                        ax[k,o].axvline(x=0.0, color='k', linestyle=":")
 
                         if k == 0:
                             ax[k,o].set_title(labels[o])

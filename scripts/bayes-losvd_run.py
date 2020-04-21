@@ -24,9 +24,9 @@ def worker(inQueue, outQueue):
     Defines the worker process of the parallelisation with multiprocessing.Queue
     and multiprocessing.Process.
     """
-    for i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, verbose, save_chains, save_plots in iter(inQueue.get, 'STOP'):
+    for i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, verbose, save_chains, save_plots, fit_type in iter(inQueue.get, 'STOP'):
 
-        status = run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, verbose, save_chains, save_plots)
+        status = run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, verbose, save_chains, save_plots, fit_type)
 
         outQueue.put(( status ))
 
@@ -51,36 +51,40 @@ def stan_cache(model_code, model_name=None, codefile=None, **kwargs):
     return sm
 #==============================================================================
 def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, 
-        verbose=False, save_chains=False, save_plots=False):
+        verbose=False, save_chains=False, save_plots=False, fit_type=None):
 
     idx = bin_list[i]
     stridx = str(idx)
-    misc.printRUNNING(runname+" - Bin: "+stridx) 
+    misc.printRUNNING(runname+" - Bin: "+stridx+" - Fit type: "+fit_type) 
 
     try:
 
         # Defining the version of the code to use
         struct = h5py.File("../preproc_data/"+runname+".hdf5","r")
-        if (np.array(struct['in/border']) == 0):
-           codefile = 'stan_model/bayes-losvd_model_no_regularisation.stan'
-        elif (np.array(struct['in/border']) == -100):   
-           codefile = 'stan_model/bayes-losvd_model_simplex_RW.stan'
-        elif (np.array(struct['in/border']) > 0):
-           codefile = 'stan_model/bayes-losvd_model_Bsplines.stan'
-        elif (np.array(struct['in/border']) < 0):
+        if (fit_type == 'S0'):
+           codefile = 'stan_model/bayes-losvd_model_S0.stan'
+        elif (fit_type == 'S1'):   
+           codefile = 'stan_model/bayes-losvd_model_S1.stan'
+        elif (fit_type[0] == 'A'):
+           codefile = 'stan_model/bayes-losvd_model_AR.stan'
+        elif (fit_type[0] == 'B'):
            codefile = 'stan_model/bayes-losvd_model_Bsplines_penalised.stan'
+        else:
+           misc.printFAILED("Not a valid FIT_TYPE. Allowed values include: S0/S1/AX/BX (with X the order of the Auto-regressive or Bspline model).")
+           return 'ERROR'
 
         if not os.path.exists(codefile):
            misc.printFAILED(codefile+" does not exist.")
-           exit()
+           return 'ERROR'
 
         # Defining output names and directories
-        outdir           = "../results/"+runname
-        pdf_filename     = outdir+"/"+runname+"_diagnostics_bin"+str(idx)+".pdf"
-        summary_filename = outdir+"/"+runname+"_Stan_summary_bin"+str(idx)+".txt"
-        chains_filename  = outdir+"/"+runname+"_chains_bin"+str(idx)+".hdf5"
-        sample_filename  = outdir+"/"+runname+"_progress_bin"+str(idx)+".csv"
-        outhdf5          = outdir+"/"+runname+"_results_bin"+str(idx)+".hdf5"
+        rootname         = runname+"-"+fit_type
+        outdir           = "../results/"+rootname
+        pdf_filename     = outdir+"/"+rootname+"_diagnostics_bin"+str(idx)+".pdf"
+        summary_filename = outdir+"/"+rootname+"_Stan_summary_bin"+str(idx)+".txt"
+        chains_filename  = outdir+"/"+rootname+"_chains_bin"+str(idx)+".hdf5"
+        sample_filename  = outdir+"/"+rootname+"_progress_bin"+str(idx)+".csv"
+        outhdf5          = outdir+"/"+rootname+"_results_bin"+str(idx)+".hdf5"
 
         if not os.path.exists("../results"):
            os.mkdir("../results")
@@ -99,7 +103,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
                 'sigma_obs':     np.array(struct['in/sigma_obs'][:,idx]), 
                 'templates':     np.array(struct['in/templates']),
                 'mean_template': np.array(struct['in/mean_template']),
-                'spline_degree': np.abs(np.array(struct['in/border']))-1,
+                'order':         np.int(fit_type[1])-1,
                 'xvel':          np.array(struct['in/xvel']),
                 'num_knots':     np.array(struct['in/nvel'])}
      
@@ -148,7 +152,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
 
         # If we are here, we are DONE!
         struct.close()
-        misc.printDONE(runname+" - Bin: "+stridx)
+        misc.printDONE(runname+" - Bin: "+stridx+" - Fit type: "+fit_type)
 
         return 'OK'
     
@@ -182,6 +186,7 @@ if (__name__ == '__main__'):
     parser.add_option("-v", "--verbose",       dest="verbose",       type="int",    default=0,     help="Printing Stan summary for each fit (Default: 0/False)")
     parser.add_option("-s", "--save_chains",   dest="save_chains",   type="int",    default=0,     help="Saving chains for each fit (Default: 0/False)")
     parser.add_option("-p", "--save_plots",    dest="save_plots",    type="int",    default=0,     help="Saving diagnistic plots (Default: 0/False)")
+    parser.add_option("-t", "--fit_type",      dest="fit_type",      type="string", default="S1",  help="Defining the type of fit (Default: S1 (RW on simplex))")
 
     (options, args) = parser.parse_args()
     preproc_file    = options.preproc_file
@@ -194,6 +199,7 @@ if (__name__ == '__main__'):
     verbose         = options.verbose
     save_chains     = options.save_chains
     save_plots      = options.save_plots
+    fit_type        = options.fit_type
 
     if (verbose == 0):
         verbose = False
@@ -258,7 +264,7 @@ if (__name__ == '__main__'):
     # Fill the queue
     for i in range(nbins):
         inQueue.put( ( i, bin_list, runname, niter, nchain, adapt_delta, 
-                       max_treedepth, verbose, save_chains, save_plots) )
+                       max_treedepth, verbose, save_chains, save_plots, fit_type) )
 
     # Now running the processes
     run_tmp = [outQueue.get() for _ in range(nbins)]
@@ -273,7 +279,7 @@ if (__name__ == '__main__'):
     if 'ERROR' not in run_tmp:
        print("")
        print("# Packing all results into a single HDF5 file.")
-       misc.pack_results(runname)
+       misc.pack_results(runname+"-"+fit_type)
 
     exit()
   

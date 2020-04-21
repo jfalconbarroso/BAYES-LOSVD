@@ -19,7 +19,6 @@ def load_data(struct,idx):
    velscale   = struct['Velscale'][idx]
    mask_flag  = struct['Mask'][idx]
    porder     = struct['Porder'][idx]
-   border     = struct['Border'][idx]
    vmax       = struct['Vmax'][idx]
    mask_width = struct['Mask_width'][idx]
    
@@ -216,7 +215,6 @@ def load_data(struct,idx):
                   'npix_obs':   npix_log,
                   'nspec':      nspec,
                   'porder':     porder,
-                  'border':     border,
                   'nbins':      nbins,
                   'snr':        targ_snr,
                   'lmin':       lmin,

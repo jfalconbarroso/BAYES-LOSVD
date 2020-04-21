@@ -7,6 +7,7 @@ import matplotlib.pyplot  as plt
 import lib.misc_functions as misc
 from   lib.load_data      import load_data
 from   lib.load_testdata  import load_testdata
+from   lib.load_testdata_v2 import load_testdata_v2
 from   lib.load_templates import load_templates
 from   lib.cap_utils      import display_bins
 from   astropy.io         import ascii
@@ -17,7 +18,11 @@ def run_preproc_data(struct,idx):
     # Checking the file exists
     rname = struct['Runname'][idx]
     rootname = rname.split('-')[0]
-    filename = "../data/"+rootname+'.fits'
+    if (struct['Survey'][idx] == 'TEST'):
+       filename = "../data/"+rootname+'.hdf5'
+    else:
+       filename = "../data/"+rootname+'.fits'
+       
     if not os.path.exists(filename):
        misc.printFAILED(filename+" does not exist")
        exit()
@@ -44,7 +49,6 @@ def run_preproc_data(struct,idx):
     print("- LOSVD Vmax:       "+str(struct['Vmax'][idx]))
     print("- Mask flag:        "+str(struct['Mask'][idx]))
     print("- Pol. order:       "+str(struct['Porder'][idx]))
-    print("- Bsplines order:   "+str(struct['Border'][idx]))
     print("- Templates:        "+str(struct['Templates'][idx]))
     print("- Number of PCA:    "+str(struct['NPCA'][idx]))
     print("-------------------------------------------")
@@ -52,7 +56,7 @@ def run_preproc_data(struct,idx):
 
     # Processing data 
     if (struct['Survey'][idx] == 'TEST'):
-       data_struct = load_testdata(struct,idx)
+       data_struct = load_testdata_v2(struct,idx)
     else:   
        data_struct = load_data(struct,idx)
    
