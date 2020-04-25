@@ -120,7 +120,8 @@ def compute_stats(filelist):
 #==============================================================================
 if (__name__ == '__main__'):
 
-   dir = "../results_deimos/"
-   filelist = glob.glob(dir+"testcase*/*results.hdf5")
+   dir = "../results_deimos_v2/"
+   filelist = glob.glob(dir+"testcases*/*results.hdf5")
+   print(filelist)
 
    tab = compute_stats(filelist)

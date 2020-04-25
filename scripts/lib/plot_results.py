@@ -160,9 +160,9 @@ def plot_corner(idx=3):
    ncoefs = coefs.shape[1]
    nweights = wei.shape[1]
     
-   #samples_corner = np.hstack((losvd,sigma,coefs,wei))
+   # samples_corner = np.hstack((losvd,sigma,coefs,wei))
    
-   samples_corner = np.hstack((sigma,coefs))
+   samples_corner = np.hstack((sigma,coefs,wei))
 
    labels = []   
    #for i in range(nvel):

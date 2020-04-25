@@ -77,8 +77,11 @@ def load_templates(struct,idx,data_struct):
        templates = PC_tmp[:,0:npca]
        ntemplates = npca
 
-       # Z-score Normalization to aid in the minimization
+       # Continuum and Z-score Normalization to aid in the minimization
        for i in range(npca):
+          coef = np.polyfit(wave,templates[:,i],1)
+          pfit = np.polyval(coef,wave)
+          templates[:,i] -= pfit
           templates[:,i] /= np.std(templates[:,i])
    else:
        mean_temp  = np.zeros(npix)

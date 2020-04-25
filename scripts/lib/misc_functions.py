@@ -317,20 +317,20 @@ def delete_files(inputfile, extension=None):
     return       
 
 #==============================================================================
-def pack_results(rootname,suffix=''):
+def pack_results(rootname,suffix='', dir='../results/'):
 
-    input_list = glob.glob("../results/"+rootname+"/"+rootname+suffix+"_results_bin*.hdf5")
+    input_list = glob.glob(dir+rootname+"/"+rootname+suffix+"_results_bin*.hdf5")
     nlist = len(input_list)
     if nlist == 0:
        print(" - Nothing to pack!")
        print("")
-       print("../results/"+rootname+"/"+rootname+suffix+"_results_bin*.hdf5")
+       print(dir+rootname+"/"+rootname+suffix+"_results_bin*.hdf5")
        return 
     else:   
        print(" - "+str(nlist)+" files found.")
 
     # Preparing outputfile
-    outfile = "../results/"+rootname+"/"+rootname+suffix+"_results.hdf5"
+    outfile = dir+rootname+"/"+rootname+suffix+"_results.hdf5"
     if os.path.exists(outfile):
        os.remove(outfile)
     g = h5py.File(outfile,'w')

@@ -21,10 +21,10 @@ def create_testdata(cases, models, snr, nsim=25):
     velscale   = 50.0
 
     # Randomly shuffling the models    
-    tmp = np.arange(nmodels)
-    np.random.shuffle(tmp)
-    idx = tmp[0:nsim]
-    model_list = model_list[idx]
+    # tmp = np.arange(nmodels)
+    # np.random.shuffle(tmp)
+    # idx = tmp[0:nsim]
+    # model_list = model_list[idx]
 
     # Defining the size of some arrays
     hdu   = fits.open(model_list[0])
@@ -48,7 +48,7 @@ def create_testdata(cases, models, snr, nsim=25):
         velscale   = xvel[1]-xvel[0]
  
         # Defining output filename and array sizes
-        outhdf5   = '../data/testcases_'+cases[i]+'.hdf5'
+        outhdf5   = '../data/testcases_'+cases[i]+'_'+models+'.hdf5'
         out_spec  = np.zeros((npix,nsnr*nsim)) * np.nan
         out_espec = np.zeros((npix,nsnr*nsim)) * np.nan
         spec_snr  = np.zeros(nsnr*nsim) * np.nan
@@ -112,10 +112,10 @@ if (__name__ == '__main__'):
     print("")
 
     cases  = ['Gaussian','Double_Gaussian','Marie1','Marie2']
-    models = 'MILES_SSP'
+    models = 'MILES_SSP_single'
     snr    = [10,25,50,100,200]
 
 
-    create_testdata(cases, models, snr)
+    create_testdata(cases, models, snr, nsim=1)
 
     exit()

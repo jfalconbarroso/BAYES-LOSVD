@@ -86,11 +86,6 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
         sample_filename  = outdir+"/"+rootname+"_progress_bin"+str(idx)+".csv"
         outhdf5          = outdir+"/"+rootname+"_results_bin"+str(idx)+".hdf5"
 
-        if not os.path.exists("../results"):
-           os.mkdir("../results")
-        if not os.path.exists(outdir):
-           os.mkdir(outdir)
-
         # Creating the structure with the data for Stan
         data = {'npix_obs':      np.array(struct['in/npix_obs']), 
                 'ntemp':         np.array(struct['in/ntemp']), 
@@ -224,6 +219,12 @@ if (__name__ == '__main__'):
     # Defining rootnames for output files
     tmpname = os.path.basename(preproc_file)
     runname = os.path.splitext(tmpname)[0]
+    outdir  = "../results/"+runname+"-"+fit_type
+
+    if not os.path.exists("../results"):
+        os.mkdir("../results")
+    if not os.path.exists(outdir):
+        os.mkdir(outdir)
 
     # Loading input information from the preproc file
     f     = h5py.File(preproc_file,'r')
