@@ -16,6 +16,7 @@ def compute_losvd(rootname, idx):
         filename = rootname+str(idx[i])+'.hdf5'
         if not os.path.exists(filename):
             continue
+        # print(filename)
 
         f   = h5py.File(filename,'r')
         tmp = np.array(f['losvd'])
@@ -35,7 +36,7 @@ if (__name__ == '__main__'):
     dir = '../results_deimos_v2/'
 
     # cases  = ['Gaussian','Double_Gaussian','Marie1','Marie2']
-    cases  = ['Gaussian','Double_Gaussian']
+    cases  = ['Marie2']
     snr    = ['10','25','50','100','200']
     ftype  = ['S0','S1','A1','A2','A3','B3','B4']
 
@@ -58,6 +59,7 @@ if (__name__ == '__main__'):
         for o in range(nftype):
             bname    = 'testcases_'+cases[i]+'-'+ftype[o]
             fname    = dir+bname+'/'+bname+'_results.hdf5'
+            print(bname)
             if not os.path.exists(fname):
                 continue
             f        = h5py.File(fname,'r')

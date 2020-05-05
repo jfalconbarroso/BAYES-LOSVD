@@ -120,7 +120,7 @@ model {
   //Smoothing AR priors on the LOSVD
   alpha ~ normal(0.0,1.0);
   beta  ~ normal(0.0,1.0);
-  sigma ~ cauchy(0.0,1.0);
+  sigma ~ normal(0.0,1.0);
   for (n in (order+1):nvel) {
     real mu = alpha;
     for (k in 1:order)
@@ -139,5 +139,9 @@ generated quantities {
   vector[npix_obs]  conv_spec = convolve_data(spec,losvd,npix_temp,nvel);
   vector[npix_obs]  poly      = leg_pols * coefs;
   vector[npix_obs]  bestfit   = poly + conv_spec;
+  vector[nmask]     log_likelihood;
+  for (i in 1:nmask){
+       log_likelihood[i] = normal_lpdf(spec_obs[mask[i]] | bestfit[mask[i]], sigma_obs[mask[i]]);
+  }   
 
 }

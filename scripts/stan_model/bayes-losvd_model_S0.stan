@@ -98,6 +98,7 @@ parameters {
   simplex[nvel] losvd;                            // LOSVD array                   
   vector<lower=-2.0,upper=2.0>[ntemp]    weights; // Weights for each PC component
   vector<lower=-2.0,upper=2.0>[porder+1] coefs;   // Coefficients of the polynomials
+  real<lower=0.0> sigma;                          // The dispersion of the LOSVD prior
 
 }
 //=============================================================================
@@ -111,8 +112,9 @@ model {
   // Weakly informative priors on PCA weights, polynomial coeffs and LOSVD
   coefs   ~ normal(0.0,1.0);
   weights ~ normal(0.0,1.0);
-  losvd   ~ normal(0.0,1.0);
- 
+  losvd   ~ normal(0.0,sigma);
+  sigma   ~ normal(0.0,1.0);
+
   // Inference
   spec_obs[mask] ~ normal(model_spec[mask],sigma_obs[mask]);
 
@@ -124,5 +126,9 @@ generated quantities {
   vector[npix_obs]  conv_spec = convolve_data(spec,losvd,npix_temp,nvel);
   vector[npix_obs]  poly      = leg_pols * coefs;
   vector[npix_obs]  bestfit   = poly + conv_spec;
-
+  vector[nmask]     log_likelihood;
+  for (i in 1:nmask){
+       log_likelihood[i] = normal_lpdf(spec_obs[mask[i]] | bestfit[mask[i]], sigma_obs[mask[i]]);
+  }   
+     
 }

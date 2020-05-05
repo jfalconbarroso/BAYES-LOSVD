@@ -107,7 +107,7 @@ data {
   int<lower=1> nmask;                        // Number of pixels of the data mask
   int<lower=1> mask[nmask];                  // Mask with the data pixels to be fitted
   int<lower=0> porder;                       // Polynomial order to be used
-  int<lower=0> order;                        // the degree of spline (is equal to B-splines order - 1)
+  int<lower=0> order;                // the degree of spline (is equal to B-splines order - 1)
   int<lower=3> num_knots;                    // Number of knots to be used in the B-splines
   //-------------------------
   vector[npix_obs]            spec_obs;      // Array with observed spectrum
@@ -127,11 +127,11 @@ transformed data{
   matrix[npix_obs,porder+1] leg_pols = legendre(scl_vect,porder,npix_obs);
 
   // Building the B-Splines
-  int                                 num_basis = num_knots + order - 1; // total number of B-splines
-  vector[num_knots]                   vect2 = create_vector(num_knots);
-  vector[num_knots]                   knots = scale_vector(vect2,num_knots)*max(xvel);
-  matrix[num_basis, nvel]             B;             // matrix of B-splines
-  matrix[nvel,num_basis]              B_transposed;  // matrix of B-splines transposed
+  int                         num_basis = num_knots + order - 1; // total number of B-splines
+  vector[num_knots]           vect2 = create_vector(num_knots);
+  vector[num_knots]           knots = scale_vector(vect2,num_knots)*max(xvel);
+  matrix[num_basis, nvel]     B;             // matrix of B-splines
+  matrix[nvel,num_basis]      B_transposed;  // matrix of B-splines transposed
   vector[order + num_knots]   ext_knots_temp;
   vector[2*order + num_knots] ext_knots; // set of extended knots
 
@@ -150,6 +150,7 @@ parameters {
   vector<lower=-2.0,upper=2.0>[ntemp]    weights;  // Weights for each PC component 
   vector<lower=-2.0,upper=2.0>[porder+1] coefs;    // Coefficients of the Legendre polynomials
   simplex[num_basis]                     a;        // B-splines coefficients
+  real<lower=0.0>                        sigma;    // Smoothing for RW prior           
  
 }
 //=============================================================================
@@ -170,6 +171,9 @@ model {
   // Weakly informative priors on PCA weights, Leg. and B-splines coefficients
   weights ~ normal(0.0,1.0);
   coefs   ~ normal(0.0,1.0);
+  sigma   ~ normal(0.0,1.0);
+  a[1]    ~ normal(0.0,sigma);
+  a[2:num_basis-1] ~ normal(a[1:(num_basis-2)],sigma);
 
   // Inference
   spec_obs[mask] ~ normal(model_spec[mask],sigma_obs[mask]);
@@ -182,5 +186,9 @@ generated quantities {
   vector[npix_obs]  conv_spec = convolve_data(spec,losvd,npix_temp,nvel);
   vector[npix_obs]  poly      = legendre(scl_vect,porder,npix_obs) * coefs;
   vector[npix_obs]  bestfit   = poly + conv_spec;
+  vector[nmask]     log_likelihood;
+  for (i in 1:nmask){
+       log_likelihood[i] = normal_lpdf(spec_obs[mask[i]] | bestfit[mask[i]], sigma_obs[mask[i]]);
+  }   
 
 }

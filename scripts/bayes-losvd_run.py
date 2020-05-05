@@ -68,7 +68,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
         elif (fit_type[0] == 'A'):
            codefile = 'stan_model/bayes-losvd_model_AR.stan'
         elif (fit_type[0] == 'B'):
-           codefile = 'stan_model/bayes-losvd_model_Bsplines_penalised.stan'
+           codefile = 'stan_model/bayes-losvd_model_Bsplines.stan'
         else:
            misc.printFAILED("Not a valid FIT_TYPE. Allowed values include: S0/S1/AX/BX (with X the order of the Auto-regressive or Bspline model).")
            return 'ERROR'
@@ -83,6 +83,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
         pdf_filename     = outdir+"/"+rootname+"_diagnostics_bin"+str(idx)+".pdf"
         summary_filename = outdir+"/"+rootname+"_Stan_summary_bin"+str(idx)+".txt"
         chains_filename  = outdir+"/"+rootname+"_chains_bin"+str(idx)+".hdf5"
+        arviz_filename   = outdir+"/"+rootname+"_chains_bin"+str(idx)+".netcdf"
         sample_filename  = outdir+"/"+rootname+"_progress_bin"+str(idx)+".csv"
         outhdf5          = outdir+"/"+rootname+"_results_bin"+str(idx)+".hdf5"
 
@@ -116,13 +117,16 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
         # If requested, saving sample chains
         if (save_chains == True):
            print("")
-           print("# Saving chains: "+chains_filename) 
+           print("# Saving chains in HDF5 format: "+chains_filename) 
            misc.save_stan_chains(samples,chains_filename)
+           print("# Saving chains in Arviz (NETCDF) format: "+arviz_filename) 
+           arviz_data = az.from_pystan(fit, log_likelihood="log_likelihood")
+           az.to_netcdf(arviz_data,arviz_filename)
 
         # Saving Stan's summary of main parameters on disk
         print("")
         print("# Saving Stan summary: "+summary_filename)         
-        unwanted = {'spec','conv_spec','poly','bestfit','a','losvd_'}
+        unwanted = {'spec','conv_spec','poly','bestfit','a','losvd_','log_likelihood'}
         misc.save_stan_summary(fit, unwanted=unwanted, verbose=verbose, summary_filename=summary_filename)
 
         # Processing output and saving results
