@@ -82,7 +82,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
         outdir           = "../results/"+rootname
         pdf_filename     = outdir+"/"+rootname+"_diagnostics_bin"+str(idx)+".pdf"
         summary_filename = outdir+"/"+rootname+"_Stan_summary_bin"+str(idx)+".txt"
-        chains_filename  = outdir+"/"+rootname+"_chains_bin"+str(idx)+".hdf5"
+        # chains_filename  = outdir+"/"+rootname+"_chains_bin"+str(idx)+".hdf5"
         arviz_filename   = outdir+"/"+rootname+"_chains_bin"+str(idx)+".netcdf"
         sample_filename  = outdir+"/"+rootname+"_progress_bin"+str(idx)+".csv"
         outhdf5          = outdir+"/"+rootname+"_results_bin"+str(idx)+".hdf5"
@@ -118,8 +118,8 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
         # If requested, saving sample chains
         if (save_chains == True):
            print("")
-           print("# Saving chains in HDF5 format: "+chains_filename) 
-           misc.save_stan_chains(samples,chains_filename)
+        #    print("# Saving chains in HDF5 format: "+chains_filename) 
+        #    misc.save_stan_chains(samples,chains_filename)
            print("# Saving chains in Arviz (NETCDF) format: "+arviz_filename) 
            arviz_data = az.from_pystan(posterior=fit, log_likelihood="log_likelihood", 
                                        observed_data=['spec_masked'], posterior_predictive="spec_pred")
