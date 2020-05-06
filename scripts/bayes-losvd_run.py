@@ -102,7 +102,8 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
                 'order':         np.int(fit_type[1])-1,
                 'xvel':          np.array(struct['in/xvel']),
                 'num_knots':     np.array(struct['in/nvel'])}
-     
+        data['spec_masked'] = data['spec_obs'][data['mask']] 
+            
         # Running the model
         with open(codefile, 'r') as myfile:
            code = myfile.read()
@@ -120,13 +121,14 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
            print("# Saving chains in HDF5 format: "+chains_filename) 
            misc.save_stan_chains(samples,chains_filename)
            print("# Saving chains in Arviz (NETCDF) format: "+arviz_filename) 
-           arviz_data = az.from_pystan(fit, log_likelihood="log_likelihood")
+           arviz_data = az.from_pystan(posterior=fit, log_likelihood="log_likelihood", 
+                                       observed_data=['spec_masked'], posterior_predictive="spec_pred")
            az.to_netcdf(arviz_data,arviz_filename)
 
         # Saving Stan's summary of main parameters on disk
         print("")
         print("# Saving Stan summary: "+summary_filename)         
-        unwanted = {'spec','conv_spec','poly','bestfit','a','losvd_','log_likelihood'}
+        unwanted = {'spec','conv_spec','poly','bestfit','a','losvd_','log_likelihood','spec_pred'}
         misc.save_stan_summary(fit, unwanted=unwanted, verbose=verbose, summary_filename=summary_filename)
 
         # Processing output and saving results

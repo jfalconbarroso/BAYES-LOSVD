@@ -83,6 +83,8 @@ data {
   matrix[npix_temp,ntemp]     templates;     // Array with PC components spectra
   vector[npix_temp]           mean_template; // Array with mean template of the PCA decomposion
   int<lower=0>                order;         // Order for the AR model
+  vector[nmask]               spec_masked;
+
 }
 //=============================================================================
 transformed data{
@@ -139,9 +141,11 @@ generated quantities {
   vector[npix_obs]  conv_spec = convolve_data(spec,losvd,npix_temp,nvel);
   vector[npix_obs]  poly      = leg_pols * coefs;
   vector[npix_obs]  bestfit   = poly + conv_spec;
+  vector[nmask]     spec_pred;
   vector[nmask]     log_likelihood;
   for (i in 1:nmask){
-       log_likelihood[i] = normal_lpdf(spec_obs[mask[i]] | bestfit[mask[i]], sigma_obs[mask[i]]);
+    log_likelihood[i] = normal_lpdf(spec_obs[mask[i]] | bestfit[mask[i]], sigma_obs[mask[i]]);
+    spec_pred[i]      = normal_rng(bestfit[mask[i]], sigma_obs[mask[i]]);
   }   
 
 }
