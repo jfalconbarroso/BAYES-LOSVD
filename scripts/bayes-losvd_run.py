@@ -102,7 +102,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
                 'order':         np.int(fit_type[1])-1,
                 'xvel':          np.array(struct['in/xvel']),
                 'num_knots':     np.array(struct['in/nvel'])}
-        data['spec_masked'] = data['spec_obs'][data['mask']] 
+        data['spec_masked'] = data['spec_obs'][data['mask']] # This is added to perform LOO tests
             
         # Running the model
         with open(codefile, 'r') as myfile:
