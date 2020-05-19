@@ -188,7 +188,7 @@ def load_data(struct,idx):
    # Defining the mask
    print(" - Defining the data mask")
    if (mask_flag == 1):
-     mask = cap.determine_goodpixels(lwave,[lmin,lmax],0.0, width=mask_width, vmax=vmax)
+     mask = cap.determine_goodpixels(lwave,[lmin,lmax],0.0, width=mask_width)
    elif (mask_flag == 0):
      mask = np.arange(npix_log)
       

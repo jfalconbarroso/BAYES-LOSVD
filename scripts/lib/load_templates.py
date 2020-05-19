@@ -1,10 +1,11 @@
 import glob
+import h5py
 import numpy                 as np
 import matplotlib.pyplot     as plt
 import lib.misc_functions    as misc
 import lib.cap_utils         as cap
 from   astropy.io            import fits
-from   sklearn.decomposition import PCA
+from   sklearn.decomposition import PCA, FastICA
 from   scipy.interpolate     import interp1d
 #==============================================================================
 def load_templates(struct,idx,data_struct):
@@ -63,20 +64,29 @@ def load_templates(struct,idx,data_struct):
        
        misc.printProgress(i+1, ntemp, suffix = 'Complete', barLength = 50) 
      
+#    f = h5py.File("../templates/miles_test.hdf5","w")
+#    f.create_dataset('spec', data=temp, compression="gzip")
+#    f.close()
+#    exit()
+
    # Running PCA on the input models
    if npca > 0:
        print(" - Running PCA on the templates...")
-       mean_temp = np.mean(temp,axis=1)
-       pca       = PCA(n_components=ntemp)
-       PC_tmp    = pca.fit_transform(temp)
+    #    mean_temp = np.mean(temp,axis=1)
+    #    pca       = PCA(n_components=ntemp)
+    #    PC_tmp    = pca.fit_transform(temp)
+       mean_temp = np.zeros(npix)
+       pca       = FastICA(n_components=npca)
+       PC_tmp    = pca.fit_transform(temp)  # Reconstruct signals
 
        # Extracting the desired number of PCA components
-       cumsum_pca_variance = np.cumsum(pca.explained_variance_ratio_)
-       print("  "+str(npca)+" PCA components explain {:7.3f}".format(cumsum_pca_variance[npca]*100)+"% of the variance in the input library")
+    #    cumsum_pca_variance = np.cumsum(pca.explained_variance_ratio_)
+    #    print("  "+str(npca)+" PCA components explain {:7.3f}".format(cumsum_pca_variance[npca]*100)+"% of the variance in the input library")
        templates = np.zeros((npix,npca))
        templates = PC_tmp[:,0:npca]
        ntemplates = npca
 
+    
        # Continuum and Z-score Normalization to aid in the minimization
        for i in range(npca):
           coef = np.polyfit(wave,templates[:,i],1)
@@ -152,7 +162,7 @@ def load_templates(struct,idx,data_struct):
        npix_temp  = len(lwave)       
    elif (diff == 1):
        mean_temp  = mean_temp[0:-2]
-       templates = templates[0:-2,:]
+       templates  = templates[0:-2,:]
        lwave      = lwave[0:-2]
        npix_temp  = len(lwave)
              

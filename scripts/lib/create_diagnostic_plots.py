@@ -63,7 +63,7 @@ def create_diagnostic_plots(idx,pdf_filename,fit,diag_pars,niter,nchain):
     var_names = list(tmp.data_vars)
 
     # Filtering the list of parameters to plot
-    unwanted  = {'losvd','spec','conv_spec','poly','bestfit','losvd_','losvd_mod'}
+    unwanted  = {'losvd','spec','conv_spec','poly','bestfit','losvd_','losvd_mod','spec_pred','log_likelihood'}
     vars_main = [e for e in var_names if e not in unwanted]
    
     # Reading diagnostic parameters
