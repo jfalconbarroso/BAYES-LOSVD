@@ -8,23 +8,27 @@ Non-parametric recovery of the LOSVD in galaxies
 
 python bayes-bayes_compile_codes.py
 
-- Create test data
+FOR TEST DATA
 
-python create_testdata.py -c ../config_files/default_testdata.conf
+  - Create test data
 
-- Preprocess data
+  python create_testdata.py -c ../config_files/default_testdata.conf
 
-python bayes-losvd_preproc_data.py -c ../config_files/default_testcases.conf
+  - Preprocess data
 
-python bayes-losvd_preproc_data.py -c ../config_files/default.conf
+  python bayes-losvd_preproc_data.py -c ../config_files/default_testcases.conf
+
+FOR REAL DATA
+
+  python bayes-losvd_preproc_data.py -c ../config_files/default.conf
 
 - Run code
 
-python bayes-losvd_run.py -r \<runname in config file\> -b \<bin number or list\> -v \<verbose\> -p \<flag to save diagnostic plots\> -s \<flag to save chains\>
+python bayes-losvd_run.py -f \<preproc HDF5 file\> -b \<bin number or list\> -t <type of fit\> -v \<verbose\> -p \<flag to save diagnostic plots\> -s \<flag to save chains\>
 
 - Inspect results
 
-python bayes-losvd_inspect_fits.py -r \<runname in config file\> -b \<bin number or list\> -s \<flag to save plot\>
+python bayes-losvd_inspect_fits.py -r \<runname in config file\>+"-"+fit_type -b \<bin number or list\> -s \<flag to save plot\>
 
 *Notes*
 
@@ -32,7 +36,6 @@ You will see that results are stored differently in the results directory.
 
 Data is sotred in HDF5 files with a different structure that allows to collect all the info of the individual bins into a single file.
 
-The analysis scripts contains the scripts to generate the plots I've been sending you. It takes the results I've generated in the machine 'denso' at the IAC. You need to chage directory accordingly.
-
+If required, chains can be saved in NETCDF format for further processing with Arviz
 
 
