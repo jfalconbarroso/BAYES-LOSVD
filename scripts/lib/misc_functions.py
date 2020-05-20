@@ -116,6 +116,26 @@ def read_lsf(wave,survey):
     return out
 
 #==============================================================================
+def read_code(code):
+    
+    # Reading the Code list file
+    tab = ascii.read("../config_files/codes_list.conf", names=['Acronym','Code'], format='no_header', comment='#')
+
+    # Selecting the requested code
+    idx = (tab['Acronym'] == code)
+    if np.sum(idx) == 0:
+        printFAILED("Not a valid FIT_TYPE. Allowed values are included in ../config_files/codes_list.conf")
+        exit()
+    else:
+        codefile = "stan_model/"+tab['Code'][np.nonzero(idx)][0]
+
+    if not os.path.exists(codefile):
+        printFAILED(codefile+" does not exist.")
+        exit()
+
+    return codefile
+
+#==============================================================================
 def load_configfile(file=''):
 
     colnames = ["Runname","Survey","Redshift","Lmin","Lmax","Vmax","Velscale","SNR","SNR_min","Porder","Templates","NPCA","Mask","Mask_width"]

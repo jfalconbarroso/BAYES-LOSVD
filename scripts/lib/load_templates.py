@@ -5,7 +5,7 @@ import matplotlib.pyplot     as plt
 import lib.misc_functions    as misc
 import lib.cap_utils         as cap
 from   astropy.io            import fits
-from   sklearn.decomposition import PCA, FastICA
+from   sklearn.decomposition import PCA
 from   scipy.interpolate     import interp1d
 #==============================================================================
 def load_templates(struct,idx,data_struct):
@@ -64,29 +64,24 @@ def load_templates(struct,idx,data_struct):
        
        misc.printProgress(i+1, ntemp, suffix = 'Complete', barLength = 50) 
      
-#    f = h5py.File("../templates/miles_test.hdf5","w")
-#    f.create_dataset('spec', data=temp, compression="gzip")
-#    f.close()
-#    exit()
-
    # Running PCA on the input models
+   if npix < ntemp:
+      misc.printFAILED("The number of pixels in the spectra ("+str(npix)+") has to be larger than the number of templates ("+str(ntemp)+") to run PCA.")
+      exit()
+
    if npca > 0:
        print(" - Running PCA on the templates...")
-    #    mean_temp = np.mean(temp,axis=1)
-    #    pca       = PCA(n_components=ntemp)
-    #    PC_tmp    = pca.fit_transform(temp)
-       mean_temp = np.zeros(npix)
-       pca       = FastICA(n_components=npca)
-       PC_tmp    = pca.fit_transform(temp)  # Reconstruct signals
-
+       mean_temp = np.mean(temp,axis=1)
+       pca       = PCA(n_components=ntemp)
+       PC_tmp    = pca.fit_transform(temp)
+      
        # Extracting the desired number of PCA components
-    #    cumsum_pca_variance = np.cumsum(pca.explained_variance_ratio_)
-    #    print("  "+str(npca)+" PCA components explain {:7.3f}".format(cumsum_pca_variance[npca]*100)+"% of the variance in the input library")
+       cumsum_pca_variance = np.cumsum(pca.explained_variance_ratio_)
+       print("  "+str(npca)+" PCA components explain {:7.3f}".format(cumsum_pca_variance[npca]*100)+"% of the variance in the input library")
        templates = np.zeros((npix,npca))
        templates = PC_tmp[:,0:npca]
        ntemplates = npca
 
-    
        # Continuum and Z-score Normalization to aid in the minimization
        for i in range(npca):
           coef = np.polyfit(wave,templates[:,i],1)
@@ -121,8 +116,10 @@ def load_templates(struct,idx,data_struct):
       data_lsf  /= (1.0 + redshift) 
       temp_lsf   = misc.read_lsf(wave, temp_name)
       fwhm_diff  = np.sqrt(data_lsf**2 - temp_lsf**2)  # in angstroms
+      bad_pix    = np.isnan(fwhm_diff)
+      fwhm_diff[bad_pix] = 1E-2  # Fixing the FWHM_diff to a tiny value if there are NaNs
       sigma_diff = fwhm_diff/2.355/dwav
-  
+
       mean_temp = cap.gaussian_filter1d(mean_temp,sigma_diff)
       for i in range(ntemplates):
          templates[:,i] = cap.gaussian_filter1d(templates[:,i], sigma_diff)  # convolution with variable sigma
@@ -146,8 +143,9 @@ def load_templates(struct,idx,data_struct):
    lwave0 = np.log(lmin)-pad*(lwave[1]-lwave[0])
    lwave1 = np.log(lmax)+(pad-1)*(lwave[1]-lwave[0])
    if (lwave[0] > lwave0):
-      print("ERROR: Templates wavelength range is not sufficient for padding")
+      misc.printFAILED("Templates wavelength range is not sufficient for padding")
       exit()
+
    idx        = (lwave >= lwave0) & (lwave <= lwave1)
    mean_temp  = mean_temp[idx]
    templates  = templates[idx,:]

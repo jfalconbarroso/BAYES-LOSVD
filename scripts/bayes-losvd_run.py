@@ -60,22 +60,8 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
     try:
 
         # Defining the version of the code to use
-        struct = h5py.File("../preproc_data/"+runname+".hdf5","r")
-        if (fit_type == 'S0'):
-           codefile = 'stan_model/bayes-losvd_model_S0.stan'
-        elif (fit_type == 'S1'):   
-           codefile = 'stan_model/bayes-losvd_model_S1.stan'
-        elif (fit_type[0] == 'A'):
-           codefile = 'stan_model/bayes-losvd_model_AR.stan'
-        elif (fit_type[0] == 'B'):
-           codefile = 'stan_model/bayes-losvd_model_Bsplines.stan'
-        else:
-           misc.printFAILED("Not a valid FIT_TYPE. Allowed values include: S0/S1/AX/BX (with X the order of the Auto-regressive or Bspline model).")
-           return 'ERROR'
-
-        if not os.path.exists(codefile):
-           misc.printFAILED(codefile+" does not exist.")
-           return 'ERROR'
+        codefile = misc.read_code(fit_type)
+        return 'ERROR'
 
         # Defining output names and directories
         rootname         = runname+"-"+fit_type
@@ -88,20 +74,21 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
         outhdf5          = outdir+"/"+rootname+"_results_bin"+str(idx)+".hdf5"
 
         # Creating the structure with the data for Stan
-        data = {'npix_obs':      np.array(struct['in/npix_obs']), 
-                'ntemp':         np.array(struct['in/ntemp']), 
-                'nvel':          np.array(struct['in/nvel']),
-                'npix_temp':     np.array(struct['in/npix_temp']),
-                'mask':          np.array(struct['in/mask']), 
-                'nmask':         np.array(struct['in/nmask']), 
-                'porder':        np.array(struct['in/porder']),
-                'spec_obs':      np.array(struct['in/spec_obs'][:,idx]), 
-                'sigma_obs':     np.array(struct['in/sigma_obs'][:,idx]), 
-                'templates':     np.array(struct['in/templates']),
-                'mean_template': np.array(struct['in/mean_template']),
-                'order':         np.int(fit_type[1])-1,
-                'xvel':          np.array(struct['in/xvel']),
-                'num_knots':     np.array(struct['in/nvel'])}
+        struct = h5py.File("../preproc_data/"+runname+".hdf5","r")
+        data   = {'npix_obs':      np.array(struct['in/npix_obs']), 
+                  'ntemp':         np.array(struct['in/ntemp']), 
+                  'nvel':          np.array(struct['in/nvel']),
+                  'npix_temp':     np.array(struct['in/npix_temp']),
+                  'mask':          np.array(struct['in/mask']), 
+                  'nmask':         np.array(struct['in/nmask']), 
+                  'porder':        np.array(struct['in/porder']),
+                  'spec_obs':      np.array(struct['in/spec_obs'][:,idx]), 
+                  'sigma_obs':     np.array(struct['in/sigma_obs'][:,idx]), 
+                  'templates':     np.array(struct['in/templates']),
+                  'mean_template': np.array(struct['in/mean_template']),
+                  'order':         np.int(fit_type[1])-1,
+                  'xvel':          np.array(struct['in/xvel']),
+                  'num_knots':     np.array(struct['in/nvel'])}
         data['spec_masked'] = data['spec_obs'][data['mask']] # This is added to perform LOO tests
             
         # Running the model
@@ -187,7 +174,7 @@ if (__name__ == '__main__'):
     parser.add_option("-v", "--verbose",       dest="verbose",       type="int",    default=0,     help="Printing Stan summary for each fit (Default: 0/False)")
     parser.add_option("-s", "--save_chains",   dest="save_chains",   type="int",    default=0,     help="Saving chains for each fit (Default: 0/False)")
     parser.add_option("-p", "--save_plots",    dest="save_plots",    type="int",    default=0,     help="Saving diagnistic plots (Default: 0/False)")
-    parser.add_option("-t", "--fit_type",      dest="fit_type",      type="string", default="S1",  help="Defining the type of fit (Default: S1 (RW on simplex))")
+    parser.add_option("-t", "--fit_type",      dest="fit_type",      type="string", default="S0",  help="Defining the type of fit (Default: S0 [Pure simplex])")
 
     (options, args) = parser.parse_args()
     preproc_file    = options.preproc_file
