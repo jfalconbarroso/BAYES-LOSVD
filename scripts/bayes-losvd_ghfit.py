@@ -8,6 +8,7 @@ import optparse
 import threading
 import warnings
 import traceback
+import arviz                        as az
 import numpy                        as np
 import matplotlib.pyplot            as plt
 import lib.misc_functions           as misc
@@ -75,7 +76,8 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, verbose
         outdir           = "../results/"+runname
         pdf_filename     = outdir+"/"+runname+"_gh_diagnostics_bin"+stridx+".pdf"
         summary_filename = outdir+"/"+runname+"_gh_Stan_summary_bin"+stridx+".txt"
-        chains_filename  = outdir+"/"+runname+"_gh_chains_bin"+stridx+".hdf5"
+        arviz_filename   = outdir+"/"+rootname+"_gh_chains_bin"+str(idx)+".netcdf"
+        # chains_filename  = outdir+"/"+runname+"_gh_chains_bin"+stridx+".hdf5"
         sample_filename  = outdir+"/"+runname+"_gh_progress_bin"+stridx+".csv"
         outhdf5          = outdir+"/"+runname+"_gh_results_bin"+stridx+".hdf5"
 
@@ -105,9 +107,9 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, verbose
         # If requested, saving sample chains
         if (save_chains == True):
            print("")
-           print("# Saving chains: "+chains_filename) 
-           misc.save_stan_chains(samples,chains_filename)
-
+           print("# Saving chains in Arviz (NETCDF) format: "+arviz_filename) 
+           arviz_data = az.from_pystan(posterior=fit)
+  
         # Saving Stan's summary of main parameters on disk
         print("")
         print("# Saving Stan summary: "+summary_filename)         
@@ -117,7 +119,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, verbose
         # Processing output and saving results
         print("")
         print("# Processing and saving results: "+outhdf5)
-        misc.process_stan_output(struct,samples,outhdf5,stridx)
+        misc.process_stan_output_hdp(struct,samples,outhdf5,stridx)
 
         # Creating diagnostic plots
         if (save_plots == True):
