@@ -76,8 +76,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, verbose
         outdir           = "../results/"+runname
         pdf_filename     = outdir+"/"+runname+"_gh_diagnostics_bin"+stridx+".pdf"
         summary_filename = outdir+"/"+runname+"_gh_Stan_summary_bin"+stridx+".txt"
-        arviz_filename   = outdir+"/"+rootname+"_gh_chains_bin"+str(idx)+".netcdf"
-        # chains_filename  = outdir+"/"+runname+"_gh_chains_bin"+stridx+".hdf5"
+        arviz_filename   = outdir+"/"+runname+"_gh_chains_bin"+str(idx)+".netcdf"
         sample_filename  = outdir+"/"+runname+"_gh_progress_bin"+stridx+".csv"
         outhdf5          = outdir+"/"+runname+"_gh_results_bin"+stridx+".hdf5"
 
@@ -109,6 +108,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, verbose
            print("")
            print("# Saving chains in Arviz (NETCDF) format: "+arviz_filename) 
            arviz_data = az.from_pystan(posterior=fit)
+           az.to_netcdf(arviz_data,arviz_filename)
   
         # Saving Stan's summary of main parameters on disk
         print("")

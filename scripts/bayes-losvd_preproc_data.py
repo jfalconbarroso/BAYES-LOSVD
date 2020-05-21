@@ -7,7 +7,6 @@ import matplotlib.pyplot  as plt
 import lib.misc_functions as misc
 from   lib.load_data      import load_data
 from   lib.load_testdata  import load_testdata
-from   lib.load_testdata_v2 import load_testdata_v2
 from   lib.load_templates import load_templates
 from   lib.cap_utils      import display_bins
 from   astropy.io         import ascii
@@ -56,7 +55,7 @@ def run_preproc_data(struct,idx):
 
     # Processing data 
     if (struct['Survey'][idx] == 'TEST'):
-       data_struct = load_testdata_v2(struct,idx)
+       data_struct = load_testdata(struct,idx)
     else:   
        data_struct = load_data(struct,idx)
    

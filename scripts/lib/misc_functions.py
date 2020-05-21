@@ -283,7 +283,7 @@ def process_stan_output_hdp(struct, samples, outhdf5=None, stridx=None):
     for key in samples.keys():
         result = compute_hdp(np.array(samples[key]), lims)
         if not (key == 'lp__'):
-           f.create_dataset("out/"+stridx+"/"+key, data=result, compression="gzip")
+           f.create_dataset("out/"+stridx+"/"+key, data=result, compression="gzip")               
     #------------
     f.close()
 

@@ -32,7 +32,7 @@ parameters {
   real<lower=0.0> offset;  
   real<lower=0.0> gamma;
   real<lower=-1000.0,upper=1000.0> vel;
-  real<lower=0.0,upper=500.0> sigma;
+  real<lower=0.0,upper=500.0>  vdisp;
   real<lower=-0.25,upper=0.25> h3;
   real<lower=-0.25,upper=0.25> h4;
 }
@@ -40,13 +40,13 @@ parameters {
 model {
         
   // Defining model  
-  vector[nvel] losvd_mod = offset + losvd_func(xvel, gamma, vel, sigma, h3, h4, nvel);
+  vector[nvel] losvd_mod = offset + losvd_func(xvel, gamma, vel, vdisp, h3, h4, nvel);
       
   // Weakly informative Priors
   offset ~ normal(0.0,0.2);
   gamma  ~ normal(0.0,1000.0);
   vel    ~ normal(0.0,200.0);
-  sigma  ~ normal(0.0,200.0);
+  vdisp  ~ normal(0.0,200.0);
   h3     ~ normal(0.0,0.1);
   h4     ~ normal(0.0,0.1);
   
@@ -57,6 +57,6 @@ model {
 //=============================================================================
 generated quantities{
  
-  vector[nvel] losvd_mod = offset + losvd_func(xvel, gamma, vel, sigma, h3, h4, nvel);
+  vector[nvel] losvd_gh_mod = offset + losvd_func(xvel, gamma, vel, vdisp, h3, h4, nvel);
 
 }    
