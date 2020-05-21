@@ -61,7 +61,6 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
 
         # Defining the version of the code to use
         codefile = misc.read_code(fit_type)
-        return 'ERROR'
 
         # Defining output names and directories
         rootname         = runname+"-"+fit_type
