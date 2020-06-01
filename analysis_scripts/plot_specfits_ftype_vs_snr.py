@@ -9,7 +9,7 @@ def plot_figure(case, id=[10,30,60,80,110]):
    # Loading files with results
    snr   = [10,25,50,100,200]
    ftype = ['S0','S1','A1','A2','A3','B3','B4']
-   outdir = "../results_deimos_v3/"
+   outdir = "../results_deimos_v4/"
 
    # Loading input LOSVD
    tab = ascii.read("../losvd/"+case+"_velscale50.dat")
@@ -93,9 +93,10 @@ def plot_figure(case, id=[10,30,60,80,110]):
 #==============================================================================
 if (__name__ == '__main__'):
 
-#    plot_figure("Gaussian")
-#    plot_figure("Double_Gaussian")
-#    plot_figure("Marie1")
-#    plot_figure("Marie2")
-   plot_figure("Wings",id=[10,30,60,90,110])
+   idx = 10
+   plot_figure("Gaussian",id=idx + np.arange(5)*25)
+   plot_figure("Double_Gaussian",id=idx + np.arange(5)*25)
+   plot_figure("Marie1",id=idx + np.arange(5)*25)
+   plot_figure("Marie2",id=idx + np.arange(5)*25)
+   plot_figure("Wings",id=idx + np.arange(5)*25)
 

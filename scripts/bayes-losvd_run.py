@@ -85,6 +85,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
                   'templates':     np.array(struct['in/templates']),
                   'mean_template': np.array(struct['in/mean_template']),
                   'order':         np.int(fit_type[1])-1,
+                  'velscale':      np.array(struct['in/velscale']),
                   'xvel':          np.array(struct['in/xvel']),
                   'num_knots':     np.array(struct['in/nvel'])}
         data['spec_masked'] = data['spec_obs'][data['mask']] # This is added to perform LOO tests
