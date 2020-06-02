@@ -93,5 +93,7 @@ def plot_figure(case, dir="../results/", binID=[0], ftype=['S0','S1','A1','A2','
 #==============================================================================
 if (__name__ == '__main__'):
 
-   plot_figure("NGC4550_SAURON", dir="../results/", binID=[0,169,189], ftype=['S0','S1','A1','A2','A3','B3','B4','G0'])
+   # plot_figure("NGC4550_SAURON", dir="../results/", binID=[0,169,189], ftype=['S0','S1','A1','A2','A3','B3','B4','G0'])
+   plot_figure("IC0719-test_blue", dir="../results_deimos_v4/", binID=[0,11,66], ftype=['S0','S1','A1','A2','A3','B3','B4'])
+   plot_figure("IC0719-test_red",  dir="../results_deimos_v4/", binID=[0,11,66], ftype=['S0','S1','A1','A2','A3','B3','B4'])
 
