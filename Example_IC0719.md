@@ -28,6 +28,7 @@ Move to the 'scripts' directory. All scripts have to be run from there.
 
   EXAMPLE: 
     python bayes-losvd_run.py -f ../preproc/IC0719-test_blue.hdf5 -b all -t A2 -v 1 -p 1 -s 0  
+    
     python bayes-losvd_run.py -f ../preproc/IC0719-test_red.hdf5  -b all -t A2 -v 1 -p 1 -s 0  
 
 - Inspect results interactively
