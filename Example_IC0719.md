@@ -4,7 +4,7 @@
 
 Move to the 'scripts' directory. All scripts have to be run from there.
 
-- Compile all the Stan codes\n
+- Compile all the Stan codes
  
   python bayes-bayes_compile_codes.py
 
