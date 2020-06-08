@@ -81,7 +81,6 @@ def plot_ftype_vs_SNR_all(tab):
 
     # Plotting results
     print("# Plotting results")
-    # colors  = ['red','blue','green','coral','brown','magenta','cyan']
     colors = plt.cm.jet(np.linspace(0,1,nftype))
     fig, ax = plt.subplots(nrows=2, ncols=1, sharex=True, sharey='row', figsize=(5,7))
     plt.subplots_adjust(left=0.15, bottom=0.06, right=0.99, top=0.99, wspace=0.0, hspace=0.0)
@@ -98,28 +97,23 @@ def plot_ftype_vs_SNR_all(tab):
             lo[0,k,o], med[0,k,o], hi[0,k,o] = np.nanpercentile(tab['Bias'][idx],q=[16,50,84])
             lo[1,k,o], med[1,k,o], hi[1,k,o] = np.nanpercentile(tab['Rel. Error'][idx],q=[16,50,84])
             lo[2,k,o], med[2,k,o], hi[2,k,o] = np.nanpercentile(tab['Accuracy'][idx],q=[16,50,84])
-            # lo[3,k,o], med[3,k,o], hi[3,k,o] = np.percentile(tab['Correlation'][idx],q=[16,50,84])
-        
+        # 
         # ax[0].fill_between(np.array(snr,dtype=float), lo[0,k,:], hi[0,k,:], alpha=0.25, color=colors[k])
         # ax[0].plot(np.array(snr,dtype=float), med[0,k,:], '.-', color=colors[k], label=labels[k])
-        ax[0].fill_between(np.array(snr,dtype=float), lo[1,k,:], hi[1,k,:], alpha=0.25, color=colors[k])
+        ax[0].fill_between(np.array(snr,dtype=float), lo[1,k,:], hi[1,k,:], alpha=0.1, color=colors[k])
         ax[0].plot(np.array(snr,dtype=float), med[1,k,:], '.-', color=colors[k], label=labels[k])
-        ax[1].fill_between(np.array(snr,dtype=float), lo[2,k,:], hi[2,k,:], alpha=0.25, color=colors[k])
+        ax[1].fill_between(np.array(snr,dtype=float), lo[2,k,:], hi[2,k,:], alpha=0.1, color=colors[k])
         ax[1].plot(np.array(snr,dtype=float), med[2,k,:], '.-', color=colors[k], label=labels[k])
         # ax[3].fill_between(np.array(snr,dtype=float), lo[3,k,:], hi[3,k,:], alpha=0.5, color=colors[k])
         # ax[3].plot(np.array(snr,dtype=float), med[3,k,:], '.-', color=colors[k], label=labels[k])
 
-    # ax[0].axhline(y=0.0, color='k', linestyle=":")
-    # ax[0].axhline(y=0.0, color='k', linestyle=":")
+    # ax[0].grid(which='both')
+    # ax[1].grid()
     ax[1].axhline(y=1.0, color='k', linestyle=":")
-
-    # ax[0].set_ylabel('Bias')        
     ax[0].set_ylabel('Relative Error')
-    ax[1].set_ylabel('Accuracy')
-    # ax[3].set_ylabel('Correlation')
+    ax[1].set_ylabel('Z-score')
     ax[-1].set_xlabel('S/N')       
     ax[0].legend(loc='upper right', fontsize=9)
-    # ax[0].set_ylim([-0.35,0.075])
     ax[0].set_ylim([0.0,1.00])
     ax[1].set_ylim([0.0,4.49])
     # plt.show() 
@@ -138,7 +132,7 @@ if (__name__ == '__main__'):
     # Loading files with results
     print("# Loading results")
     tab = compute_stats(filelist)
-    
+
     # Plot Ftype vs SNR for different cases
     plot_ftype_vs_SNR_split(tab)
 

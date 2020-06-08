@@ -8,7 +8,7 @@ def plot_figure(case, id=[10,30,60,80,110]):
 
    # Loading files with results
    snr   = [10,25,50,100,200]
-   ftype = ['S0','S1','A1','A2','A3','B3','B4']
+   ftype = ['S0','S1','A1','A2','A3','A4','B3','B4']
    outdir = "../results_deimos_v4/"
 
    # Loading input LOSVD
@@ -86,7 +86,7 @@ def plot_figure(case, id=[10,30,60,80,110]):
    f.close()
   
 #    plt.show()   
-   fig.savefig("Figures/bayes-losvd_specfits_"+case+".pdf",dpi=600)
+   fig.savefig("Figures/bayes-losvd_specfits_"+case+"_test.pdf",dpi=600)
 
    return
 
@@ -94,9 +94,10 @@ def plot_figure(case, id=[10,30,60,80,110]):
 if (__name__ == '__main__'):
 
    idx = 10
-   plot_figure("Gaussian",id=idx + np.arange(5)*25)
-   plot_figure("Double_Gaussian",id=idx + np.arange(5)*25)
+   idx = 8
+   # plot_figure("Gaussian",id=idx + np.arange(5)*25)
+   # plot_figure("Double_Gaussian",id=idx + np.arange(5)*25)
    plot_figure("Marie1",id=idx + np.arange(5)*25)
-   plot_figure("Marie2",id=idx + np.arange(5)*25)
-   plot_figure("Wings",id=idx + np.arange(5)*25)
+   # plot_figure("Marie2",id=idx + np.arange(5)*25)
+   # plot_figure("Wings",id=idx + np.arange(5)*25)
 

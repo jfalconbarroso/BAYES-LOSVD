@@ -160,17 +160,18 @@ if (__name__ == '__main__'):
 
     # Capturing the command line arguments
     parser = optparse.OptionParser(usage="%prog -f file")
-    parser.add_option("-f", "--preproc_file",  dest="preproc_file",  type="string", default="",    help="Filename of the preprocessed file")
-    parser.add_option("-i", "--niter",         dest="niter",         type="int",    default=500,   help="Number of iterations in stan")
-    parser.add_option("-c", "--nchain",        dest="nchain",        type="int",    default=1,     help="Number of simultaneous chains to run")
-    parser.add_option("-a", "--adapt_delta",   dest="adapt_delta",   type="float",  default=0.99,  help="Stan Adapt_delta")
-    parser.add_option("-m", "--max_treedepth", dest="max_treedepth", type="int",    default=18,    help="Stan maximum tree depth")
-    parser.add_option("-b", "--bin",           dest="bin",           type="string", default="all", help="Bin ID for spectrum run [all,odd,even,bin_list]")
-    parser.add_option("-n", "--njobs",         dest="njobs",         type="int",    default=1,     help="Number of jobs to lauch in parallel")
-    parser.add_option("-v", "--verbose",       dest="verbose",       type="int",    default=0,     help="Printing Stan summary for each fit (Default: 0/False)")
-    parser.add_option("-s", "--save_chains",   dest="save_chains",   type="int",    default=0,     help="Saving chains for each fit (Default: 0/False)")
-    parser.add_option("-p", "--save_plots",    dest="save_plots",    type="int",    default=0,     help="Saving diagnistic plots (Default: 0/False)")
-    parser.add_option("-t", "--fit_type",      dest="fit_type",      type="string", default="S0",  help="Defining the type of fit (Default: S0 [Pure simplex])")
+    parser.add_option("-f", "--preproc_file",  dest="preproc_file",  type="string", default="",     help="Filename of the preprocessed file")
+    parser.add_option("-i", "--niter",         dest="niter",         type="int",    default=500,    help="Number of iterations in stan")
+    parser.add_option("-c", "--nchain",        dest="nchain",        type="int",    default=1,      help="Number of simultaneous chains to run")
+    parser.add_option("-a", "--adapt_delta",   dest="adapt_delta",   type="float",  default=0.99,   help="Stan Adapt_delta")
+    parser.add_option("-d", "--max_treedepth", dest="max_treedepth", type="int",    default=18,     help="Stan maximum tree depth")
+    parser.add_option("-b", "--bin",           dest="bin",           type="string", default="all",  help="Bin ID for spectrum run [all,odd,even,bin_list]")
+    parser.add_option("-n", "--njobs",         dest="njobs",         type="int",    default=1,      help="Number of jobs to lauch in parallel")
+    parser.add_option("-v", "--verbose",       dest="verbose",       type="int",    default=0,      help="Printing Stan summary for each fit (Default: 0/False)")
+    parser.add_option("-s", "--save_chains",   dest="save_chains",   type="int",    default=0,      help="Saving chains for each fit (Default: 0/False)")
+    parser.add_option("-p", "--save_plots",    dest="save_plots",    type="int",    default=0,      help="Saving diagnistic plots (Default: 0/False)")
+    parser.add_option("-t", "--fit_type",      dest="fit_type",      type="string", default="S0",   help="Defining the type of fit (Default: S0 [Pure simplex])")
+    parser.add_option("-m", "--mask_bin",      dest="mask_bin",      type="string", default="none", help="Bin ID to mask [Default: None]")
 
     (options, args) = parser.parse_args()
     preproc_file    = options.preproc_file
@@ -184,6 +185,7 @@ if (__name__ == '__main__'):
     save_chains     = options.save_chains
     save_plots      = options.save_plots
     fit_type        = options.fit_type
+    mask_bin        = options.mask_bin
 
     if (verbose == 0):
         verbose = False
@@ -231,11 +233,17 @@ if (__name__ == '__main__'):
        bin_list = list(np.arange(1,nbins,2)) 
        print("# EVEN bins selected")
     else:
-       dummy    = bin.split(",") 
-       bin_list = list(np.array(dummy,dtype=int))
+       bin_list = list(np.array(bin.split(","),dtype=int))
        nbins    = len(bin_list)
        print("# Selected bins: "+bin)
     
+    # Masking undesired bins
+    if mask_bin != None:
+        print("# Masking bins: "+mask_bin)
+        bad_bins = list(np.array(mask_bin.split(","),dtype=int))
+        bin_list = np.setdiff1d(bin_list, bad_bins, assume_unique=False)
+        nbins    = len(bin_list)
+
     # Managing the work PARALLEL or SERIAL accordingly
     if njobs*nchain > cpu_count():
         misc.printFAILED("ERROR: The chosen number of NJOBS and NCHAIN seems to be larger than the number of CPUs in the system!")
