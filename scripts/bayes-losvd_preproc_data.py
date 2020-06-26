@@ -2,6 +2,7 @@ import os
 import h5py
 import warnings
 import optparse
+import toml
 import numpy              as np
 import matplotlib.pyplot  as plt
 import lib.misc_functions as misc
@@ -12,23 +13,16 @@ from   lib.cap_utils      import display_bins
 from   astropy.io         import ascii
 from   matplotlib.backends.backend_pdf import PdfPages
 #==============================================================================
-def run_preproc_data(struct,idx):
+def run_preproc_data(rname, struct):
 
-    # Checking the file exists
-    rname = struct['Runname'][idx]
-    rootname = rname.split('-')[0]
-    if (struct['Survey'][idx] == 'TEST'):
-       filename = "../data/"+rootname+'.hdf5'
-    else:
-       filename = "../data/"+rootname+'.fits'
+    # Checking there is no missing keyword in configuration structure
+    misc.check_configuration(struct)
        
-    if not os.path.exists(filename):
-       misc.printFAILED(filename+" does not exist")
-       exit()
-
+    # Defining output filenames
     outhdf5 = "../preproc_data/"+rname+".hdf5"
     outpdf  = "../preproc_data/"+rname+".pdf"
 
+    # Creating output directories if they do not exist
     if not os.path.exists("../preproc_data"):
           os.mkdir("../preproc_data")
     if os.path.exists(outhdf5):
@@ -37,30 +31,28 @@ def run_preproc_data(struct,idx):
           os.remove(outpdf)
 
     # Printing some basic info
-    print("-------------------------------------------")
-    print("- Input run name:   "+struct['Runname'][idx])
-    print("- Survey:           "+struct['Survey'][idx])
-    print("- Wavelength range: "+str(struct['Lmin'][idx])+"-"+str(struct['Lmax'][idx]))
-    print("- Target SNR:       "+str(struct['SNR'][idx]))
-    print("- Min SNR:          "+str(struct['SNR_min'][idx]))
-    print("- Redshift:         "+str(struct['Redshift'][idx]))
-    print("- Velscale:         "+str(struct['Velscale'][idx]))
-    print("- LOSVD Vmax:       "+str(struct['Vmax'][idx]))
-    print("- Mask flag:        "+str(struct['Mask'][idx]))
-    print("- Pol. order:       "+str(struct['Porder'][idx]))
-    print("- Templates:        "+str(struct['Templates'][idx]))
-    print("- Number of PCA:    "+str(struct['NPCA'][idx]))
-    print("-------------------------------------------")
+    print("--------------------------------------------")
+    print("- Input run name:   "+rname)
+    print("- Survey:           "+struct['instrument'])
+    print("- Wavelength range: "+str(struct['lmin'])+"-"+str(struct['lmax']))
+    print("- Target SNR:       "+str(struct['snr']))
+    print("- Min SNR:          "+str(struct['snr_min']))
+    print("- Redshift:         "+str(struct['redshift']))
+    print("- Velscale:         "+str(struct['velscale']))
+    print("- LOSVD Vmax:       "+str(struct['vmax']))
+    print("- Mask file:        "+str(struct['mask_file']))
+    print("- Pol. order:       "+str(struct['porder']))
+    print("- Templates:        "+str(struct['template_lib']))
+    print("- Number of PCA:    "+str(struct['npca']))
+    print("--------------------------------------------")
     print("")
 
     # Processing data 
-    if (struct['Survey'][idx] == 'TEST'):
-       data_struct = load_testdata(struct,idx)
-    else:   
-       data_struct = load_data(struct,idx)
-   
+    data_struct = load_data(struct)
+    exit()
+
     # Processing templates 
-    temp_struct = load_templates(struct,idx,data_struct)
+    temp_struct = load_templates(struct,data_struct)
 
     # Saving preprocessed information
     print("")
@@ -147,19 +139,20 @@ if (__name__ == '__main__'):
 
     # Capturing the command line arguments
     parser = optparse.OptionParser(usage="%prog -c cfile")
-    parser.add_option("-c", "--config",  dest="config_file", type="string", default="../config_files/default.conf", help="Filename of the general config file")
+    parser.add_option("-c", "--config",  dest="config_file", type="string", default="../config_files/example_preproc.properties", help="Filename of the general config file")
 
     (options, args) = parser.parse_args()
     config_file = options.config_file
     
     # Reading config file
-    config = misc.load_configfile(config_file)
-    ncases = len(config['Runname'])
+    config = toml.load(config_file)
+    cases  = list(config.keys())
+    ncases = len(cases)
     
     # Procesing each case
     for i in range(ncases):
-        misc.printRUNNING(config['Runname'][i]) 
-        run_preproc_data(config,i)
+        misc.printRUNNING(cases[i]) 
+        run_preproc_data(cases[i], config[cases[i]])
         
     exit()
     

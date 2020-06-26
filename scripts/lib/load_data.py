@@ -1,97 +1,69 @@
-import numpy              as np
+import os
+import toml
+import importlib.util
 import matplotlib.pyplot  as plt
 import lib.misc_functions as misc
 import lib.cap_utils      as cap
-from   astropy.io         import fits
 #===============================================================================
-def load_data(struct,idx):
+def load_data(struct):
 
-   # Reading relevant info from config file
-   rname      = struct['Runname'][idx]
-   rootname   = rname.split('-')[0]
-   filename   = rootname+'.fits'
-   survey     = struct['Survey'][idx]
-   targ_snr   = struct['SNR'][idx]
-   snr_min    = struct['SNR_min'][idx]
-   lmin       = struct['Lmin'][idx]
-   lmax       = struct['Lmax'][idx]
-   redshift   = struct['Redshift'][idx]
-   velscale   = struct['Velscale'][idx]
-   mask_flag  = struct['Mask'][idx]
-   porder     = struct['Porder'][idx]
-   vmax       = struct['Vmax'][idx]
-   mask_width = struct['Mask_width'][idx]
-   
-   # Survey specific reading of the datacube info
-   print(" - Reading the datacube and basic info")
-   hdu = fits.open("../data/"+filename)
-   if (survey == "SAURON"):
-       
-       #---------------------------
-       hdr  = hdu[1].header
-       data = hdu[1].data
-       #---------------------------
-       spec  = data['DATA_SPE'].T
-       espec = np.sqrt(data['STAT_SPE'].T)
-       x     = data['XPOS']
-       y     = data['YPOS']
-       npix  = spec.shape[0]
-       nspax = spec.shape[1]
-       wave  = hdr['CRVALS'] + hdr['CDELTS']*np.arange(npix)
-       psize = 1.0
-       
-   elif (survey == "MUSE-WFM"):
-
-       if len(hdu) < 3:
-          print("ERROR: The MUSE datacube needs 3 extensions: [0] Primary, [1] Data, [2] Variance")
-          exit()
-
-       #---------------------------
-       hdr   = hdu[1].header
-       spec  = hdu[1].data
-       espec = np.sqrt(hdu[2].data)
-       #---------------------------
-       xaxis = np.arange(spec.shape[2])*hdr['CD2_2']*3600.0
-       yaxis = np.arange(spec.shape[1])*hdr['CD2_2']*3600.0
-       x, y  = np.meshgrid(xaxis,yaxis)
-       x, y  = x.ravel(), y.ravel()
-       npix  = spec.shape[0]
-       nspax = spec.shape[1]*spec.shape[2]
-       wave  = hdr['CRVAL3'] + hdr['CD3_3']*np.arange(npix)
-       psize = 0.2 # arcsec per spaxel
-       
-       # Reshaping the 3D cube to 2D
-       spec  = np.reshape(spec,(npix,nspax))
-       espec = np.reshape(espec,(npix,nspax))
-       
-   elif (survey == "CALIFA-V1200"):
-       
-       if len(hdu) < 2:
-          print("ERROR: The CALIFA datacube needs 2 extensions: [0] Data, [1] Dispersion")
-          exit()
-
-       #---------------------------
-       hdr   = hdu[0].header
-       spec  = hdu[0].data
-       espec = hdu[1].data 
-       #---------------------------
-       xaxis = np.arange(spec.shape[2])*hdr['CD2_2']*3600.0
-       yaxis = np.arange(spec.shape[1])*hdr['CD2_2']*3600.0
-       x, y  = np.meshgrid(xaxis,yaxis)
-       x, y  = x.ravel(), y.ravel()
-       psize = np.abs(x[1]-x[0])
-       npix  = spec.shape[0]
-       nspax = spec.shape[1]*spec.shape[2]
-       wave  = hdr['CRVAL3'] + hdr['CDELT3']*np.arange(npix)
-
-       # Reshaping the 3D cube to 2D
-       spec  = np.reshape(spec,(npix,nspax))
-       espec = np.reshape(espec,(npix,nspax))
-
-   else:
-       
-       print("ERROR: Survey not recognised. Please choose between SAURON/MUSE/CALIFA-V1200")
+   # Adding the relative path to input filename and check file exists
+   if not os.path.exists("../data/"+struct['filename']):
+       misc.printFAILED("File '"+struct['filename']+"' not found in 'data' directory")
        exit()
+   struct['filename'] = "../data/"+struct['filename']
+   
+   # Reading instruments config file
+   instr_config = toml.load("../config_files/instruments.properties")
+   instr_list   = list(instr_config.keys())
+
+   if struct['instrument'] not in instr_list:
+       misc.printFAILED("Instrument '"+struct['instrument']+"' not found in instruments configuration file")
+       exit()
+   if not os.path.exists("../config_files/instruments/"+instr_config[struct['instrument']]['read_file']):
+       misc.printFAILED("Instrument read file '"+instr_config[struct['instrument']]['read_file']+"' not found in instruments directory")
+       exit()
+
+   # Reading instrument specific data and info
+   print(" - Reading the data and basic info")
+   instr  = importlib.util.spec_from_file_location("", "../config_files/instruments/"+instr_config[struct['instrument']]['read_file'])
+   module = importlib.util.module_from_spec(instr)
+   instr.loader.exec_module(module)
+   data   = module.read_data("../data/"+struct['filename'])
+
+   print(data)
+   exit()
+       
+# 
+       
+#    elif (survey == "CALIFA-V1200"):
+       
+#        if len(hdu) < 2:
+#           print("ERROR: The CALIFA datacube needs 2 extensions: [0] Data, [1] Dispersion")
+#           exit()
+
+#        #---------------------------
+#        hdr   = hdu[0].header
+#        spec  = hdu[0].data
+#        espec = hdu[1].data 
+#        #---------------------------
+#        xaxis = np.arange(spec.shape[2])*hdr['CD2_2']*3600.0
+#        yaxis = np.arange(spec.shape[1])*hdr['CD2_2']*3600.0
+#        x, y  = np.meshgrid(xaxis,yaxis)
+#        x, y  = x.ravel(), y.ravel()
+#        psize = np.abs(x[1]-x[0])
+#        npix  = spec.shape[0]
+#        nspax = spec.shape[1]*spec.shape[2]
+#        wave  = hdr['CRVAL3'] + hdr['CDELT3']*np.arange(npix)
+
+#        # Reshaping the 3D cube to 2D
+#        spec  = np.reshape(spec,(npix,nspax))
+#        espec = np.reshape(espec,(npix,nspax))
+
+#    else:
+       
+#        print("ERROR: Survey not recognised. Please choose between SAURON/MUSE/CALIFA-V1200")
+#        exit()
 
    # Correcting the data for redshift
    print(" - Correcting data for redshift")

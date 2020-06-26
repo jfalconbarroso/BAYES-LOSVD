@@ -401,3 +401,14 @@ def check_hdf5_tree(filename):
     return
 
  #============================================================================== 
+def check_configuration(struct):
+
+    l = ['filename','instrument','redshift','lmin','lmax','vmax','velscale',
+         'snr','snr_min','porder','template_lib','npca','mask_file']
+
+    for key in l:
+        if key not in struct.keys():
+            printFAILED("keyword '"+key+"' not found in configuration file")
+            exit()
+
+    return True
