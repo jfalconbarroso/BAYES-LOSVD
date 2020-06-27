@@ -16,6 +16,6 @@ def read_data(filename):
     wave  = hdr['CRVALS'] + hdr['CDELTS']*np.arange(npix)
     psize = 1.0
 
-    struct = {'wave':wave, 'spec':spec, 'espec':espec, 'x':x, 'y':y, 'npix':npix, 'nspax':nspax, 'psize':psize}
+    struct = {'wave':wave, 'spec':spec, 'espec':espec, 'x':x, 'y':y, 'npix':npix, 'nspax':nspax, 'psize':psize,'ndim':2}
 
     return struct

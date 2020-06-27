@@ -1,5 +1,7 @@
+import os
 import glob
 import h5py
+import toml
 import numpy                 as np
 import matplotlib.pyplot     as plt
 import lib.misc_functions    as misc
@@ -8,17 +10,28 @@ from   astropy.io            import fits
 from   sklearn.decomposition import PCA
 from   scipy.interpolate     import interp1d
 #==============================================================================
-def load_templates(struct,idx,data_struct):
+def load_templates(struct,data_struct):
 
    # Reading relevant info from config file
-   temp_name = struct['Templates'][idx]
-   velscale  = struct['Velscale'][idx]
-   npca      = struct['NPCA'][idx]
-   survey    = struct['Survey'][idx]
-   redshift  = struct['Redshift'][idx]
-   vmax      = struct['Vmax'][idx]
+   temp_name = struct['template_lib']
+   velscale  = struct['velscale']
+   npca      = struct['npca']
+   instr     = struct['instrument']
+   redshift  = struct['redshift']
+   vmax      = struct['vmax']
    lmin      = data_struct['lmin']
    lmax      = data_struct['lmax']
+
+   # Getting the appropiate LSF files
+   instr_config  = toml.load("../config_files/instruments.properties")
+   lsf_data_file = "../config_files/instruments/"+instr_config[instr]['lsf_file']
+   lsf_temp_file = "../config_files/instruments/"+temp_name+'.lsf' 
+   if not os.path.exists(lsf_data_file):
+       misc.printFAILED("Data lsf file not found in 'config_files/instruments' directory")
+       exit()
+   if not os.path.exists(lsf_temp_file):
+       misc.printFAILED("Templates lsf file not found in 'config_files/instruments' directory")
+       exit()
 
    # Creating the LOSVD velocity vector
    print(" - Creating the LOSVD velocity vector")
@@ -93,37 +106,22 @@ def load_templates(struct,idx,data_struct):
        templates  = temp
        ntemplates = ntemp
 
-#    fig, ax = plt.subplots(nrows=7,ncols=1, sharex=True, sharey=False, figsize=(8,8))    
-#    ax = ax.ravel()
-#    fig.subplots_adjust(left=0.1, bottom=0.1, right=0.98, top=0.98, wspace=0.0, hspace=0.0)
-#    col = ['blue','orange','green','red','magenta','brown']
-
-#    ax[0].plot(wave,mean_temp/np.std(mean_temp), color='black', label='Mean spectrum')
-#    ax[0].legend()
-#    for i in range(6):
-#        ax[i+1].plot(wave,templates[:,i],color=col[i], label='PC'+str(i+1))
-#        ax[i+1].set_xlim([4750.0,5450.0])
-#        ax[i+1].set_ylim([-3.5,5.9])
-#        ax[i+1].legend()
-#    ax[6].set_xlabel("Wavelength ($\mathrm{\AA}$)")    
-#    plt.show()
-#    exit()
-   
    # Convolving the templates to match the data's LSF
-   if not (survey == 'TEST'):
-      print(" - Convolving the templates to match the data's LSF")
-      data_lsf   = misc.read_lsf(wave, survey)
-      data_lsf  /= (1.0 + redshift) 
-      temp_lsf   = misc.read_lsf(wave, temp_name)
-      fwhm_diff  = np.sqrt(data_lsf**2 - temp_lsf**2)  # in angstroms
-      bad_pix    = np.isnan(fwhm_diff)
-      fwhm_diff[bad_pix] = 1E-2  # Fixing the FWHM_diff to a tiny value if there are NaNs
-      sigma_diff = fwhm_diff/2.355/dwav
+   print(" - Convolving the templates to match the data's LSF")
+   data_lsf   = misc.read_lsf(wave, lsf_data_file)
+   data_lsf  /= (1.0 + redshift) 
+   temp_lsf   = misc.read_lsf(wave, lsf_temp_file)
+   fwhm_diff  = np.sqrt(data_lsf**2 - temp_lsf**2)  # in angstroms
+   bad_pix    = np.isnan(fwhm_diff)
+   if np.sum(bad_pix) > 0:
+       misc.printWARNING("Some values of the data LSF are below the templates values")
+   fwhm_diff[bad_pix] = 1E-2  # Fixing the FWHM_diff to a tiny value if there are NaNs
+   sigma_diff = fwhm_diff/2.355/dwav
 
-      mean_temp = cap.gaussian_filter1d(mean_temp,sigma_diff)
-      for i in range(ntemplates):
-         templates[:,i] = cap.gaussian_filter1d(templates[:,i], sigma_diff)  # convolution with variable sigma
-         misc.printProgress(i+1, ntemplates, prefix = '   Progress:', suffix = 'Complete', barLength = 50) 
+   mean_temp = cap.gaussian_filter1d(mean_temp,sigma_diff)
+   for i in range(ntemplates):
+      templates[:,i] = cap.gaussian_filter1d(templates[:,i], sigma_diff)  # convolution with variable sigma
+      misc.printProgress(i+1, ntemplates, prefix = '   Progress:', suffix = 'Complete', barLength = 50) 
    
 
    # Log-rebinning the PCA spectra using the data's velscale

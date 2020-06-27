@@ -107,8 +107,6 @@ data {
   int<lower=1> nmask;                        // Number of pixels of the data mask
   int<lower=1> mask[nmask];                  // Mask with the data pixels to be fitted
   int<lower=0> porder;                       // Polynomial order to be used
-  int<lower=0> order;                // the degree of spline (is equal to B-splines order - 1)
-  int<lower=3> num_knots;                    // Number of knots to be used in the B-splines
   //-------------------------
   vector[npix_obs]            spec_obs;      // Array with observed spectrum
   vector<lower=0.0>[npix_obs] sigma_obs;     // Array with error espectrum
@@ -116,11 +114,15 @@ data {
   vector[npix_temp]           mean_template; // Array with mean template of the PCA decomposion
   vector[nvel] xvel;                         // Velocity vector to be used as knots  
   //-------------------------
+  int<lower=0> spline_order;                        // the degree of spline (is equal to B-splines order - 1)
   vector[nmask]               spec_masked;
 
 }
 //=============================================================================
 transformed data{
+
+  // Number of knots to be used in the B-splines
+  int<lower=3> num_knots = nvel; 
 
   // Building the Legendre polynomials
   vector[npix_obs]          vect     = create_vector(npix_obs);
@@ -128,19 +130,19 @@ transformed data{
   matrix[npix_obs,porder+1] leg_pols = legendre(scl_vect,porder,npix_obs);
 
   // Building the B-Splines
-  int                         num_basis = num_knots + order - 1; // total number of B-splines
+  int                         num_basis = num_knots + spline_order - 1; // total number of B-splines
   vector[num_knots]           vect2 = create_vector(num_knots);
   vector[num_knots]           knots = scale_vector(vect2,num_knots)*max(xvel);
   matrix[num_basis, nvel]     B;             // matrix of B-splines
   matrix[nvel,num_basis]      B_transposed;  // matrix of B-splines transposed
-  vector[order + num_knots]   ext_knots_temp;
-  vector[2*order + num_knots] ext_knots; // set of extended knots
+  vector[spline_order + num_knots]   ext_knots_temp;
+  vector[2*spline_order + num_knots] ext_knots; // set of extended knots
 
-  ext_knots_temp = append_row(rep_vector(knots[1], order), knots);
-  ext_knots      = append_row(ext_knots_temp, rep_vector(knots[num_knots], order));
+  ext_knots_temp = append_row(rep_vector(knots[1], spline_order), knots);
+  ext_knots      = append_row(ext_knots_temp, rep_vector(knots[num_knots], spline_order));
   for (ind in 1:num_basis)
-    B[ind,:] = to_row_vector(build_b_spline(to_array_1d(xvel), to_array_1d(ext_knots), ind, order + 1));
-  B[num_knots + order - 1, nvel] = 1;
+    B[ind,:] = to_row_vector(build_b_spline(to_array_1d(xvel), to_array_1d(ext_knots), ind, spline_order + 1));
+  B[num_knots + spline_order - 1, nvel] = 1;
   B_transposed = B';
 
 }    

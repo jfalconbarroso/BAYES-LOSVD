@@ -20,6 +20,6 @@ def read_data(filename):
     nspax = spec.shape[2]
     wave  = hdr['CRVAL1'] + hdr['CDELT1']*np.arange(npix)
 
-    struct = {'wave':wave, 'spec':spec, 'espec':espec, 'x':x, 'y':y, 'npix':npix, 'nspax':nspax, 'psize':psize}
+    struct = {'wave':wave, 'spec':spec, 'espec':espec, 'x':x, 'y':y, 'npix':npix, 'nspax':nspax, 'psize':psize, 'ndim':1}
 
     return struct       

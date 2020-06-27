@@ -2,6 +2,7 @@ import os
 import sys
 import glob
 import h5py
+import toml
 import arviz                 as az
 import numpy                 as np
 import matplotlib.pyplot     as plt
@@ -65,6 +66,20 @@ def printRUNNING(outstr=""):
     return
 
 #==============================================================================
+def printWARNING(outstr=""):
+
+    print("")
+    print("")
+    sys.stdout.write("\033[F"); sys.stdout.write("\033[K")
+    sys.stdout.write("\r\r[ "+'\033[0;36m'+"WARNING "+'\033[0;39m'+"] "+outstr)
+    sys.stdout.flush()
+    print("")
+    print("")
+
+    return
+
+
+#==============================================================================
 def create_gh_losvd(pars,velscale):
     
     # Defining parameters in pixels 
@@ -104,10 +119,10 @@ def mirror_vector(maxval, inc=1):
     return np.r_[-x[::-1], 0, x]
 
 #==============================================================================
-def read_lsf(wave,survey):
+def read_lsf(wave,lsf_file):
     
     # Reading the LSF file
-    tab = ascii.read("../config_files/"+survey+".lsf")
+    tab = ascii.read(lsf_file)
      
     # Interpolating LSF at input wavelengths
     f   = interp1d(tab['Lambda'],tab['FWHM'])
@@ -116,24 +131,18 @@ def read_lsf(wave,survey):
     return out
 
 #==============================================================================
-def read_code(code):
+def read_code(fit_type):
+
+    codes_file = "../config_files/codes.properties"
+    config     = toml.load(codes_file)
+    codefile   = "stan_model/"+config[fit_type]['codefile']    
     
-    # Reading the Code list file
-    tab = ascii.read("../config_files/codes_list.conf", names=['Acronym','Code'], format='no_header', comment='#')
+    extrapars = {}
+    for key, val in config[fit_type].items():
+        if key != 'codefile':
+            extrapars[key] = val
 
-    # Selecting the requested code
-    idx = (tab['Acronym'] == code)
-    if np.sum(idx) == 0:
-        printFAILED("Not a valid FIT_TYPE. Allowed values are included in ../config_files/codes_list.conf")
-        exit()
-    else:
-        codefile = "stan_model/"+tab['Code'][np.nonzero(idx)][0]
-
-    if not os.path.exists(codefile):
-        printFAILED(codefile+" does not exist.")
-        exit()
-
-    return codefile
+    return codefile, extrapars
 
 #==============================================================================
 def load_configfile(file=''):
@@ -412,3 +421,61 @@ def check_configuration(struct):
             exit()
 
     return True
+
+ #============================================================================== 
+def check_codes(fit_type):
+
+    codes_file = "../config_files/codes.properties"
+    if not os.path.exists(codes_file):
+        printFAILED("codes.properties not found in 'config_files' directory")
+        exit()
+
+    config = toml.load(codes_file)
+    
+    if fit_type not in config.keys():
+        printFAILED("Fit type '"+fit_type+"' not found in codes file.")
+        print("Available options are:")
+        for key in config.keys():
+            print(" - ",key)
+        exit()
+
+    return True
+
+ #============================================================================== 
+def spectralMasking(maskfile, logLam,redshift):
+
+    """ Mask spectral region in the fit. 
+        Adapted from GIST pipeline
+    """
+    # Read file
+    mask        = np.genfromtxt(maskfile, usecols=(0,1))
+    maskComment = np.genfromtxt(maskfile, usecols=(2), dtype=str )
+    goodPixels  = np.arange( len(logLam) )
+
+    # In case there is only one mask
+    if len( mask.shape ) == 1  and  mask.shape[0] != 0:
+        mask        = mask.reshape(1,2)
+        maskComment = maskComment.reshape(1)
+
+    for i in range( mask.shape[0] ):
+
+        # Check for sky-lines
+        if maskComment[i] == 'sky'  or  maskComment[i] == 'SKY'  or  maskComment[i] == 'Sky':
+            mask[i,0] = mask[i,0] / (1+redshift)
+
+        # Define masked pixel range
+        minimumPixel = int( np.round( ( np.log( mask[i,0] - mask[i,1]/2. ) - logLam[0] ) / (logLam[1] - logLam[0]) ) )
+        maximumPixel = int( np.round( ( np.log( mask[i,0] + mask[i,1]/2. ) - logLam[0] ) / (logLam[1] - logLam[0]) ) )
+
+        # Handle border of wavelength range
+        if minimumPixel < 0:            minimumPixel = 0
+        if maximumPixel < 0:            maximumPixel = 0
+        if minimumPixel >= len(logLam): minimumPixel = len(logLam)-1
+        if maximumPixel >= len(logLam): maximumPixel = len(logLam)-1
+
+        # Mark masked spectral pixels
+        goodPixels[minimumPixel:maximumPixel+1] = -1
+
+    goodPixels = goodPixels[ np.where( goodPixels != -1 )[0] ]
+
+    return(goodPixels)

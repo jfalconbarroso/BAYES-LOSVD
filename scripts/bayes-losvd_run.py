@@ -5,7 +5,7 @@ import h5py
 import pickle
 import pystan
 import optparse
-import threading
+# import threading
 import warnings
 import traceback
 import arviz                           as az
@@ -13,7 +13,6 @@ import numpy                           as np
 import matplotlib.pyplot               as plt
 import lib.misc_functions              as misc
 from   lib.create_diagnostic_plots     import create_diagnostic_plots 
-from   lib.load_preproc_data           import load_preproc_data
 from   hashlib                         import md5
 from   multiprocessing                 import Queue, Process, cpu_count
 #==============================================================================
@@ -59,8 +58,8 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
     try:
 
         # Defining the version of the code to use
-        codefile = misc.read_code(fit_type)
-
+        codefile, extrapars = misc.read_code(fit_type)
+     
         # Defining output names and directories
         rootname         = runname+"-"+fit_type
         outdir           = "../results/"+rootname
@@ -70,7 +69,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
         sample_filename  = outdir+"/"+rootname+"_progress_bin"+str(idx)+".csv"
         outhdf5          = outdir+"/"+rootname+"_results_bin"+str(idx)+".hdf5"
 
-        # Creating the structure with the data for Stan
+        # Creating the basic structure with the data for Stan
         struct = h5py.File("../preproc_data/"+runname+".hdf5","r")
         data   = {'npix_obs':      np.array(struct['in/npix_obs']), 
                   'ntemp':         np.array(struct['in/ntemp']), 
@@ -83,11 +82,13 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
                   'sigma_obs':     np.array(struct['in/sigma_obs'][:,idx]), 
                   'templates':     np.array(struct['in/templates']),
                   'mean_template': np.array(struct['in/mean_template']),
-                  'order':         np.int(fit_type[1])-1,
                   'velscale':      np.array(struct['in/velscale']),
-                  'xvel':          np.array(struct['in/xvel']),
-                  'num_knots':     np.array(struct['in/nvel'])}
+                  'xvel':          np.array(struct['in/xvel'])}
         data['spec_masked'] = data['spec_obs'][data['mask']] # This is added to perform LOO tests
+
+        # Adding any extra parameter needed for that particular fit_type
+        for key, val in extrapars.items():
+            data[key] = val
             
         # Running the model
         with open(codefile, 'r') as myfile:
@@ -170,7 +171,7 @@ if (__name__ == '__main__'):
     parser.add_option("-s", "--save_chains",   dest="save_chains",   type="int",    default=0,      help="Saving chains for each fit (Default: 0/False)")
     parser.add_option("-p", "--save_plots",    dest="save_plots",    type="int",    default=0,      help="Saving diagnistic plots (Default: 0/False)")
     parser.add_option("-t", "--fit_type",      dest="fit_type",      type="string", default="S0",   help="Defining the type of fit (Default: S0 [Pure simplex])")
-    parser.add_option("-m", "--mask_bin",      dest="mask_bin",      type="string", default="none", help="Bin ID to mask [Default: None]")
+    parser.add_option("-m", "--mask_bin",      dest="mask_bin",      type="string", default="None", help="Bin ID to mask [Default: None]")
 
     (options, args) = parser.parse_args()
     preproc_file    = options.preproc_file
@@ -206,6 +207,9 @@ if (__name__ == '__main__'):
        misc.printFAILED(preproc_file+" does not exist.")
        exit()
 
+    # Checking fit_type is a valid one
+    misc.check_codes(fit_type)
+
     # Defining rootnames for output files
     tmpname = os.path.basename(preproc_file)
     runname = os.path.splitext(tmpname)[0]
@@ -237,7 +241,7 @@ if (__name__ == '__main__'):
        print("# Selected bins: "+bin)
     
     # Masking undesired bins
-    if mask_bin != None:
+    if mask_bin != "None":
         print("# Masking bins: "+mask_bin)
         bad_bins = list(np.array(mask_bin.split(","),dtype=int))
         bin_list = np.setdiff1d(bin_list, bad_bins, assume_unique=False)

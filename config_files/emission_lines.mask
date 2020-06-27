@@ -1,0 +1,33 @@
+# This file defines spectral ranges that are masked during the analysis of the PPXF module.
+#
+# Lambda [Angst.]    Width [Angst.]    Comment
+3203.15              20                HeII     
+3345.81              20                [NeV]    
+3425.81              20                [NeV]    
+3726.03              20                [OII]    
+3728.73              20                [OII]    
+3868.69              20                [NeIII]  
+3967.40              20                [NeIII]  
+3889.05              20                H5       
+3970.07              20                He       
+4101.73              20                Hd       
+4340.46              20                Hg       
+4363.15              20                [OIII]   
+4685.74              20                HeII     
+4711.30              20                [ArIV]   
+4740.10              20                [ArIV]   
+4861.32              20                Hb       
+4958.83              20                [OIII]   
+5006.77              20                [OIII]   
+5197.90              20                [NI]     
+5200.39              20                [NI]   
+5465.00              30                Residual
+5875.60              20                HeI      
+6300.20              20                [OI]     
+6363.67              20                [OI]     
+6547.96              20                [NII]    
+6562.80              20                Ha       
+6583.34              20                [NII]    
+6716.31              20                [SII]    
+6730.68              20                [SII]    
+7135.67              20                [ArIII]  

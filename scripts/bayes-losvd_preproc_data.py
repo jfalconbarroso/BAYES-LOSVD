@@ -17,7 +17,7 @@ def run_preproc_data(rname, struct):
 
     # Checking there is no missing keyword in configuration structure
     misc.check_configuration(struct)
-       
+    
     # Defining output filenames
     outhdf5 = "../preproc_data/"+rname+".hdf5"
     outpdf  = "../preproc_data/"+rname+".pdf"
@@ -47,16 +47,17 @@ def run_preproc_data(rname, struct):
     print("--------------------------------------------")
     print("")
 
-    # Processing data 
+    # Processing data
+    print("# Processing data .....") 
     data_struct = load_data(struct)
-    exit()
 
     # Processing templates 
+    print("# Processing templates .....") 
     temp_struct = load_templates(struct,data_struct)
 
     # Saving preprocessed information
     print("")
-    print(" - Saving preproc data: "+outhdf5)
+    print("# Saving preproc data: "+outhdf5)
     print("")
     f    = h5py.File(outhdf5, "w")
     #------------
@@ -75,10 +76,10 @@ def run_preproc_data(rname, struct):
     f.close()
 
     # Saving a simple plot with some basic figures about the pre-processed data
-    print(" - Plotting some basic info in "+outpdf)
+    print("# Plotting some basic info in "+outpdf)
     pdf_pages = PdfPages(outpdf)
  
-    if not (struct['Survey'][idx] == 'TEST'):
+    if data_struct['ndim'] == 2:
 
        # Bin map -----------
        fig = plt.figure(figsize=(10,7))
@@ -91,12 +92,16 @@ def run_preproc_data(rname, struct):
            ax0.text(data_struct['xbin'][i],data_struct['ybin'][i],i, fontsize=5, horizontalalignment='left', verticalalignment='center')
        pdf_pages.savefig(fig)
 
-    # Input central spectra including mask and PCA templates
+    # Input central spectra (2D case) or first spectra (1D case) including mask and PCA templates
     fig = plt.figure(figsize=(10,7))
     plt.subplots_adjust(left=0.10, bottom=0.10, right=0.98, top=0.925, wspace=0.0, hspace=0.0)
     ax1 = plt.subplot2grid((3,1),(0,0))
     ax1.plot(np.exp(data_struct['wave_obs']),data_struct['spec_obs'][:,0],'k')
-    ax1.set_ylabel("Central spec")
+    if data_struct['ndim'] == 1:
+       ax1.set_ylabel("First spec")
+    else:
+       ax1.set_ylabel("Central spec")
+
     ax1.set_xlim([np.exp(temp_struct['lwave_temp'])[0],np.exp(temp_struct['lwave_temp'])[-1]])
     ax1.axvline(x=np.exp(data_struct['wave_obs'][data_struct['mask'][0]]),  color='k', linestyle=":")
     ax1.axvline(x=np.exp(data_struct['wave_obs'][data_struct['mask'][-1]]), color='k', linestyle=":")

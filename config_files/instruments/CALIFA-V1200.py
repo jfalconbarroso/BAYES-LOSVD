@@ -26,6 +26,6 @@ def read_data(filename):
     spec  = np.reshape(spec,(npix,nspax))
     espec = np.reshape(espec,(npix,nspax))
 
-    struct = {'wave':wave, 'spec':spec, 'espec':espec, 'x':x, 'y':y, 'npix':npix, 'nspax':nspax, 'psize':psize}
+    struct = {'wave':wave, 'spec':spec, 'espec':espec, 'x':x, 'y':y, 'npix':npix, 'nspax':nspax, 'psize':psize, 'ndim':2}
 
     return struct       
