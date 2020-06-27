@@ -73,19 +73,6 @@ def run_inspect_fits(filename,idx, losvd_file=None, norm=0, save=0):
    ax1.axvline(x=0.0, color='k', linestyle=":")
    ax1.set_xlabel("Velocity (km s$^{-1}$)")
 
-   # from astropy.modeling import models, fitting
-   # g_init = models.Gaussian1D(amplitude=1., mean=0, stddev=100.)
-   # fit_g = fitting.LevMarLSQFitter()
-   # g = fit_g(g_init, xvel, losvd[2,:])
-   # ax1.plot(xvel,g(xvel))
-   # print(g)
-
-   # fit_g = fitting.LevMarLSQFitter()
-   # g = fit_g(g_init, input_xvel, input_losvd)
-   # ax1.plot(input_xvel,g(input_xvel))
-   # print(g)
-
-
    # Spectral fit
    mx  = 1.1*np.amax(spec_obs)
    mn0 = 0.7*np.amin(spec_obs)
@@ -112,7 +99,6 @@ def run_inspect_fits(filename,idx, losvd_file=None, norm=0, save=0):
 
    ax2.set_ylabel("Norm. flux")
    ax2.set_xlabel("Wavelength ($\\mathrm{\\AA}$)")
-   # ax2.legend(loc=1)
 
    if (save == 1):
       dirname, inputname = os.path.split(filename) 
