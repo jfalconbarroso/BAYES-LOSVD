@@ -2,6 +2,7 @@ data/
 results*/
 scripts/stan_model/cache*.pkl
 scripts/stan_model/old/
+scripts/slurm*
 preproc_data/
 sync_denso.sh
 sync_deimos.sh
