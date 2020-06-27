@@ -205,7 +205,7 @@ if (__name__ == '__main__'):
     # Checking the file exists
     if not os.path.exists(preproc_file):
        misc.printFAILED(preproc_file+" does not exist.")
-       exit()
+       sys.exit()
 
     # Checking fit_type is a valid one
     misc.check_codes(fit_type)
@@ -250,7 +250,7 @@ if (__name__ == '__main__'):
     # Managing the work PARALLEL or SERIAL accordingly
     if njobs*nchain > cpu_count():
         misc.printFAILED("ERROR: The chosen number of NJOBS and NCHAIN seems to be larger than the number of CPUs in the system!")
-        exit()
+        sys.exit()
 
     # Create Queues
     inQueue  = Queue()
@@ -282,5 +282,5 @@ if (__name__ == '__main__'):
        print("# Packing all results into a single HDF5 file.")
        misc.pack_results(runname+"-"+fit_type)
 
-    exit()
+    sys.exit()
   

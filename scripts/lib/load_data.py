@@ -1,4 +1,5 @@
 import os
+import sys
 import toml
 import importlib.util
 import numpy              as np
@@ -11,7 +12,7 @@ def load_data(struct):
    # Adding the relative path to input filename and check file exists
    if not os.path.exists("../data/"+struct['filename']):
        misc.printFAILED("File '"+struct['filename']+"' not found in 'data' directory")
-       exit()
+       sys.exit()
    struct['filename'] = "../data/"+struct['filename']
    
    # Reading instruments config file
@@ -20,10 +21,10 @@ def load_data(struct):
 
    if struct['instrument'] not in instr_list:
        misc.printFAILED("Instrument '"+struct['instrument']+"' not found in instruments configuration file")
-       exit()
+       sys.exit()
    if not os.path.exists("../config_files/instruments/"+instr_config[struct['instrument']]['read_file']):
        misc.printFAILED("Instrument read file '"+instr_config[struct['instrument']]['read_file']+"' not found in instruments directory")
-       exit()
+       sys.exit()
 
    # Reading instrument specific data and info
    print(" - Reading the data and basic info")

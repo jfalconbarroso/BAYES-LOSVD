@@ -418,7 +418,7 @@ def check_configuration(struct):
     for key in l:
         if key not in struct.keys():
             printFAILED("keyword '"+key+"' not found in configuration file")
-            exit()
+            sys.exit()
 
     return True
 
@@ -428,7 +428,7 @@ def check_codes(fit_type):
     codes_file = "../config_files/codes.properties"
     if not os.path.exists(codes_file):
         printFAILED("codes.properties not found in 'config_files' directory")
-        exit()
+        sys.exit()
 
     config = toml.load(codes_file)
     
@@ -437,7 +437,7 @@ def check_codes(fit_type):
         print("Available options are:")
         for key in config.keys():
             print(" - ",key)
-        exit()
+        sys.exit()
 
     return True
 

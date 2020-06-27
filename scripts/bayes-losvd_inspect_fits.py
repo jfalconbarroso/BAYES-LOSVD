@@ -17,7 +17,7 @@ def run_inspect_fits(filename,idx, losvd_file=None, norm=0, save=0):
    dummy  = f.get('out/'+stridx+'/bestfit')
    if dummy == None:
       misc.printFAILED("ERROR: Bin "+stridx+" does not exist in file")
-      exit()
+      sys.exit()
 
    # Reading input LOSVD if requested
    if not (losvd_file == None): 
@@ -154,11 +154,8 @@ if (__name__ == '__main__'):
 
     if not os.path.exists(filename):
        misc.printFAILED(filename+" does not exist.")
-       exit()
+       sys.exit()
 
     run_inspect_fits(filename,binID,losvd_file,norm=norm,save=save)
 
     misc.printDONE(runname+" - Bin: "+str(binID))
-
-    
-    exit()

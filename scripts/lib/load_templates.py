@@ -1,4 +1,5 @@
 import os
+import sys
 import glob
 import h5py
 import toml
@@ -28,10 +29,10 @@ def load_templates(struct,data_struct):
    lsf_temp_file = "../config_files/instruments/"+temp_name+'.lsf' 
    if not os.path.exists(lsf_data_file):
        misc.printFAILED("Data lsf file not found in 'config_files/instruments' directory")
-       exit()
+       sys.exit()
    if not os.path.exists(lsf_temp_file):
        misc.printFAILED("Templates lsf file not found in 'config_files/instruments' directory")
-       exit()
+       sys.exit()
 
    # Creating the LOSVD velocity vector
    print(" - Creating the LOSVD velocity vector")
@@ -80,7 +81,7 @@ def load_templates(struct,data_struct):
    # Running PCA on the input models
    if npix < ntemp:
       misc.printFAILED("The number of pixels in the spectra ("+str(npix)+") has to be larger than the number of templates ("+str(ntemp)+") to run PCA.")
-      exit()
+      sys.exit()
 
    if npca > 0:
        print(" - Running PCA on the templates...")
@@ -142,7 +143,7 @@ def load_templates(struct,data_struct):
    lwave1 = np.log(lmax)+(pad-1)*(lwave[1]-lwave[0])
    if (lwave[0] > lwave0):
       misc.printFAILED("Templates wavelength range is not sufficient for padding")
-      exit()
+      sys.exit()
 
    idx        = (lwave >= lwave0) & (lwave <= lwave1)
    mean_temp  = mean_temp[idx]
