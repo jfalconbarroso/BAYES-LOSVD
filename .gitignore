@@ -3,6 +3,7 @@ results*/
 scripts/stan_model/cache*.pkl
 scripts/stan_model/old/
 scripts/slurm*
+scripts/.ipynb_checkpoints/
 preproc_data/
 sync_denso.sh
 sync_deimos.sh
