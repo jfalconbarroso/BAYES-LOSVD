@@ -35,6 +35,7 @@ def load_templates(struct,data_struct):
        sys.exit()
 
    # Creating the LOSVD velocity vector
+   print("")
    print(" - Creating the LOSVD velocity vector")
    xvel = misc.mirror_vector(vmax,inc=velscale)
    if (xvel[1]-xvel[0] < velscale):
@@ -45,6 +46,7 @@ def load_templates(struct,data_struct):
    # Loading SSP models and defining some basic parameters–
    list  = glob.glob("../templates/"+temp_name+"/*")
    ntemp = len(list)
+   print("")
    print(" - "+str(ntemp)+" templates found in "+temp_name+" library")
 
    hdu  = fits.open(list[0])
@@ -66,6 +68,7 @@ def load_templates(struct,data_struct):
     
    # Loading templates into final arrays
    # NOTE: this loops already cuts the spectra to the Lmin,Lmax limits
+   print("")
    print(" - Loading and preparing the templates...")
    for i in range(ntemp):
         
@@ -76,7 +79,7 @@ def load_templates(struct,data_struct):
        scale[i]   = np.mean(temp[:,i])
        temp[:,i] /= scale[i]       
        
-       misc.printProgress(i+1, ntemp, suffix = 'Complete', barLength = 50) 
+    #    misc.printProgress(i+1, ntemp, suffix = 'Complete', barLength = 50) 
      
    # Running PCA on the input models
    if npix < ntemp:
@@ -84,6 +87,7 @@ def load_templates(struct,data_struct):
       sys.exit()
 
    if npca > 0:
+       print("")
        print(" - Running PCA on the templates...")
        mean_temp = np.mean(temp,axis=1)
        pca       = PCA(n_components=ntemp)
@@ -108,6 +112,7 @@ def load_templates(struct,data_struct):
        ntemplates = ntemp
 
    # Convolving the templates to match the data's LSF
+   print("")
    print(" - Convolving the templates to match the data's LSF")
    data_lsf   = misc.read_lsf(wave, lsf_data_file)
    data_lsf  /= (1.0 + redshift) 
@@ -126,6 +131,7 @@ def load_templates(struct,data_struct):
    
 
    # Log-rebinning the PCA spectra using the data's velscale
+   print("")
    print(" - Log-rebinning the templates")
    lamRange = np.array([np.amin(wave),np.amax(wave)])
    mean_temp, lwave, dummy = cap.log_rebin(lamRange, mean_temp, velscale=velscale)
@@ -162,7 +168,8 @@ def load_templates(struct,data_struct):
        templates  = templates[0:-2,:]
        lwave      = lwave[0:-2]
        npix_temp  = len(lwave)
-             
+
+   print("")             
    print(" - Storing everything in templates structure")
    struct = {'lwave_temp':    lwave,
              'mean_template': mean_temp,
