@@ -6,6 +6,7 @@ import numpy              as np
 import matplotlib.pyplot  as plt
 import lib.misc_functions as misc
 import lib.cap_utils      as cap
+from   tqdm.auto          import trange
 #===============================================================================
 def load_data(struct):
 
@@ -27,7 +28,6 @@ def load_data(struct):
        sys.exit()
 
    # Reading instrument specific data and info
-   print("")
    print(" - Reading the data and basic info")
    instr  = importlib.util.spec_from_file_location("", "../config_files/instruments/"+instr_config[struct['instrument']]['read_file'])
    module = importlib.util.module_from_spec(instr)
@@ -48,7 +48,6 @@ def load_data(struct):
    lmax  = struct['lmax']
 
    # Correcting the data for redshift
-   print("")
    print(" - Correcting data for redshift")
    wave /= (1.0 + struct['redshift'])
    
@@ -59,7 +58,6 @@ def load_data(struct):
        lmax = wave[-1]
 
    # Cutting the data to the desired wavelength range
-   print("")
    print(" - Cutting data to desired wavelength range")
    idx   = (wave >= lmin) & (wave <= lmax)
    wave  = wave[idx]
@@ -74,13 +72,11 @@ def load_data(struct):
    espec *= factor
       
    # Computing the SNR in each spaxel
-   print("")
    print(" - Computing the SNR of each spaxel")
    signal = np.nanmedian(spec,axis=0)
    noise  = np.abs(np.nanmedian(espec,axis=0)) 
           
    # Selecting those spaxels above SNR_min
-   print("")
    print(" - Selecting spaxels aboove SNR_min")
    idx    = (np.abs((signal/noise)-struct['snr_min']) <= 1.0)
    isof   = np.mean(signal[idx])
@@ -96,12 +92,11 @@ def load_data(struct):
    if struct['snr'] > 0.0:
 
        # Determining Voronoi binning to the data
-       print("")
        print(" - Computing the Voronoi binning")
        binNum, xbin, ybin, xBar, yBar, bin_snr, nPixels, scale = cap.voronoi_2d_binning(x, y, \
                signal, noise, struct['snr'], plot=False, quiet=True, pixelsize=psize)
           
-       print("   - "+str(len(xbin))+" Voronoi bins required")   
+       print("   - "+str(len(xbin))+" Voronoi bins created")   
           
        # Applying the Voronoi binning to the data
        print("   - Applying the Voronoi binning")
@@ -111,14 +106,13 @@ def load_data(struct):
        bin_espec = np.zeros([npix,nbins])
        bin_flux  = np.zeros(nbins)
     
-       for i in range(nbins):
+       for i in trange(nbins, ascii=True, leave=False):
            k = np.where( binNum == ubins[i] )[0]
            valbin = len(k)
            if valbin == 1:
               av_spec     = spec[:,k]
               av_err_spec = espec[:,k]
            else:
-              #av_spec     = np.nanmean(spec[:,k],axis=1)
               av_spec     = np.nansum(spec[:,k],axis=1)
               av_err_spec = np.sqrt(np.sum(espec[:,k]**2,axis=1))
     
@@ -126,7 +120,6 @@ def load_data(struct):
            bin_spec[:,i]  = np.ravel(av_spec)
            bin_espec[:,i] = np.ravel(av_err_spec)
            
-           misc.printProgress(i+1, nbins, barLength = 50)
    else:
 
        binNum    = np.arange(nspec)
@@ -138,14 +131,13 @@ def load_data(struct):
        ybin      = y        
        
    # Log-rebinning the data to the input Velscale
-   print("")
    print(" - Log-rebinning and normalizing the spectra")
    lamRange = np.array([np.amin(wave),np.amax(wave)])
    dummy, lwave, _ = cap.log_rebin(lamRange, bin_spec[:,0], velscale=struct['velscale'])
    npix_log = len(dummy)
    lspec, lespec = np.zeros([npix_log,nbins]), np.zeros([npix_log,nbins])
    
-   for i in range(nbins):
+   for i in trange(nbins, ascii=True, leave=False):
        
       #Log-rebinning the spectra 
       lspec[:,i],  dummy , dummy = cap.log_rebin(lamRange, bin_spec[:,i],  velscale=struct['velscale'])
@@ -155,10 +147,7 @@ def load_data(struct):
       lespec[:,i] /= np.nanmedian(lspec[:,i])
       lspec[:,i]  /= np.nanmedian(lspec[:,i]) 
 
-      misc.printProgress(i+1, nbins, barLength = 50)
-
    # Defining the data mask
-   print("")
    print(" - Defining the data mask")
    if (struct['mask_file'] == "None"):
        mask = np.arange(npix_log)
@@ -169,7 +158,6 @@ def load_data(struct):
        mask = misc.spectralMasking("../config_files/"+struct['mask_file'],lwave, struct['redshift'])
       
    # Storing all the info in a data structure
-   print("")
    print(" - Storing everything in data structure")
    print("")
    data_struct = {'binID':      binNum,

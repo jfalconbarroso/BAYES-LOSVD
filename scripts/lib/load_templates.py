@@ -10,6 +10,7 @@ import lib.cap_utils         as cap
 from   astropy.io            import fits
 from   sklearn.decomposition import PCA
 from   scipy.interpolate     import interp1d
+from   tqdm.auto             import trange
 #==============================================================================
 def load_templates(struct,data_struct):
 
@@ -35,7 +36,6 @@ def load_templates(struct,data_struct):
        sys.exit()
 
    # Creating the LOSVD velocity vector
-   print("")
    print(" - Creating the LOSVD velocity vector")
    xvel = misc.mirror_vector(vmax,inc=velscale)
    if (xvel[1]-xvel[0] < velscale):
@@ -46,7 +46,6 @@ def load_templates(struct,data_struct):
    # Loading SSP models and defining some basic parameters–
    list  = glob.glob("../templates/"+temp_name+"/*")
    ntemp = len(list)
-   print("")
    print(" - "+str(ntemp)+" templates found in "+temp_name+" library")
 
    hdu  = fits.open(list[0])
@@ -68,9 +67,8 @@ def load_templates(struct,data_struct):
     
    # Loading templates into final arrays
    # NOTE: this loops already cuts the spectra to the Lmin,Lmax limits
-   print("")
    print(" - Loading and preparing the templates...")
-   for i in range(ntemp):
+   for i in trange(ntemp, ascii=True, leave=False):
         
        # Reading, trimming and scaling the spectra 
        hdu        = fits.open(list[i])
@@ -78,16 +76,13 @@ def load_templates(struct,data_struct):
        temp[:,i]  = tmp[idx]
        scale[i]   = np.mean(temp[:,i])
        temp[:,i] /= scale[i]       
-       
-    #    misc.printProgress(i+1, ntemp, suffix = 'Complete', barLength = 50) 
-     
+            
    # Running PCA on the input models
    if npix < ntemp:
       misc.printFAILED("The number of pixels in the spectra ("+str(npix)+") has to be larger than the number of templates ("+str(ntemp)+") to run PCA.")
       sys.exit()
 
    if npca > 0:
-       print("")
        print(" - Running PCA on the templates...")
        mean_temp = np.mean(temp,axis=1)
        pca       = PCA(n_components=ntemp)
@@ -95,7 +90,7 @@ def load_templates(struct,data_struct):
       
        # Extracting the desired number of PCA components
        cumsum_pca_variance = np.cumsum(pca.explained_variance_ratio_)
-       print("  "+str(npca)+" PCA components explain {:7.3f}".format(cumsum_pca_variance[npca]*100)+"% of the variance in the input library")
+       print("    "+str(npca)+" PCA components explain {:7.3f}".format(cumsum_pca_variance[npca]*100)+"% of the variance in the input library")
        templates = np.zeros((npix,npca))
        templates = PC_tmp[:,0:npca]
        ntemplates = npca
@@ -112,7 +107,6 @@ def load_templates(struct,data_struct):
        ntemplates = ntemp
 
    # Convolving the templates to match the data's LSF
-   print("")
    print(" - Convolving the templates to match the data's LSF")
    data_lsf   = misc.read_lsf(wave, lsf_data_file)
    data_lsf  /= (1.0 + redshift) 
@@ -125,13 +119,10 @@ def load_templates(struct,data_struct):
    sigma_diff = fwhm_diff/2.355/dwav
 
    mean_temp = cap.gaussian_filter1d(mean_temp,sigma_diff)
-   for i in range(ntemplates):
+   for i in trange(ntemplates, ascii=True, leave=False):
       templates[:,i] = cap.gaussian_filter1d(templates[:,i], sigma_diff)  # convolution with variable sigma
-      misc.printProgress(i+1, ntemplates, prefix = '   Progress:', suffix = 'Complete', barLength = 50) 
    
-
    # Log-rebinning the PCA spectra using the data's velscale
-   print("")
    print(" - Log-rebinning the templates")
    lamRange = np.array([np.amin(wave),np.amax(wave)])
    mean_temp, lwave, dummy = cap.log_rebin(lamRange, mean_temp, velscale=velscale)
@@ -169,7 +160,6 @@ def load_templates(struct,data_struct):
        lwave      = lwave[0:-2]
        npix_temp  = len(lwave)
 
-   print("")             
    print(" - Storing everything in templates structure")
    struct = {'lwave_temp':    lwave,
              'mean_template': mean_temp,
