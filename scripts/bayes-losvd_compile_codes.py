@@ -44,5 +44,3 @@ if (__name__ == '__main__'):
             code = myfile.read()
        model = stan_cache(model_code=code) 
        misc.printDONE(codefile+" compiled.")
-
-    exit()

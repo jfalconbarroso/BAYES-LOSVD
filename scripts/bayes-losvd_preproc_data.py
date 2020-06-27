@@ -7,7 +7,6 @@ import numpy              as np
 import matplotlib.pyplot  as plt
 import lib.misc_functions as misc
 from   lib.load_data      import load_data
-from   lib.load_testdata  import load_testdata
 from   lib.load_templates import load_templates
 from   lib.cap_utils      import display_bins
 from   astropy.io         import ascii
@@ -91,6 +90,8 @@ def run_preproc_data(rname, struct):
        for i in range(np.amax(data_struct['binID'])+1):
            ax0.text(data_struct['xbin'][i],data_struct['ybin'][i],i, fontsize=5, horizontalalignment='left', verticalalignment='center')
        pdf_pages.savefig(fig)
+       plt.close()
+
 
     # Input central spectra (2D case) or first spectra (1D case) including mask and PCA templates
     fig = plt.figure(figsize=(10,7))
@@ -126,6 +127,7 @@ def run_preproc_data(rname, struct):
 
     pdf_pages.savefig(fig)    
     pdf_pages.close()   
+    plt.close()
    
     misc.printDONE(rname)
 
@@ -158,6 +160,4 @@ if (__name__ == '__main__'):
     for i in range(ncases):
         misc.printRUNNING(cases[i]) 
         run_preproc_data(cases[i], config[cases[i]])
-        
-    exit()
-    
+            

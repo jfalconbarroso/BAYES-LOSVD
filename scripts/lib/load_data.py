@@ -156,12 +156,9 @@ def load_data(struct):
    else:
        if not os.path.exists("../config_files/"+struct['mask_file']):
            misc.printFAILED("Cannot find mask file in 'config_files' directory")
-           exit()
+           sys.exit()
        mask = misc.spectralMasking("../config_files/"+struct['mask_file'],lwave, struct['redshift'])
       
-   print(mask)
-   exit()
-
    # Storing all the info in a data structure
    print(" - Storing everything in data structure")
    print("")
