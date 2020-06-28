@@ -172,6 +172,7 @@ if (__name__ == '__main__'):
     parser.add_option("-p", "--save_plots",    dest="save_plots",    type="int",    default=0,      help="Saving diagnistic plots (Default: 0/False)")
     parser.add_option("-t", "--fit_type",      dest="fit_type",      type="string", default="S0",   help="Defining the type of fit (Default: S0 [Pure simplex])")
     parser.add_option("-m", "--mask_bin",      dest="mask_bin",      type="string", default="None", help="Bin ID to mask [Default: None]")
+    parser.add_option("-x", "--restart",       dest="restart",       type="int",    default=0,      help="Restart run [Default: 0/False]")
 
     (options, args) = parser.parse_args()
     preproc_file    = options.preproc_file
@@ -186,6 +187,7 @@ if (__name__ == '__main__'):
     save_plots      = options.save_plots
     fit_type        = options.fit_type
     mask_bin        = options.mask_bin
+    restart         = options.restart
 
     if (verbose == 0):
         verbose = False
@@ -201,6 +203,11 @@ if (__name__ == '__main__'):
         save_plots = False
     else:
         save_plots = True    
+
+    if (restart == 0):
+        restart = False
+    else:
+        restart = True    
 
     # Checking the file exists
     if not os.path.exists(preproc_file):
@@ -226,31 +233,11 @@ if (__name__ == '__main__'):
     f.close()
             
     # Defining the list of bins to be analysed
-    if (bin == "all"):
-       bin_list = list(np.arange(nbins))
-       print("# ENTIRE list of bins selected")
-    elif (bin == "odd"):
-       bin_list = list(np.arange(0,nbins,2)) 
-       print("# ODD bins selected")
-    elif (bin == "even"):
-       bin_list = list(np.arange(1,nbins,2)) 
-       print("# EVEN bins selected")
-    else:
-       bin_list = list(np.array(bin.split(","),dtype=int))
-       nbins    = len(bin_list)
-       print("# Selected bins: "+bin)
-    
-    # Masking undesired bins
-    if mask_bin != "None":
-        print("# Masking bins: "+mask_bin)
-        bad_bins = list(np.array(mask_bin.split(","),dtype=int))
-        bin_list = np.setdiff1d(bin_list, bad_bins, assume_unique=False)
-        nbins    = len(bin_list)
+    bin_list, nbins = misc.create_bins_list(bin, nbins, mask_bin, outdir, restart)
 
     # Managing the work PARALLEL or SERIAL accordingly
     if njobs*nchain > cpu_count():
-        misc.printFAILED("ERROR: The chosen number of NJOBS and NCHAIN seems to be larger than the number of CPUs in the system!")
-        sys.exit()
+        misc.printWARNING("The chosen number of NJOBS and NCHAIN seems to be larger than the number of CPUs in the system!")
 
     # Create Queues
     inQueue  = Queue()

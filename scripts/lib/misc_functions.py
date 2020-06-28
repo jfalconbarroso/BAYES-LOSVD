@@ -461,3 +461,48 @@ def spectralMasking(maskfile, logLam,redshift):
     goodPixels = goodPixels[ np.where( goodPixels != -1 )[0] ]
 
     return(goodPixels)
+
+ #============================================================================== 
+def create_bins_list(bin, nbins, mask_bin, outdir, restart):
+
+    if (bin == "all"):
+       bin_list = list(np.arange(nbins))
+       print("# ENTIRE list of bins selected")
+
+    elif (bin == "odd"):
+       bin_list = list(np.arange(0,nbins,2)) 
+       print("# ODD bins selected")
+
+    elif (bin == "even"):
+       bin_list = list(np.arange(1,nbins,2)) 
+       print("# EVEN bins selected")
+
+    else:
+       bin_list = list(np.array(bin.split(","),dtype=int))
+       nbins    = len(bin_list)
+       print("# Selected bins: "+bin)
+    
+    # Masking undesired bins
+    if mask_bin != "None":
+        print("# Masking bins: "+mask_bin)
+        bad_bins = list(np.array(mask_bin.split(","),dtype=int))
+        bin_list = np.setdiff1d(bin_list, bad_bins, assume_unique=False)
+        nbins    = len(bin_list)
+    else:
+        print("# No mask to be applied to input bin list")
+
+    # Updating list if restart option is activated
+    if restart:
+        print("# Restart flag is on. Updating the input list")
+        flist = glob.glob(outdir+"/*bin*.hdf5")
+        bins_on_disk = []
+        for file in flist:
+            bins_on_disk = np.append(bins_on_disk,file.split("bin")[1].split(".hdf5")[0])
+        
+        bins_on_disk = np.array(np.sort(bins_on_disk), dtype=int)
+        bin_list = np.setdiff1d(bin_list,bins_on_disk, assume_unique=False)
+        nbins_on_disk = len(bins_on_disk)
+        nbins = len(bin_list)
+        print(" - "+str(nbins_on_disk)+" bins found on disk. Running "+str(nbins)+" bins.")
+
+    return bin_list, nbins
