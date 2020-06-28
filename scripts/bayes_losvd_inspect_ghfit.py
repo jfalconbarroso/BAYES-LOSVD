@@ -121,11 +121,8 @@ if (__name__ == '__main__'):
 
     if not os.path.exists(filename):
        misc.printFAILED(filename+" does not exist.")
-       exit()
+       sys.exit()
 
     run_inspect_ghfit(filename,binID,losvd_file,norm=norm,save=save)
 
     misc.printDONE(runname+" - Bin: "+str(binID))
-
-    
-    exit()

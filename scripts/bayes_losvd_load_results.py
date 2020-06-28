@@ -1,6 +1,7 @@
 import os
 import sys
 import h5py
+import optparse
 import warnings
 import numpy              as np
 import lib.misc_functions as misc
@@ -58,5 +59,12 @@ if (__name__ == '__main__'):
     print("             (load results)                ")
     print("===========================================")
     print("")
-    
-    tab = load_results("../results/NGC4550_SAURON-SP/NGC4550_SAURON-SP_results.hdf5", verbose=False)
+
+    # Capturing the command line arguments
+    parser = optparse.OptionParser(usage="%prog -f file")
+    parser.add_option("-f", "--filename",  dest="filename", type="string", default=None, help="Filename of the HDF5 file with results")
+
+    (options, args) = parser.parse_args()
+    filename = options.filename
+
+    tab = load_results(filename)
