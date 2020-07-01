@@ -3,20 +3,26 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Overview & Features
-===================
+Welcome to BAYES-LOSVD
+======================
+
+Here you will find all the relevant documentation for the BAYES-LOSVD code.
+
+It contains instructions to install, run the code, and analyse the outputs.
+The code is written in a flexible and modular fashion, so that it be easily expanded 
+in its capabilities by non-expert python users. We provide details on how to 
+enhance the code with the inclusion of new reading procedures for different 
+data formats, as well as guidelines on how to incorporate new Stan models.
+
+Please read all the pages below for more information.
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-BAYES-LOSVD is a python framework for the non-parametric extraction of the Line-Of-Sight Velocity Distributions in galaxies.
-It makes use of Stan (https://mc-stan.org/) to perform all the computations and provide reliable uncertainties for all 
-the parametes of the model chosen for the fit.
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   :maxdepth: 0
+   :caption: Contents
+   
+   overview
+   download_installation
+   usage_tutorial
+   license
+   acknowledgements
+   contact
