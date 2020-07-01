@@ -1,6 +1,0 @@
-Usage & Tutorial
-=====================
-
-Configuration files
-
-Jupyter notebook

@@ -1,0 +1,395 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Usage &mdash; BAYES-LOSVD  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Workflow &amp; Tutorial" href="workflow_tutorial.html" />
+    <link rel="prev" title="Directory structure" href="dir_structure.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> BAYES-LOSVD
+          
+
+          
+            
+            <img src="_static/bayes_losvd_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview &amp; Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download_installation.html">Download &amp; Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dir_structure.html">Directory structure</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-steps">Basic steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#preproc-data-configuration-files">Preproc data configuration files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instruments-configuration-file">Instruments configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#stan-codes-configuration-file">Stan codes configuration file</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#adding-new-stan-models">Adding new Stan models</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="workflow_tutorial.html">Workflow &amp; Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contact.html">Contact</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">BAYES-LOSVD</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Usage</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="usage">
+<span id="id1"></span><h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The BAYES-LOSVD package commands have to be executed from the ‘scripts’ directory.</p>
+<p>See <a class="reference internal" href="dir_structure.html#dir-structure"><span class="std std-ref">Directory structure</span></a> for relevant details.</p>
+</div>
+<div class="section" id="basic-steps">
+<h2>Basic steps<a class="headerlink" href="#basic-steps" title="Permalink to this headline">¶</a></h2>
+<p>Running the code involves the following steps:</p>
+<dl class="simple">
+<dt>Step 1: Compilation of the Stan codes.</dt><dd><ul class="simple">
+<li><p>This step is necessary to run the main fitting code. Stan models will be internally converted into C++ and then compiled. This step only needs to be executed once.</p></li>
+</ul>
+</dd>
+<dt>Step 2: Pre-processing of the input data</dt><dd><ul class="simple">
+<li><p>This is needed to chose, e.g., the wavelength range for the fitting, the level of spatial binning, number of PCA components or template library, among other things.</p></li>
+</ul>
+</dd>
+<dt>Step 3: Running the code</dt><dd><ul class="simple">
+<li><p>This is the main step of the process that leads to the extraction of the LOSVD.</p></li>
+</ul>
+</dd>
+<dt>Step 4: Analysis of the outputs</dt><dd><ul class="simple">
+<li><p>In this step the spectral fits, the recovered LOSVD and Stan convergence diagnostics can be checked.</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="preproc-data-configuration-files">
+<h2>Preproc data configuration files<a class="headerlink" href="#preproc-data-configuration-files" title="Permalink to this headline">¶</a></h2>
+<p>The standard location to place the required configuration file for the preprocessing of a particular dataset is the <code class="docutils literal notranslate"><span class="pre">config_files</span></code> directory.</p>
+<p>The configuration file for the preprocessing follows the <a class="reference external" href="https://en.wikipedia.org/wiki/TOML">TOML (Tom’s Obvius Minimal Language)</a>. An example of such file is provided at  the <code class="docutils literal notranslate"><span class="pre">config_files/example_preproc.properties</span> <span class="pre">file</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">NGC000</span><span class="p">]</span>
+<span class="n">filename</span>     <span class="o">=</span> <span class="s2">&quot;NGC000.fits&quot;</span>
+<span class="n">instrument</span>   <span class="o">=</span> <span class="s2">&quot;MUSE-WFM&quot;</span>
+<span class="n">redshift</span>     <span class="o">=</span> <span class="mf">0.00</span>
+<span class="n">lmin</span>         <span class="o">=</span> <span class="mf">4825.0</span>
+<span class="n">lmax</span>         <span class="o">=</span> <span class="mf">5300.0</span>
+<span class="n">vmax</span>         <span class="o">=</span> <span class="mf">700.0</span>
+<span class="n">velscale</span>     <span class="o">=</span> <span class="mf">60.0</span>
+<span class="n">snr</span>          <span class="o">=</span> <span class="mf">50.0</span>
+<span class="n">snr_min</span>      <span class="o">=</span> <span class="mf">3.0</span>
+<span class="n">porder</span>       <span class="o">=</span> <span class="mi">5</span>
+<span class="n">template_lib</span> <span class="o">=</span> <span class="s2">&quot;MILES_SSP&quot;</span>
+<span class="n">npca</span>         <span class="o">=</span> <span class="mi">5</span>
+<span class="n">mask_file</span>    <span class="o">=</span> <span class="s2">&quot;emission_lines.mask&quot;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">[&lt;run</span> <span class="pre">name&gt;]</span></code>: name to identify the run</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">filename</span></code> filename in data dir</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">instrument</span></code>: intrument mode [see instruments.properties]</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">redshift</span></code>: redshift of the target</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lmin</span></code>: minimum wavelength to be used in the fit (in Angstroms)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lmax</span></code>: maximum wavelength to be used in the fit (in Angstroms)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vmax</span></code>: maximum value of velocity allowed for the LOSVD extraction</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">velscale</span></code>: desired velocity scale km/s/pix</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">snr</span></code>: target signal-to-noise ratio (Note: if not required set to 0 or a * negative value)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">snr_min</span></code>: minimum signal-to-noise to use for the spatial binning</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">porder</span></code>: polynomial order to be used in spectral fitting</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">template_lib</span></code>: template library to use from those available in ‘templates’ directory</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">npca</span></code>: number of PCA components to use as templates</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mask_file</span></code>: emission line mask file</p></li>
+</ul>
+<p>The same file can have as many <code class="docutils literal notranslate"><span class="pre">[&lt;run</span> <span class="pre">name&gt;]</span></code> configuration blocks as needed.</p>
+</div>
+<div class="section" id="instruments-configuration-file">
+<h2>Instruments configuration file<a class="headerlink" href="#instruments-configuration-file" title="Permalink to this headline">¶</a></h2>
+<p>Our current distribution includes reading routines for some of the most popular IFUs/surveys (e.g. SAURON, CALIFA, MUSE-WFM, …). This is defined in a <a class="reference external" href="https://en.wikipedia.org/wiki/TOML">TOML</a> file <code class="docutils literal notranslate"><span class="pre">ìnstruments.properties</span></code> placed in the <code class="docutils literal notranslate"><span class="pre">config_files</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">MUSE</span><span class="o">-</span><span class="n">WFM</span><span class="p">]</span>
+<span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;MUSE-WFM.py&#39;</span>
+<span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;MUSE-WFM.lsf&#39;</span>
+
+<span class="p">[</span><span class="n">MUSE</span><span class="o">-</span><span class="n">WFM_2D</span><span class="p">]</span>
+<span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;FITS2D.py&#39;</span>
+<span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;MUSE-WFM.lsf&#39;</span>
+
+<span class="p">[</span><span class="n">SAURON_E3D</span><span class="p">]</span>
+<span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;SAURON_E3D.py&#39;</span>
+<span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;SAURON_E3D.lsf&#39;</span>
+
+<span class="p">[</span><span class="n">CALIFA</span><span class="o">-</span><span class="n">V1200</span><span class="p">]</span>
+<span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;CALIFA-V1200.py&#39;</span>
+<span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;CALIFA-V1200.lsf&#39;</span>
+
+<span class="p">[</span><span class="n">CALIFA</span><span class="o">-</span><span class="n">V500</span><span class="p">]</span>
+<span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;CALIFA-V500.py&#39;</span>
+<span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;CALIFA-V500.lsf&#39;</span>
+</pre></div>
+</div>
+<p>Each instrument is defined with a <code class="docutils literal notranslate"><span class="pre">[&lt;instrument</span> <span class="pre">name&gt;]</span></code> heading.
+This is the name to be used in the <code class="docutils literal notranslate"><span class="pre">instrument</span></code> keyword of the preprocessing configuration file. For each instrument, two files are required: a Python routine to read the instrument data (<code class="docutils literal notranslate"><span class="pre">read_file</span></code>), and an ASCII file describing the Line-Spread Function (i.e. the instrumental resolution as a function of wavelength) for the instrument (<code class="docutils literal notranslate"><span class="pre">lsf_file</span></code>). Both files are placed in the <code class="docutils literal notranslate"><span class="pre">config_files/instruments</span></code> directory for the default instruments.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Adding new instruments is as simple as including, following the scheme above,  their definition in the <code class="docutils literal notranslate"><span class="pre">config_files/instruments.properties</span></code> file and adding the required two new files to the <code class="docutils literal notranslate"><span class="pre">config_files/instruments/</span></code> directory. The user should use existing files for reference on the required input and output variables.</p>
+</div>
+</div>
+<div class="section" id="stan-codes-configuration-file">
+<h2>Stan codes configuration file<a class="headerlink" href="#stan-codes-configuration-file" title="Permalink to this headline">¶</a></h2>
+<p>BAYES-LOSVD allows different Stan models to perform the LOSVD fitting. The different implementations describe the LOSVD in distinct ways: from a pure Simplex definition (with no prior assumptions), to several forms of regularization using priors (e.g. Random Walk, Auto-Regresive, or penalised B-splines). The list of available models is listed in the <code class="docutils literal notranslate"><span class="pre">config_files/codes.properties</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">SP</span><span class="p">]</span>
+<span class="n">codefile</span> <span class="o">=</span> <span class="s2">&quot;bayes-losvd_model_SP.stan&quot;</span>
+
+<span class="p">[</span><span class="n">RW</span><span class="p">]</span>
+<span class="n">codefile</span> <span class="o">=</span> <span class="s2">&quot;bayes-losvd_model_RW.stan&quot;</span>
+
+<span class="p">[</span><span class="n">AR1</span><span class="p">]</span>
+<span class="n">codefile</span> <span class="o">=</span> <span class="s2">&quot;bayes-losvd_model_AR.stan&quot;</span>
+<span class="n">order</span>    <span class="o">=</span> <span class="mi">1</span>
+
+<span class="p">[</span><span class="n">AR2</span><span class="p">]</span>
+<span class="n">codefile</span> <span class="o">=</span> <span class="s2">&quot;bayes-losvd_model_AR.stan&quot;</span>
+<span class="n">order</span>    <span class="o">=</span> <span class="mi">2</span>
+
+<span class="p">[</span><span class="n">AR3</span><span class="p">]</span>
+<span class="n">codefile</span> <span class="o">=</span> <span class="s2">&quot;bayes-losvd_model_AR.stan&quot;</span>
+<span class="n">order</span>    <span class="o">=</span> <span class="mi">3</span>
+
+<span class="p">[</span><span class="n">Bsplines3</span><span class="p">]</span>
+<span class="n">codefile</span> <span class="o">=</span> <span class="s2">&quot;bayes-losvd_model_Bsplines.stan&quot;</span>
+<span class="n">spline_order</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="p">[</span><span class="n">Bsplines4</span><span class="p">]</span>
+<span class="n">codefile</span> <span class="o">=</span> <span class="s2">&quot;bayes-losvd_model_Bsplines.stan&quot;</span>
+<span class="n">spline_order</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="p">[</span><span class="n">GHfree</span><span class="p">]</span>
+<span class="n">codefile</span> <span class="o">=</span> <span class="s2">&quot;bayes-losvd_model_GH_full_series.stan&quot;</span>
+</pre></div>
+</div>
+<p>Like previous <a class="reference external" href="https://en.wikipedia.org/wiki/TOML">TOML</a> files the code identification is set in the <code class="docutils literal notranslate"><span class="pre">[&lt;code</span> <span class="pre">name&gt;]</span></code> keyword. We require the <code class="docutils literal notranslate"><span class="pre">codefile</span></code> with the actual name of the file with the Stan model. In addition, it is possible to pass the Stan code other variables for execution (see, e.g.,  AR and Bsplines models above).</p>
+<div class="section" id="adding-new-stan-models">
+<h3>Adding new Stan models<a class="headerlink" href="#adding-new-stan-models" title="Permalink to this headline">¶</a></h3>
+<p>Adding a new Stan code is as simple as including, following the scheme above,  its definition in the <code class="docutils literal notranslate"><span class="pre">config_files/codes.properties</span> <span class="pre">file</span></code> and adding the required Stan model file to the <code class="docutils literal notranslate"><span class="pre">scripts/stan_model/</span></code> directory. For the new model to work properly, it requires the following input variables in the Stan’s data block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="p">{</span>
+   <span class="nb">int</span><span class="o">&lt;</span><span class="n">lower</span><span class="o">=</span><span class="mi">1</span><span class="o">&gt;</span> <span class="n">npix_obs</span><span class="p">;</span>      <span class="o">//</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">pixels</span> <span class="n">of</span> <span class="nb">input</span> <span class="n">spectrum</span>
+   <span class="nb">int</span><span class="o">&lt;</span><span class="n">lower</span><span class="o">=</span><span class="mi">1</span><span class="o">&gt;</span> <span class="n">ntemp</span><span class="p">;</span>         <span class="o">//</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">PC</span> <span class="n">components</span>
+   <span class="nb">int</span><span class="o">&lt;</span><span class="n">lower</span><span class="o">=</span><span class="mi">1</span><span class="o">&gt;</span> <span class="n">npix_temp</span><span class="p">;</span>     <span class="o">//</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">pixels</span> <span class="n">of</span> <span class="n">each</span> <span class="n">PC</span> <span class="n">components</span>
+   <span class="nb">int</span><span class="o">&lt;</span><span class="n">lower</span><span class="o">=</span><span class="mi">1</span><span class="o">&gt;</span> <span class="n">nvel</span><span class="p">;</span>          <span class="o">//</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">pixels</span> <span class="n">of</span> <span class="n">the</span> <span class="n">LOSVD</span>
+   <span class="nb">int</span><span class="o">&lt;</span><span class="n">lower</span><span class="o">=</span><span class="mi">1</span><span class="o">&gt;</span> <span class="n">nmask</span><span class="p">;</span>         <span class="o">//</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">pixels</span> <span class="n">of</span> <span class="n">the</span> <span class="n">mask</span>
+   <span class="nb">int</span><span class="o">&lt;</span><span class="n">lower</span><span class="o">=</span><span class="mi">1</span><span class="o">&gt;</span> <span class="n">mask</span><span class="p">[</span><span class="n">nmask</span><span class="p">];</span>   <span class="o">//</span> <span class="n">Mask</span> <span class="k">with</span> <span class="n">pixels</span> <span class="n">to</span> <span class="n">be</span> <span class="n">fitted</span>
+   <span class="nb">int</span><span class="o">&lt;</span><span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">porder</span><span class="p">;</span>        <span class="o">//</span> <span class="n">Polynomial</span> <span class="n">order</span> <span class="n">to</span> <span class="n">be</span> <span class="n">used</span>
+   <span class="n">vector</span><span class="p">[</span><span class="n">npix_obs</span><span class="p">]</span>            <span class="n">spec_obs</span><span class="p">;</span>      <span class="o">//</span> <span class="n">Array</span> <span class="k">with</span> <span class="n">observed</span> <span class="n">spectrum</span>
+   <span class="n">vector</span><span class="o">&lt;</span><span class="n">lower</span><span class="o">=</span><span class="mf">0.0</span><span class="o">&gt;</span><span class="p">[</span><span class="n">npix_obs</span><span class="p">]</span> <span class="n">sigma_obs</span><span class="p">;</span>     <span class="o">//</span> <span class="n">Array</span> <span class="k">with</span> <span class="n">error</span> <span class="n">spectrum</span>
+   <span class="n">matrix</span><span class="p">[</span><span class="n">npix_temp</span><span class="p">,</span><span class="n">ntemp</span><span class="p">]</span>     <span class="n">templates</span><span class="p">;</span>     <span class="o">//</span> <span class="n">Array</span> <span class="k">with</span> <span class="n">PC</span> <span class="n">components</span> <span class="n">spectra</span>
+   <span class="n">vector</span><span class="p">[</span><span class="n">npix_temp</span><span class="p">]</span>           <span class="n">mean_template</span><span class="p">;</span> <span class="o">//</span> <span class="n">Array</span> <span class="k">with</span> <span class="n">mean</span> <span class="n">template</span> <span class="n">of</span> <span class="n">the</span>  <span class="n">PCA</span> <span class="n">decomposion</span>
+   <span class="n">vector</span><span class="p">[</span><span class="n">nmask</span><span class="p">]</span>               <span class="n">spec_masked</span><span class="p">;</span>   <span class="o">//</span> <span class="n">masked</span> <span class="nb">input</span> <span class="n">spectrum</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>These variables will be generated automatically during the preprocessing process. Note that the input spectrum, error spectrum, mean_template and templates are log-rebinned.</p>
+<p>In addition, the generated quantites block should contain the following variables:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">generated</span> <span class="n">quantities</span> <span class="p">{</span>
+
+  <span class="n">vector</span><span class="p">[</span><span class="n">npix_temp</span><span class="p">]</span> <span class="n">spec</span>      <span class="o">=</span> <span class="n">mean_template</span> <span class="o">+</span> <span class="n">templates</span> <span class="o">*</span> <span class="n">weights</span><span class="p">;</span>
+  <span class="n">vector</span><span class="p">[</span><span class="n">npix_obs</span><span class="p">]</span>  <span class="n">conv_spec</span> <span class="o">=</span> <span class="n">convolve_data</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span><span class="n">losvd</span><span class="p">,</span><span class="n">npix_temp</span><span class="p">,</span><span class="n">nvel</span><span class="p">);</span>
+  <span class="n">vector</span><span class="p">[</span><span class="n">npix_obs</span><span class="p">]</span>  <span class="n">poly</span>      <span class="o">=</span> <span class="n">leg_pols</span> <span class="o">*</span> <span class="n">coefs</span><span class="p">;</span>
+  <span class="n">vector</span><span class="p">[</span><span class="n">npix_obs</span><span class="p">]</span>  <span class="n">bestfit</span>   <span class="o">=</span> <span class="n">poly</span> <span class="o">+</span> <span class="n">conv_spec</span><span class="p">;</span>
+  <span class="n">vector</span><span class="p">[</span><span class="n">nmask</span><span class="p">]</span>     <span class="n">spec_pred</span><span class="p">;</span>
+  <span class="n">vector</span><span class="p">[</span><span class="n">nmask</span><span class="p">]</span>     <span class="n">log_likelihood</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="ow">in</span> <span class="mi">1</span><span class="p">:</span><span class="n">nmask</span><span class="p">){</span>
+    <span class="n">log_likelihood</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">normal_lpdf</span><span class="p">(</span><span class="n">spec_obs</span><span class="p">[</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">|</span> <span class="n">bestfit</span><span class="p">[</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span>   <span class="n">sigma_obs</span><span class="p">[</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]]);</span>
+    <span class="n">spec_pred</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>      <span class="o">=</span> <span class="n">normal_rng</span><span class="p">(</span><span class="n">bestfit</span><span class="p">[</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">sigma_obs</span><span class="p">[</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]]);</span>
+  <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The parameters of the model can be anything. BAYES-LOSVD will capture them automatically and process them appropiately.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="workflow_tutorial.html" class="btn btn-neutral float-right" title="Workflow &amp; Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="dir_structure.html" class="btn btn-neutral float-left" title="Directory structure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Jesus Falcon-Barroso &amp; Marie Martig; 
+      <span class="lastupdated">
+        Last updated on Jul 02, 2020.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

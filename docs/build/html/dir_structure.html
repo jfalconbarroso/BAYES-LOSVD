@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Usage &amp; Tutorial &mdash; BAYES-LOSVD 0.1 documentation</title>
+  <title>Directory structure &mdash; BAYES-LOSVD  documentation</title>
   
 
   
@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="License" href="license.html" />
+    <link rel="next" title="Usage" href="usage.html" />
     <link rel="prev" title="Download &amp; Installation" href="download_installation.html" /> 
 </head>
 
@@ -87,11 +87,9 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview &amp; Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="download_installation.html">Download &amp; Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage &amp; Tutorial</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#workflow">Workflow</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Directory structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow_tutorial.html">Workflow &amp; Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contact.html">Contact</a></li>
@@ -140,13 +138,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Usage &amp; Tutorial</li>
+      <li>Directory structure</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/usage_tutorial.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/dir_structure.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -159,15 +157,71 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="usage-tutorial">
-<h1>Usage &amp; Tutorial<a class="headerlink" href="#usage-tutorial" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="configuration">
-<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="directory-structure">
+<span id="dir-structure"></span><h1>Directory structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">¶</a></h1>
+<p>We provide below the basic directory structure of the package along with the main files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>BAYES-LOSVD/
+   │
+   ├─ config_files/
+   |   ├─ example_preproc.properties
+   |   ├─ codes.properties
+   |   ├─ instruments.properties
+   |   └─ instruments/
+   |         ├─ CALIFA-V1200.lsf
+   |         ├─ CALIFA-V1200.py
+   |         ├─ CALIFA-V500.lsf
+   |         ├─ CALIFA-V500.py
+   |         ├─ EMILES_SSP.lsf
+   |         ├─ FITS2D.py
+   |         ├─ MILES_SSP.lsf
+   |         ├─ MILES_Stars.lsf
+   |         ├─ MUSE-WFM.lsf
+   |         ├─ MUSE-WFM.py
+   |         ├─ SAURON_E3D.lsf
+   |         └─ SAURON_E3D.py
+   |
+   ├─ data/
+   │   └─ NGC0000.fits
+   |
+   ├─ preproc_data/
+   |
+   ├─ results/
+   |
+   ├─ scripts/
+   │   ├─ bayes_losvd_compile_codes.py
+   │   ├─ bayes_losvd_ghfit.py
+   │   ├─ bayes_losvd_inspect_fits.py
+   │   ├─ bayes_losvd_inspect_ghfit.py
+   │   ├─ bayes_losvd_load_results.py
+   │   ├─ bayes_losvd_monitor.py
+   │   ├─ bayes_losvd_notebook.ipynb
+   │   ├─ bayes_losvd_preproc_data.py
+   │   ├─ bayes_losvd_run.py
+   │   ├─ lib/
+   │   └─ stan_model/
+   |         ├─ bayes-losvd_ghfit.stan
+   |         ├─ bayes-losvd_model_AR.stan
+   |         ├─ bayes-losvd_model_Bsplines.stan
+   |         ├─ bayes-losvd_model_GH_full_series.stan
+   |         ├─ bayes-losvd_model_RW.stan
+   |         └─ bayes-losvd_model_SP.stan
+   |
+   └─ templates/
+       ├─ MILES_Stars/
+       ├─ MILES_SSP/
+       └─ EMILES_SSP/
+</pre></div>
 </div>
-<div class="section" id="workflow">
-<h2>Workflow<a class="headerlink" href="#workflow" title="Permalink to this headline">¶</a></h2>
-<p>Jupyter notebook</p>
-</div>
+<p>The main purposes of each directory are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">config_files</span></code>: holds all the necessary configuration files to run the code</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: contains the data to be analysed (e.g. MUSE datacube)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">preproc_data</span></code>: it will contain the preprocessed data (in HDF5) before analysis</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">results</span></code>: it will store the results from our main code (i.e. bayes_losvd_run.py)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scripts</span></code>: contains the main procedures to run the code</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">templates</span></code>: holds the templates to be used to fit the input spectra</p></li>
+</ul>
+<p>We provide details about the configuration files and execution of the code in <a class="reference internal" href="usage.html#usage"><span class="std std-ref">Usage</span></a>.</p>
 </div>
 
 
@@ -178,7 +232,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="license.html" class="btn btn-neutral float-right" title="License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="usage.html" class="btn btn-neutral float-right" title="Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="download_installation.html" class="btn btn-neutral float-left" title="Download &amp; Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -190,7 +244,10 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Jesus Falcon-Barroso &amp; Marie Martig
+        &copy; Copyright 2020, Jesus Falcon-Barroso &amp; Marie Martig; 
+      <span class="lastupdated">
+        Last updated on Jul 02, 2020.
+      </span>
 
     </p>
   </div>

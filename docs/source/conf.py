@@ -18,12 +18,11 @@
 # -- Project information -----------------------------------------------------
 
 project = 'BAYES-LOSVD'
-copyright = '2020, Jesus Falcon-Barroso & Marie Martig'
+copyright = '2020, Jesus Falcon-Barroso & Marie Martig; '
 author = 'Jesus Falcon-Barroso & Marie Martig'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1'
-
+release = ''
 
 # -- General configuration ---------------------------------------------------
 
@@ -31,9 +30,7 @@ release = '0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 import sphinx_rtd_theme
-extensions = [
-    "sphinx_rtd_theme"    
-]
+extensions = ["sphinx_rtd_theme"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -41,8 +38,7 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = []
-
+exclude_patterns = ['Thumbs.db', '.DS_Store']
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -59,3 +55,8 @@ html_static_path = ['_static']
 
 # BAYES-LOSVD logo
 html_logo = "_static/bayes_losvd_logo.png"
+
+# If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
+# using the given strftime format.
+html_last_updated_fmt = '%b %d, %Y'
+

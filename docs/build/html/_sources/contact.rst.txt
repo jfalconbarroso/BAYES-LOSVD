@@ -5,5 +5,5 @@ The BAYES-LOSVD code and this documentation are maintained by Jesus Falcon-Barro
 
 Your feedback, suggestions, and bug reports are appreciated. 
 
-Please do not hesitate to contact me at :email:`jfalcon@iac.es <jfalcon@iac.es>`
+Please do not hesitate to contact me at:  `jfalcon@iac.es <mailto:jfalcon@iac.es>`_.
 

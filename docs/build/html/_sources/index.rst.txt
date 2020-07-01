@@ -22,7 +22,9 @@ Please read all the pages below for more information.
    
    overview
    download_installation
-   usage_tutorial
+   dir_structure
+   usage
+   workflow_tutorial
    license
    acknowledgements
    contact
