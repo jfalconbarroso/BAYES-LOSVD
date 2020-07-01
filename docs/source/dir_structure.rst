@@ -61,7 +61,7 @@ The main purposes of each directory are:
 
 * ``config_files``: holds all the necessary configuration files to run the code 
 * ``data``: contains the data to be analysed (e.g. MUSE datacube)
-* ``preproc_data``: it will contain the preprocessed data (in HDF5) before analysis
+* ``preproc_data``: it will contain the preprocessed data (in HDF5) for analysis
 * ``results``: it will store the results from our main code (i.e. bayes_losvd_run.py)
 * ``scripts``: contains the main procedures to run the code
 * ``templates``: holds the templates to be used to fit the input spectra
