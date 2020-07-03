@@ -41,7 +41,7 @@ def load_data(struct):
    x     = data['x']
    y     = data['y']
    npix  = data['npix']
-   nspax = data['nspax']
+   nspec = data['nspax']
    psize = data['psize']
    ndim  = data['ndim']
    lmin  = struct['lmin']
@@ -78,15 +78,17 @@ def load_data(struct):
           
    # Selecting those spaxels above SNR_min
    print(" - Selecting spaxels aboove SNR_min")
-   idx    = (np.abs((signal/noise)-struct['snr_min']) <= 1.0)
-   isof   = np.mean(signal[idx])
-   idx    = (signal >= isof)
-   spec   = spec[:,idx]
-   espec  = espec[:,idx]   
-   signal = signal[idx]
-   noise  = noise[idx]
-   x, y   = x[idx], y[idx]
-   nspec  = np.sum(idx)
+   delta  = np.abs((signal/noise)-struct['snr_min'])
+   idx    = (delta <= 3.0)
+   if np.sum(idx) > 0:
+       isof   = np.mean(signal[idx])
+       idx    = (signal >= isof)
+       spec   = spec[:,idx]
+       espec  = espec[:,idx]   
+       signal = signal[idx]
+       noise  = noise[idx]
+       x, y   = x[idx], y[idx]
+       nspec  = np.sum(idx)
 
    # IF requested, Voronoi binning the data
    if struct['snr'] > 0.0:
