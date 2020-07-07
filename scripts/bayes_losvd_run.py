@@ -170,7 +170,7 @@ if (__name__ == '__main__'):
     parser.add_option("-v", "--verbose",       dest="verbose",       type="int",    default=0,      help="Printing Stan summary for each fit (Default: 0/False)")
     parser.add_option("-s", "--save_chains",   dest="save_chains",   type="int",    default=0,      help="Saving chains for each fit (Default: 0/False)")
     parser.add_option("-p", "--save_plots",    dest="save_plots",    type="int",    default=0,      help="Saving diagnistic plots (Default: 0/False)")
-    parser.add_option("-t", "--fit_type",      dest="fit_type",      type="string", default="S0",   help="Defining the type of fit (Default: S0 [Pure simplex])")
+    parser.add_option("-t", "--fit_type",      dest="fit_type",      type="string", default="SP",   help="Defining the type of fit (Default: S0 [Pure simplex])")
     parser.add_option("-m", "--mask_bin",      dest="mask_bin",      type="string", default="None", help="Bin ID to mask [Default: None]")
     parser.add_option("-x", "--restart",       dest="restart",       type="int",    default=0,      help="Restart run [Default: 0/False]")
 

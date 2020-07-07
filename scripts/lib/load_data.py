@@ -124,6 +124,7 @@ def load_data(struct):
            
    else:
 
+       bin_snr   = signal/noise
        binNum    = np.arange(nspec)
        bin_flux  = np.mean(spec,axis=0)
        bin_spec  = spec
