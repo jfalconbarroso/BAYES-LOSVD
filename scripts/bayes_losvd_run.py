@@ -106,7 +106,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
            print("")
            print("# Saving chains in Arviz (NETCDF) format: "+arviz_filename) 
            arviz_data = az.from_pystan(posterior=fit, log_likelihood="log_likelihood", 
-                                       observed_data=['spec_masked'], posterior_predictive="spec_pred")
+                                       observed_data=['spec_masked','mask','spec_obs','sigma_obs'], posterior_predictive="spec_pred")
            az.to_netcdf(arviz_data,arviz_filename)
 
         # Saving Stan's summary of main parameters on disk
