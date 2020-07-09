@@ -65,16 +65,6 @@ def load_data(struct):
    espec = espec[idx,:]
    npix  = np.sum(idx)
 
-#    # Making sure there are no NaNs and negative values in the data
-#    good   = np.isfinite(spec) & (spec > 0.0)
-#    if np.sum(good) > 0.0:
-#       factor = np.ceil(np.abs(np.amin(np.log10(spec[good]))))
-#       spec  *= factor
-#       espec *= factor
-#    else:
-#        misc.printFAILED("There is no useful positive pixels in the data")
-#        sys.exit()   
-
    # Computing the SNR in each spaxel
    print(" - Computing the SNR of each spaxel")
    signal = np.nanmedian(spec,axis=0)
