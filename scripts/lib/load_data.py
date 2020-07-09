@@ -65,17 +65,32 @@ def load_data(struct):
    espec = espec[idx,:]
    npix  = np.sum(idx)
 
-   # Making sure there are no NaNs and negative values in the data
-   good   = np.isfinite(spec) & (spec > 0.0)
-   factor = np.ceil(np.abs(np.amin(np.log10(spec[good]))))
-   spec  *= factor
-   espec *= factor
-      
+#    # Making sure there are no NaNs and negative values in the data
+#    good   = np.isfinite(spec) & (spec > 0.0)
+#    if np.sum(good) > 0.0:
+#       factor = np.ceil(np.abs(np.amin(np.log10(spec[good]))))
+#       spec  *= factor
+#       espec *= factor
+#    else:
+#        misc.printFAILED("There is no useful positive pixels in the data")
+#        sys.exit()   
+
    # Computing the SNR in each spaxel
    print(" - Computing the SNR of each spaxel")
    signal = np.nanmedian(spec,axis=0)
    noise  = np.abs(np.nanmedian(espec,axis=0)) 
-          
+
+   # Filtering out those spectra with NaN estimates for SNR
+   good = np.isfinite(signal/noise) & (signal/noise > 0.0)
+   if np.sum(good) > 0:
+       signal = signal[good]
+       noise  = noise[good]
+       spec   = spec[:,good]
+       espec  = espec[:,good]
+       x      = x[good]
+       y      = y[good]
+       nspec  = np.sum(good)
+
    # Selecting those spaxels above SNR_min
    print(" - Selecting spaxels aboove SNR_min")
    delta  = np.abs((signal/noise)-struct['snr_min'])
