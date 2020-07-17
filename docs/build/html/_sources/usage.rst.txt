@@ -62,14 +62,27 @@ The configuration file for the preprocessing follows the `TOML (Tom's Obvius Min
 * ``porder``: polynomial order to be used in spectral fitting
 * ``template_lib``: template library to use from those available in 'templates' directory
 * ``npca``: number of PCA components to use as templates
-* ``mask_file``: emission line mask file
+* ``mask_file``: emission line mask file. Set to "None" if no masking is desired
 
 The same file can have as many ``[<run name>]`` configuration blocks as needed.
 
 Instruments configuration file
 ------------------------------
 
-Our current distribution includes reading routines for some of the most popular IFUs/surveys (e.g. SAURON, CALIFA, MUSE-WFM, ...). This is defined in a `TOML  <https://en.wikipedia.org/wiki/TOML>`_ file ``ìnstruments.properties`` placed in the ``config_files``::
+Our current distribution includes reading routines for some of the most popular IFUs/surveys (e.g. CALIFA, MANGA, MUSE-WFM, SAMI, SAURON, FITS2D, ...). 
+This is defined in a `TOML  <https://en.wikipedia.org/wiki/TOML>`_ file ``ìnstruments.properties`` placed in the ``config_files``::
+
+  [CALIFA-V1200]
+  read_file = 'CALIFA.py'
+  lsf_file  = 'CALIFA-V1200.lsf'
+  
+  [CALIFA-V500]
+  read_file = 'CALIFA.py'
+  lsf_file  = 'CALIFA-V500.lsf'
+
+  [MANGA]
+  read_file = 'MANGA.py'
+  lsf_file  = 'MANGA.lsf'
 
   [MUSE-WFM]
   read_file = 'MUSE-WFM.py'
@@ -79,23 +92,27 @@ Our current distribution includes reading routines for some of the most popular 
   read_file = 'FITS2D.py'
   lsf_file  = 'MUSE-WFM.lsf'
   
+  [SAMI-BLUE]
+  read_file = 'SAMI.py'
+  lsf_file  = 'SAMI-BLUE.lsf'
+
+  [SAMI-RED]
+  read_file = 'SAMI.py'
+  lsf_file  = 'SAMI-RED.lsf'
+
   [SAURON_E3D]
   read_file = 'SAURON_E3D.py'
   lsf_file  = 'SAURON_E3D.lsf'
   
-  [CALIFA-V1200]
-  read_file = 'CALIFA-V1200.py'
-  lsf_file  = 'CALIFA-V1200.lsf'
-  
-  [CALIFA-V500]
-  read_file = 'CALIFA-V500.py'
-  lsf_file  = 'CALIFA-V500.lsf'
-
 Each instrument is defined with a ``[<instrument name>]`` heading.
 This is the name to be used in the ``instrument`` keyword of the preprocessing configuration file. For each instrument, two files are required: a Python routine to read the instrument data (``read_file``), and an ASCII file describing the Line-Spread Function (i.e. the instrumental resolution as a function of wavelength) for the instrument (``lsf_file``). Both files are placed in the ``config_files/instruments`` directory for the default instruments. 
 
 .. hint::
-   Adding new instruments is as simple as including, following the scheme above,  their definition in the ``config_files/instruments.properties`` file and adding the required two new files to the ``config_files/instruments/`` directory. The user should use existing files for reference on the required input and output variables.
+   Adding new instruments is as simple as including, following the scheme above,  their definition 
+   in the ``config_files/instruments.properties`` file and adding the required two new files to the 
+   ``config_files/instruments/`` directory. The user should use existing files for reference on the 
+   required input and output variables. Please make sure there are no NaNs in the data by setting up
+   the flux values to zero and the errors to a very large value. See SAMI.py for an example.
 
 Stan codes configuration file
 -----------------------------

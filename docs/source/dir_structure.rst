@@ -12,16 +12,20 @@ We provide below the basic directory structure of the package along with the mai
       |   ├─ codes.properties
       |   ├─ instruments.properties     
       |   └─ instruments/     
+      |         ├─ CALIFA.py
       |         ├─ CALIFA-V1200.lsf
-      |         ├─ CALIFA-V1200.py
       |         ├─ CALIFA-V500.lsf
-      |         ├─ CALIFA-V500.py
       |         ├─ EMILES_SSP.lsf
       |         ├─ FITS2D.py
+      |         ├─ MANGA.py
+      |         ├─ MANGA.lsf
       |         ├─ MILES_SSP.lsf
       |         ├─ MILES_Stars.lsf
       |         ├─ MUSE-WFM.lsf
       |         ├─ MUSE-WFM.py
+      |         ├─ SAMI.py
+      |         ├─ SAMI-BLUE.lsf
+      |         ├─ SAMI-RED.lsf
       |         ├─ SAURON_E3D.lsf
       |         └─ SAURON_E3D.py
       |

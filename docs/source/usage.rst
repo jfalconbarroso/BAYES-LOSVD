@@ -15,24 +15,31 @@ Basic steps
 Running the code involves the following steps:
 
 Step 1: Compilation of the Stan codes. 
-   * This step is necessary to run the main fitting code. Stan models will be internally converted into C++ and then compiled. This step only needs to be executed once.
+   * This step is necessary to run the main fitting code. Stan models will be 
+   internally converted into C++ and then compiled. This step only needs to be executed once.
 
 Step 2: Pre-processing of the input data
-   * This is needed to chose, e.g., the wavelength range for the fitting, the level of spatial binning, number of PCA components or template library, among other things.
+   * Before execution, the data has to be prepared/preprocessed. This is needed 
+   to chose, e.g., the wavelength range for the fitting, the level of spatial binning, 
+   number of PCA components or template library, among other things.
 
 Step 3: Running the code
    * This is the main step of the process that leads to the extraction of the LOSVD.
 
 Step 4: Analysis of the outputs
-   * In this step the spectral fits, the recovered LOSVD and Stan convergence diagnostics can be checked.
+   * In this step the spectral fits, the recovered LOSVD and Stan convergence 
+   diagnostics can be checked.
 
 
 Preproc data configuration files
 ---------------------------------------
 
-The standard location to place the required configuration file for the preprocessing of a particular dataset is the ``config_files`` directory. 
+The standard location to place the required configuration file for the 
+preprocessing of a particular dataset is the ``config_files`` directory. 
 
-The configuration file for the preprocessing follows the `TOML (Tom's Obvius Minimal Language) <https://en.wikipedia.org/wiki/TOML>`_. An example of such file is provided at  the ``config_files/example_preproc.properties file``::
+The configuration file for the preprocessing follows the 
+`TOML (Tom's Obvius Minimal Language) <https://en.wikipedia.org/wiki/TOML>`_. 
+An example of such file is provided at  the ``config_files/example_preproc.properties file``::
 
   [NGC000]
   filename     = "NGC000.fits"
@@ -62,14 +69,29 @@ The configuration file for the preprocessing follows the `TOML (Tom's Obvius Min
 * ``porder``: polynomial order to be used in spectral fitting
 * ``template_lib``: template library to use from those available in 'templates' directory
 * ``npca``: number of PCA components to use as templates
-* ``mask_file``: emission line mask file
+* ``mask_file``: emission line mask file. Set to "None" if no masking is desired
 
 The same file can have as many ``[<run name>]`` configuration blocks as needed.
 
 Instruments configuration file
 ------------------------------
 
-Our current distribution includes reading routines for some of the most popular IFUs/surveys (e.g. SAURON, CALIFA, MUSE-WFM, ...). This is defined in a `TOML  <https://en.wikipedia.org/wiki/TOML>`_ file ``ìnstruments.properties`` placed in the ``config_files``::
+Our current distribution includes reading routines for some of the most popular 
+IFUs/surveys (e.g. CALIFA, MANGA, MUSE-WFM, SAMI, SAURON, FITS2D, ...). This is 
+defined in a `TOML  <https://en.wikipedia.org/wiki/TOML>`_ file ``ìnstruments.properties`` 
+placed in the ``config_files``::
+
+  [CALIFA-V1200]
+  read_file = 'CALIFA.py'
+  lsf_file  = 'CALIFA-V1200.lsf'
+  
+  [CALIFA-V500]
+  read_file = 'CALIFA.py'
+  lsf_file  = 'CALIFA-V500.lsf'
+
+  [MANGA]
+  read_file = 'MANGA.py'
+  lsf_file  = 'MANGA.lsf'
 
   [MUSE-WFM]
   read_file = 'MUSE-WFM.py'
@@ -79,28 +101,39 @@ Our current distribution includes reading routines for some of the most popular 
   read_file = 'FITS2D.py'
   lsf_file  = 'MUSE-WFM.lsf'
   
+  [SAMI-BLUE]
+  read_file = 'SAMI.py'
+  lsf_file  = 'SAMI-BLUE.lsf'
+
+  [SAMI-RED]
+  read_file = 'SAMI.py'
+  lsf_file  = 'SAMI-RED.lsf'
+
   [SAURON_E3D]
   read_file = 'SAURON_E3D.py'
   lsf_file  = 'SAURON_E3D.lsf'
   
-  [CALIFA-V1200]
-  read_file = 'CALIFA-V1200.py'
-  lsf_file  = 'CALIFA-V1200.lsf'
-  
-  [CALIFA-V500]
-  read_file = 'CALIFA-V500.py'
-  lsf_file  = 'CALIFA-V500.lsf'
-
 Each instrument is defined with a ``[<instrument name>]`` heading.
-This is the name to be used in the ``instrument`` keyword of the preprocessing configuration file. For each instrument, two files are required: a Python routine to read the instrument data (``read_file``), and an ASCII file describing the Line-Spread Function (i.e. the instrumental resolution as a function of wavelength) for the instrument (``lsf_file``). Both files are placed in the ``config_files/instruments`` directory for the default instruments. 
+This is the name to be used in the ``instrument`` keyword of the preprocessing configuration 
+file. For each instrument, two files are required: a Python routine to read the instrument 
+data (``read_file``), and an ASCII file describing the Line-Spread Function (i.e. the 
+instrumental resolution as a function of wavelength) for the instrument (``lsf_file``). Both 
+files are placed in the ``config_files/instruments`` directory for the default instruments. 
 
 .. hint::
-   Adding new instruments is as simple as including, following the scheme above,  their definition in the ``config_files/instruments.properties`` file and adding the required two new files to the ``config_files/instruments/`` directory. The user should use existing files for reference on the required input and output variables.
+   Adding new instruments is as simple as including, following the scheme above,  their definition 
+   in the ``config_files/instruments.properties`` file and adding the required two new files to the 
+   ``config_files/instruments/`` directory. The user should use existing files for reference on the 
+   required input and output variables. Please make sure there are no NaNs in the data by setting up
+   the flux values to zero and the errors to a very large value. See SAMI.py for an example.
 
 Stan codes configuration file
 -----------------------------
 
-BAYES-LOSVD allows different Stan models to perform the LOSVD fitting. The different implementations describe the LOSVD in distinct ways: from a pure Simplex definition (with no prior assumptions), to several forms of regularization using priors (e.g. Random Walk, Auto-Regresive, or penalised B-splines). The list of available models is listed in the ``config_files/codes.properties`` file::
+BAYES-LOSVD allows different Stan models to perform the LOSVD fitting. The different implementations 
+describe the LOSVD in distinct ways: from a pure Simplex definition (with no prior assumptions), to 
+several forms of regularization using priors (e.g. Random Walk, Auto-Regresive, or penalised B-splines). 
+The list of available models is listed in the ``config_files/codes.properties`` file::
 
   [SP]
   codefile = "bayes-losvd_model_SP.stan"

@@ -229,14 +229,27 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">porder</span></code>: polynomial order to be used in spectral fitting</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">template_lib</span></code>: template library to use from those available in ‘templates’ directory</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">npca</span></code>: number of PCA components to use as templates</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">mask_file</span></code>: emission line mask file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mask_file</span></code>: emission line mask file. Set to “None” if no masking is desired</p></li>
 </ul>
 <p>The same file can have as many <code class="docutils literal notranslate"><span class="pre">[&lt;run</span> <span class="pre">name&gt;]</span></code> configuration blocks as needed.</p>
 </div>
 <div class="section" id="instruments-configuration-file">
 <h2>Instruments configuration file<a class="headerlink" href="#instruments-configuration-file" title="Permalink to this headline">¶</a></h2>
-<p>Our current distribution includes reading routines for some of the most popular IFUs/surveys (e.g. SAURON, CALIFA, MUSE-WFM, …). This is defined in a <a class="reference external" href="https://en.wikipedia.org/wiki/TOML">TOML</a> file <code class="docutils literal notranslate"><span class="pre">ìnstruments.properties</span></code> placed in the <code class="docutils literal notranslate"><span class="pre">config_files</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">MUSE</span><span class="o">-</span><span class="n">WFM</span><span class="p">]</span>
+<p>Our current distribution includes reading routines for some of the most popular IFUs/surveys (e.g. CALIFA, MANGA, MUSE-WFM, SAMI, SAURON, FITS2D, …).
+This is defined in a <a class="reference external" href="https://en.wikipedia.org/wiki/TOML">TOML</a> file <code class="docutils literal notranslate"><span class="pre">ìnstruments.properties</span></code> placed in the <code class="docutils literal notranslate"><span class="pre">config_files</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">CALIFA</span><span class="o">-</span><span class="n">V1200</span><span class="p">]</span>
+<span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;CALIFA.py&#39;</span>
+<span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;CALIFA-V1200.lsf&#39;</span>
+
+<span class="p">[</span><span class="n">CALIFA</span><span class="o">-</span><span class="n">V500</span><span class="p">]</span>
+<span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;CALIFA.py&#39;</span>
+<span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;CALIFA-V500.lsf&#39;</span>
+
+<span class="p">[</span><span class="n">MANGA</span><span class="p">]</span>
+<span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;MANGA.py&#39;</span>
+<span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;MANGA.lsf&#39;</span>
+
+<span class="p">[</span><span class="n">MUSE</span><span class="o">-</span><span class="n">WFM</span><span class="p">]</span>
 <span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;MUSE-WFM.py&#39;</span>
 <span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;MUSE-WFM.lsf&#39;</span>
 
@@ -244,24 +257,28 @@
 <span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;FITS2D.py&#39;</span>
 <span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;MUSE-WFM.lsf&#39;</span>
 
+<span class="p">[</span><span class="n">SAMI</span><span class="o">-</span><span class="n">BLUE</span><span class="p">]</span>
+<span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;SAMI.py&#39;</span>
+<span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;SAMI-BLUE.lsf&#39;</span>
+
+<span class="p">[</span><span class="n">SAMI</span><span class="o">-</span><span class="n">RED</span><span class="p">]</span>
+<span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;SAMI.py&#39;</span>
+<span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;SAMI-RED.lsf&#39;</span>
+
 <span class="p">[</span><span class="n">SAURON_E3D</span><span class="p">]</span>
 <span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;SAURON_E3D.py&#39;</span>
 <span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;SAURON_E3D.lsf&#39;</span>
-
-<span class="p">[</span><span class="n">CALIFA</span><span class="o">-</span><span class="n">V1200</span><span class="p">]</span>
-<span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;CALIFA-V1200.py&#39;</span>
-<span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;CALIFA-V1200.lsf&#39;</span>
-
-<span class="p">[</span><span class="n">CALIFA</span><span class="o">-</span><span class="n">V500</span><span class="p">]</span>
-<span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;CALIFA-V500.py&#39;</span>
-<span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;CALIFA-V500.lsf&#39;</span>
 </pre></div>
 </div>
 <p>Each instrument is defined with a <code class="docutils literal notranslate"><span class="pre">[&lt;instrument</span> <span class="pre">name&gt;]</span></code> heading.
 This is the name to be used in the <code class="docutils literal notranslate"><span class="pre">instrument</span></code> keyword of the preprocessing configuration file. For each instrument, two files are required: a Python routine to read the instrument data (<code class="docutils literal notranslate"><span class="pre">read_file</span></code>), and an ASCII file describing the Line-Spread Function (i.e. the instrumental resolution as a function of wavelength) for the instrument (<code class="docutils literal notranslate"><span class="pre">lsf_file</span></code>). Both files are placed in the <code class="docutils literal notranslate"><span class="pre">config_files/instruments</span></code> directory for the default instruments.</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>Adding new instruments is as simple as including, following the scheme above,  their definition in the <code class="docutils literal notranslate"><span class="pre">config_files/instruments.properties</span></code> file and adding the required two new files to the <code class="docutils literal notranslate"><span class="pre">config_files/instruments/</span></code> directory. The user should use existing files for reference on the required input and output variables.</p>
+<p>Adding new instruments is as simple as including, following the scheme above,  their definition
+in the <code class="docutils literal notranslate"><span class="pre">config_files/instruments.properties</span></code> file and adding the required two new files to the
+<code class="docutils literal notranslate"><span class="pre">config_files/instruments/</span></code> directory. The user should use existing files for reference on the
+required input and output variables. Please make sure there are no NaNs in the data by setting up
+the flux values to zero and the errors to a very large value. See SAMI.py for an example.</p>
 </div>
 </div>
 <div class="section" id="stan-codes-configuration-file">
@@ -362,7 +379,7 @@ This is the name to be used in the <code class="docutils literal notranslate"><s
     <p>
         &copy; Copyright 2020, Jesus Falcon-Barroso &amp; Marie Martig; 
       <span class="lastupdated">
-        Last updated on Jul 02, 2020.
+        Last updated on Jul 10, 2020.
       </span>
 
     </p>
