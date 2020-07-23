@@ -144,7 +144,6 @@ def load_data(struct):
    dummy, lwave, _ = cap.log_rebin(lamRange, bin_spec[:,0], velscale=struct['velscale'])
    npix_log = len(dummy)
    lspec, lespec = np.zeros([npix_log,nbins]), np.zeros([npix_log,nbins])
-   
    for i in trange(nbins, ascii=True, leave=False):
        
       #Log-rebinning the spectra 

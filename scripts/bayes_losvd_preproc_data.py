@@ -49,10 +49,7 @@ def run_preproc_data(rname, struct):
 
     # Processing data
     print("# Processing data .....") 
-    if struct['instrument'] == 'testdata':
-       data_struct = load_testdata(struct)
-    else:
-       data_struct = load_data(struct)
+    data_struct = load_data(struct)
 
     # Processing templates 
     print("# Processing templates .....") 
