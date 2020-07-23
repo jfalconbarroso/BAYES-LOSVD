@@ -532,13 +532,6 @@ def pad_templates(struct, nvel):
 
     # Padding the templates
     npad      = int(np.floor(nvel/2))
-    # mean_temp = np.pad(mean_temp, pad_width=(npad+1,npad),         mode='edge')
-    # templates = np.pad(templates, pad_width=((npad+1,npad),(0,0)), mode='edge')
-    # dwave     = lwave[1]-lwave[0]
-    # lwave_pre = lwave[0]  - dwave*(np.arange(npad+1)+1)
-    # lwave_pos = lwave[-1] + dwave*(np.arange(npad)+1)
-    # lwave_new = np.concatenate((lwave_pre,lwave,lwave_pos))
-
     mean_temp = np.pad(mean_temp, pad_width=(npad,npad+1),         mode='edge')
     templates = np.pad(templates, pad_width=((npad,npad+1),(0,0)), mode='edge')
     dwave     = lwave[1]-lwave[0]
