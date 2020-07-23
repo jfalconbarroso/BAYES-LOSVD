@@ -33,18 +33,18 @@ functions{
 
   // Function that convolves an input spectrum with a given kernel
   // (Adapted from https://discourse.mc-stan.org/t/discrete-convolution-by-direct-summation-can-this-be-made-more-efficient/969/3) 
-  vector convolve_data(vector spec, vector kernel, int npix_temp, int nk){
-
-     row_vector[nk]          kernelp  = kernel';
-     vector[npix_temp-nk+1]  out_spec = rep_vector(1.0,npix_temp-nk+1);
-
-     for (i in 1:(npix_temp-nk+1)){
+  vector convolve_data(vector spec, vector kernel, int npix, int nk){
+      
+     row_vector[nk] kernelp  = kernel';
+     vector[npix]   out_spec = rep_vector(1.0,npix);
+   
+     for (i in 1:npix){
         out_spec[i] = kernelp * spec[i:(i+nk-1)];
      }    
-
+     
      return out_spec;   
-
-  }  
+      
+  }
 
   // Function to create a fiducial vector from 1 to npix 
   vector create_vector(int npix){
@@ -168,7 +168,7 @@ model {
 
   // Defining model  
   vector[npix_temp] spec       = mean_template + templates * weights;       
-  vector[npix_obs]  conv_spec  = convolve_data(spec,losvd,npix_temp,nvel);
+  vector[npix_obs]  conv_spec  = convolve_data(spec,losvd,npix_obs,nvel);
   vector[npix_obs]  model_spec = leg_pols * coefs + conv_spec;
 
   // Weakly informative priors on PCA weights, Leg. and B-splines coefficients
@@ -186,7 +186,7 @@ model {
 generated quantities {
 
   vector[npix_temp] spec      = mean_template + templates * weights;       
-  vector[npix_obs]  conv_spec = convolve_data(spec,losvd,npix_temp,nvel);
+  vector[npix_obs]  conv_spec = convolve_data(spec,losvd,npix_obs,nvel);
   vector[npix_obs]  poly      = legendre(scl_vect,porder,npix_obs) * coefs;
   vector[npix_obs]  bestfit   = poly + conv_spec;
   vector[nmask]     spec_pred;

@@ -7,6 +7,7 @@ import numpy              as np
 import matplotlib.pyplot  as plt
 import lib.misc_functions as misc
 from   lib.load_data      import load_data
+from   lib.load_testdata  import load_testdata
 from   lib.load_templates import load_templates
 from   lib.cap_utils      import display_bins
 from   astropy.io         import ascii
@@ -48,11 +49,24 @@ def run_preproc_data(rname, struct):
 
     # Processing data
     print("# Processing data .....") 
-    data_struct = load_data(struct)
+    if struct['instrument'] == 'testdata':
+       data_struct = load_testdata(struct)
+    else:
+       data_struct = load_data(struct)
 
     # Processing templates 
     print("# Processing templates .....") 
     temp_struct = load_templates(struct,data_struct)
+
+    # Creating the LOSVD velocity vector
+    print("") 
+    print("# Creating the LOSVD velocity vector .....")
+    print("") 
+    xvel, nvel = misc.create_xvel_vector(struct)
+
+    # Padding the templates
+    print("# Padding the templates for convolution .....") 
+    temp_struct_padded = misc.pad_templates(temp_struct, nvel)
 
     # Saving preprocessed information
     print("")
@@ -60,13 +74,16 @@ def run_preproc_data(rname, struct):
     print("")
     f    = h5py.File(outhdf5, "w")
     #------------
+    f.create_dataset("in/xvel", data=xvel)
+    f.create_dataset("in/nvel", data=nvel)
+    #------------
     for key, val in data_struct.items():
        if (np.size(val) < 2):
           f.create_dataset("in/"+key, data=val)
        else:
           f.create_dataset("in/"+key, data=val, compression="gzip")
     #------------
-    for key, val in temp_struct.items():
+    for key, val in temp_struct_padded.items():
        if (np.size(val) < 2):
           f.create_dataset("in/"+key, data=val)
        else:

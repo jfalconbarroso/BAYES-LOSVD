@@ -158,7 +158,8 @@ def load_data(struct):
    # Defining the data mask
    print(" - Defining the data mask")
    if (struct['mask_file'] == "None"):
-       mask = np.arange(npix_log)
+       mn   = np.int(0.01*npix_log) # Masking edges only
+       mask = np.arange(mn, npix_log-mn)
    else:
        if not os.path.exists("../config_files/"+struct['mask_file']):
            misc.printFAILED("Cannot find mask file in 'config_files' directory")

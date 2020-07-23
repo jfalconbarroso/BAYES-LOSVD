@@ -10,7 +10,7 @@ from   astropy.io         import ascii
 from   lib.cap_utils      import display_bins
 from   matplotlib.patches import Circle
 #==============================================================================
-def run_inspect_fits(filename,idx, losvd_file=None, norm=0, save=0):
+def run_inspect_fits(filename,idx, losvd_file=None, save=0):
 
    # Checking bin exists in dataset
    stridx = str(idx)
@@ -34,18 +34,17 @@ def run_inspect_fits(filename,idx, losvd_file=None, norm=0, save=0):
    spec_obs = np.array(f['in/spec_obs'][:,idx])
    xvel     = np.array(f['in/xvel'])
    mask     = np.array(f['in/mask'])
+   ndim     = np.array(f['in/ndim'])
    # --- Output results ---------
    bestfit  = np.array(f['out/'+stridx+'/bestfit'])
    losvd    = np.array(f['out/'+stridx+'/losvd'])
    poly     = np.array(f['out/'+stridx+'/poly'])+1.0
    nbins    = len(xbin)
   
-   # Normalizing LOSVDs if requested ----------------------------------------------------------
-   if (norm == 1):
-      # norm_factor = np.trapz(losvd[2,:],-xvel)
-      norm_factor = np.sum(losvd[2,:])
-      for i in range(5):
-          losvd[i,:] /= norm_factor              
+   # Normalizing LOSVDs ----------------------------------------------------------
+   norm_factor = np.sum(losvd[2,:])
+   for i in range(5):
+       losvd[i,:] /= norm_factor              
 
    # Making plot ----------------------------------------------------------
    fig = plt.figure(figsize=(10,7))
@@ -53,7 +52,7 @@ def run_inspect_fits(filename,idx, losvd_file=None, norm=0, save=0):
    plt.subplots_adjust(left=0.07, bottom=0.10, right=0.98, top=0.925, wspace=0.0, hspace=0.3)
 
    # Bin map -----------
-   if len(xbin) > 1:
+   if ndim > 1:
       ax0 = plt.subplot2grid((2,4),(0,0), colspan=1)
       ax0.set_title("BinID map")
       ax0.plot(xbin,ybin,'k+', zorder=0)
@@ -126,7 +125,6 @@ if (__name__ == '__main__'):
     parser.add_option("-b", "--binID", dest="binID",    type="int",    default=0,      help="ID of the bin to plot")
     parser.add_option("-l", "--losvd", dest="losvd",    type="str",    default=None,   help="(Optional) Filename of the input LOSVD")
     parser.add_option("-s", "--save",  dest="save",     type="int",    default=0,      help="(Optional) Save figure")
-    parser.add_option("-n", "--norm",  dest="norm",     type="int",    default=0,      help="(Optional) Normalizing LOSVD")
     parser.add_option("-d", "--dir",   dest="dir",      type="string", default='../results/', help="(Optional) The directory with results")
 
 
@@ -135,7 +133,6 @@ if (__name__ == '__main__'):
     binID      = options.binID
     losvd_file = options.losvd
     save       = options.save
-    norm       = options.norm
     dir        = options.dir
     filename   = dir+runname+"/"+runname+"_results.hdf5"
 
@@ -143,6 +140,6 @@ if (__name__ == '__main__'):
        misc.printFAILED(filename+" does not exist.")
        sys.exit()
 
-    run_inspect_fits(filename,binID,losvd_file,norm=norm,save=save)
+    run_inspect_fits(filename,binID,losvd_file,save=save)
 
     misc.printDONE(runname+" - Bin: "+str(binID))
