@@ -268,6 +268,4 @@ if (__name__ == '__main__'):
        print("")
        print("# Packing all results into a single HDF5 file.")
        misc.pack_results(runname+"-"+fit_type)
-
-    sys.exit()
   

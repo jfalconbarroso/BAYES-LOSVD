@@ -13,11 +13,11 @@ def read_data(filename):
     spec  = hdu[0].data
     espec = hdu[1].data 
     #---------------------------
-    x     = np.arange(spec.shape[2])
-    y     = np.zeros(spec.shape[2])
+    x     = np.arange(spec.shape[1])
+    y     = np.zeros(spec.shape[1])
     psize = 1.0
     npix  = spec.shape[0]
-    nspax = spec.shape[2]
+    nspax = spec.shape[1]
     wave  = hdr['CRVAL1'] + hdr['CDELT1']*np.arange(npix)
 
     struct = {'wave':wave, 'spec':spec, 'espec':espec, 'x':x, 'y':y, 'npix':npix, 'nspax':nspax, 'psize':psize, 'ndim':1}

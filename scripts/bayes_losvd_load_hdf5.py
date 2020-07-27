@@ -6,7 +6,7 @@ import warnings
 import numpy              as np
 import lib.misc_functions as misc
 #==============================================================================
-def load_results(filename, verbose=True):
+def load_hdf5(filename, verbose=True):
 
     misc.printRUNNING("Loading "+filename+" data")
 
@@ -33,18 +33,19 @@ def load_results(filename, verbose=True):
             print(' - '+key)
         struct[key] = np.array(values)
 
-    if verbose:
-        print("")
-        print("# Loading Stan results:")
-    output_data = f['out']
-    bins_list   = list(output_data.keys())
-    for idx in bins_list:
-        tmp = f['out/'+idx]
-        struct[int(idx)] = {}
-        for key,values in tmp.items():
-            if verbose:
-                print(' - ['+idx+'] '+key)
-            struct[int(idx)][key] = np.array(values)
+    if f.get("out") != None:
+        if verbose:
+            print("")
+            print("# Loading Stan results:")
+        output_data = f['out']
+        bins_list   = list(output_data.keys())
+        for idx in bins_list:
+            tmp = f['out/'+idx]
+            struct[int(idx)] = {}
+            for key,values in tmp.items():
+                if verbose:
+                    print(' - ['+idx+'] '+key)
+                struct[int(idx)][key] = np.array(values)
 
     misc.printDONE()
 
@@ -67,4 +68,4 @@ if (__name__ == '__main__'):
     (options, args) = parser.parse_args()
     filename = options.filename
 
-    tab = load_results(filename)
+    tab = load_hdf5(filename)

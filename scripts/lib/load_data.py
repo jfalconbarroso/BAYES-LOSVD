@@ -82,7 +82,7 @@ def load_data(struct):
        nspec  = np.sum(good)
 
    # Selecting those spaxels above SNR_min
-   print(" - Selecting spaxels aboove SNR_min")
+   print(" - Selecting spaxels above SNR_min")
    delta  = np.abs((signal/noise)-struct['snr_min'])
    idx    = (delta <= 3.0)
    if np.sum(idx) > 0:
@@ -137,6 +137,7 @@ def load_data(struct):
        nbins     = nspec
        xbin      = x
        ybin      = y        
+       print(" - "+str(len(xbin))+" spectra in file")   
        
    # Log-rebinning the data to the input Velscale
    print(" - Log-rebinning and normalizing the spectra")
