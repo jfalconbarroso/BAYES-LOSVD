@@ -84,7 +84,6 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
                   'mean_template': np.array(struct['in/mean_template']),
                   'velscale':      np.array(struct['in/velscale']),
                   'xvel':          np.array(struct['in/xvel'])}
-        data['spec_masked'] = data['spec_obs'][data['mask']] # This is added to perform LOO tests
 
         # Adding any extra parameter needed for that particular fit_type
         for key, val in extrapars.items():
@@ -112,7 +111,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
         # Saving Stan's summary of main parameters on disk
         print("")
         print("# Saving Stan summary: "+summary_filename)         
-        unwanted = {'spec','conv_spec','poly','bestfit','a','losvd_','log_likelihood','spec_pred'}
+        unwanted = {'spec','conv_spec','poly','bestfit','a','losvd_'}
         misc.save_stan_summary(fit, unwanted=unwanted, verbose=verbose, summary_filename=summary_filename)
 
         # Processing output and saving results

@@ -234,23 +234,22 @@ def process_stan_output_per(struct, samples, outhdf5=None, stridx=None):
     if os.path.exists(outhdf5):
        os.remove(outhdf5)
 
+    # Opening the pointer to the output file
     f = h5py.File(outhdf5, "w")
-    #------------
-    struct.copy('in',f)
 
-    # If structure already contains results from a previous step, copy results also
+    # Adding all the input and exisiting output variables
+    struct.copy('in',f)
     if not (struct.get('out') == None):
-       struct.copy('out',f)
-    #------------
+        struct.copy('out/'+stridx, f, name='out/'+stridx)
+
+    # Adding all the new outputs
     for key in samples.keys():
         if np.ndim(samples[key]) == 1:
-           result = np.percentile(np.array(samples[key]), q=lims)
+            result = np.percentile(np.array(samples[key]), q=lims)
         elif np.ndim(samples[key]) > 1:
-           result = np.percentile(np.array(samples[key]).T, q=lims, axis=1)
-
+            result = np.percentile(np.array(samples[key]).T, q=lims, axis=1)
         if not (key == 'lp__'):
-           f.create_dataset("out/"+stridx+"/"+key, data=result, compression="gzip")
-    #------------
+            f.create_dataset("out/"+stridx+"/"+key, data=result, compression="gzip")
     f.close()
 
     return
@@ -263,19 +262,20 @@ def process_stan_output_hdp(struct, samples, outhdf5=None, stridx=None):
     if os.path.exists(outhdf5):
        os.remove(outhdf5)
 
+    # Opening the pointer to the output file
     f = h5py.File(outhdf5, "w")
-    #------------
-    struct.copy('in',f)
 
-    # If structure already contains results from a previous step, copy results also
+    # Adding all the input and exisiting output variables
+    struct.copy('in',f)
     if not (struct.get('out') == None):
-       struct.copy('out',f)
-    #------------
+        struct.copy('out/'+stridx, f, name='out/'+stridx)
+
+    # Adding all the processed outputs
     for key in samples.keys():
         result = compute_hdp(np.array(samples[key]), lims)
         if not (key == 'lp__'):
            f.create_dataset("out/"+stridx+"/"+key, data=result, compression="gzip")               
-    #------------
+
     f.close()
 
     return
@@ -352,8 +352,8 @@ def pack_results(rootname,suffix='', dir='../results/'):
 
        # Copying the input data       
        if (infile == input_list[0]):
-          f.copy("in",g)
-       
+           f.copy("in",g)
+    
        # Copying the output results
        members = []
        f.visit(members.append)

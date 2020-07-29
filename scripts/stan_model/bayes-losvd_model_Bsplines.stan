@@ -115,7 +115,6 @@ data {
   vector[nvel] xvel;                         // Velocity vector to be used as knots  
   //-------------------------
   int<lower=0> spline_order;                        // the degree of spline (is equal to B-splines order - 1)
-  vector[nmask]               spec_masked;
 
 }
 //=============================================================================
@@ -189,11 +188,5 @@ generated quantities {
   vector[npix_obs]  conv_spec = convolve_data(spec,losvd,npix_obs,nvel);
   vector[npix_obs]  poly      = legendre(scl_vect,porder,npix_obs) * coefs;
   vector[npix_obs]  bestfit   = poly + conv_spec;
-  vector[nmask]     spec_pred;
-  vector[nmask]     log_likelihood;
-  for (i in 1:nmask){
-    log_likelihood[i] = normal_lpdf(spec_obs[mask[i]] | bestfit[mask[i]], sigma_obs[mask[i]]);
-    spec_pred[i]      = normal_rng(bestfit[mask[i]], sigma_obs[mask[i]]);
-  }   
 
 }

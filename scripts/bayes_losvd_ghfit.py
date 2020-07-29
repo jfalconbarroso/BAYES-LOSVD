@@ -8,6 +8,7 @@ import optparse
 import threading
 import warnings
 import traceback
+import tempfile
 import arviz                        as az
 import numpy                        as np
 import matplotlib.pyplot            as plt
@@ -60,7 +61,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, verbose
         # Checking the desired bin exists
         input_file = "../results/"+runname+"/"+runname+"_results.hdf5"
 
-        struct    = h5py.File(input_file,'r')
+        struct    = h5py.File(input_file,'r+')
         check_bin = struct.get('out/'+stridx)
         if check_bin == None:
            misc.printFAILED("Bin "+stridx+" does not exist in "+input_file)
@@ -81,6 +82,12 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, verbose
         outhdf5          = outdir+"/"+runname+"_gh_results_bin"+stridx+".hdf5"
 
         # Creating the structure with the data for Stan
+        # -------
+        # NOTE: losvd_obs, sigma_losvd is what goes into the GH fit
+        #       losvd is the processed output of bayes_losvd_run.py
+        #       losvd_obs = losvd[2,:]
+        #       sigma_losvd is an averaged version of the true 1sigma uncertainties from the bayes_losvd_run.py fit
+        # -------
         losvd       = struct['out/'+stridx+'/losvd'][2,:]
         sigma       = np.zeros((len(losvd),2))
         sigma[:,0]  = np.fabs(struct['out/'+stridx+'/losvd'][1,:]-losvd)
@@ -93,6 +100,12 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, verbose
                 'sigma_losvd': sigma_losvd
                 }
 
+        # Creating a temporary file adding the input data to the input HDF5 file info
+        temp = tempfile.NamedTemporaryFile()
+        struct2 = h5py.File(temp.name,'w')
+        struct.copy('in',struct2)
+        struct2.create_dataset("out/"+stridx+"/losvd",       data=np.array(struct['out/'+stridx+'/losvd']), compression="gzip")
+    
         # Running the model
         with open(codefile, 'r') as myfile:
            code   = myfile.read()
@@ -119,7 +132,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, verbose
         # Processing output and saving results
         print("")
         print("# Processing and saving results: "+outhdf5)
-        misc.process_stan_output_hdp(struct,samples,outhdf5,stridx)
+        misc.process_stan_output_hdp(struct2,samples,outhdf5,stridx)
 
         # Creating diagnostic plots
         if (save_plots == True):
@@ -137,6 +150,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, verbose
 
         # If we are here, we are DONE!
         struct.close()
+        struct2.close()
         misc.printDONE(runname+" - Bin: "+stridx)
 
         return 'OK'
@@ -161,14 +175,14 @@ if (__name__ == '__main__'):
 
     # Capturing the command line arguments
     parser = optparse.OptionParser(usage="%prog -f file")
-    parser.add_option("-r", "--runname",       dest="runname",       type="string", default="",   help="Runname of the preprocessed file")
-    parser.add_option("-i", "--niter",         dest="niter",         type="int",    default=1000, help="Number of iterations in stan")
-    parser.add_option("-c", "--nchain",        dest="nchain",        type="int",    default=1,    help="Number of simultaneous chains to run")
-    parser.add_option("-a", "--adapt_delta",   dest="adapt_delta",   type="float",  default=0.99, help="Stan Adapt_delta")
-    parser.add_option("-m", "--max_treedepth", dest="max_treedepth", type="int",    default=15,   help="Stan maximum tree depth")
-    parser.add_option("-b", "--bin",           dest="bin",           type="string", default="-1", help="Bin ID for single spectrum run")
-    parser.add_option("-n", "--njobs",         dest="njobs",         type="int",    default=1,    help="Number of jobs to lauch in parallel")
-    parser.add_option("-v", "--verbose",       dest="verbose",       type="int",    default=0,    help="Printing Stan summary for each fit")
+    parser.add_option("-r", "--runname",       dest="runname",       type="string", default="",    help="Runname of the preprocessed file")
+    parser.add_option("-i", "--niter",         dest="niter",         type="int",    default=1000,  help="Number of iterations in stan")
+    parser.add_option("-c", "--nchain",        dest="nchain",        type="int",    default=1,     help="Number of simultaneous chains to run")
+    parser.add_option("-a", "--adapt_delta",   dest="adapt_delta",   type="float",  default=0.99,  help="Stan Adapt_delta")
+    parser.add_option("-m", "--max_treedepth", dest="max_treedepth", type="int",    default=15,    help="Stan maximum tree depth")
+    parser.add_option("-b", "--bin",           dest="bin",           type="string", default="all", help="Bin ID for single spectrum run")
+    parser.add_option("-n", "--njobs",         dest="njobs",         type="int",    default=1,     help="Number of jobs to lauch in parallel")
+    parser.add_option("-v", "--verbose",       dest="verbose",       type="int",    default=0,     help="Printing Stan summary for each fit")
     parser.add_option("-s", "--save_chains",   dest="save_chains",   type="int",    default=0,     help="Saving chains for each fit (Default: 0/False)")
     parser.add_option("-p", "--save_plots",    dest="save_plots",    type="int",    default=0,     help="Saving diagnistic plots (Default: 0/False)")
 
