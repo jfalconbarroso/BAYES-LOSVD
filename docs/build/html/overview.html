@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview &amp; Features &mdash; BAYES-LOSVD  documentation</title>
+  <title>Overview &mdash; BAYES-LOSVD  documentation</title>
   
 
   
@@ -85,7 +85,10 @@
             
               <p class="caption"><span class="caption-text">Contents</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview &amp; Features</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example-figures">Example figures</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="download_installation.html">Download &amp; Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dir_structure.html">Directory structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
@@ -138,7 +141,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Overview &amp; Features</li>
+      <li>Overview</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -157,11 +160,20 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="overview-features">
-<h1>Overview &amp; Features<a class="headerlink" href="#overview-features" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
 <p>BAYES-LOSVD is a python framework for the non-parametric extraction of the Line-Of-Sight Velocity Distributions in galaxies. It makes use of Stan (<a class="reference external" href="https://mc-stan.org/">https://mc-stan.org/</a>) to perform all the computations and provide reliable uncertainties for all the parametes of the model chosen for the fit. The code comes with a large number of features, including read-in routines for some of the most popular IFU spectrographs and surveys: ATLAS3D, CALIFA, MaNGA, MUSE-WFM, SAMI, SAURON.</p>
-<p>Main Features
-Example plots</p>
+<div class="section" id="example-figures">
+<h2>Example figures<a class="headerlink" href="#example-figures" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-default" id="id1">
+<a class="reference internal image-reference" href="_images/example_figure1.png"><img alt="_images/example_figure1.png" src="_images/example_figure1.png" style="width: 300px;" /></a>
+<p class="caption"><span class="caption-text">LOSVD recovery for no regularisation and an auto-regressive (order 2) prior. Black line on main panels are the input test data with S/N of 100, while the red line shows the best fitting model. Residuals are indicated in green. The spectral fits are carried out with 5 PCA templates. In the insets, the input LOSVD is a Gaussian centred at zero and a velocity dispersion of 150 km/s (indicated in red). The recovered median values of the LOSVDs are indicated with a thick black line. 16%-84% and 1%-99% confidence limits at each point are indicated in dark and light blue, respectively.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id2">
+<a class="reference internal image-reference" href="_images/example_figure2.png"><img alt="_images/example_figure2.png" src="_images/example_figure2.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">LOSVD recovery for different input LOSVDs and types of regularisation. Colors as figure above. Each row represents a particular LOSVD shape for different types of regularisation. These are solutions for input spectra with S/N=50. All panels are plotted on the same scale.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+</div>
 </div>
 
 

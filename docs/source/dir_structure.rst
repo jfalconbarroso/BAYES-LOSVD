@@ -41,7 +41,7 @@ We provide below the basic directory structure of the package along with the mai
       │   ├─ bayes_losvd_ghfit.py
       │   ├─ bayes_losvd_inspect_fits.py
       │   ├─ bayes_losvd_inspect_ghfit.py
-      │   ├─ bayes_losvd_load_results.py
+      │   ├─ bayes_losvd_load_hdf5.py
       │   ├─ bayes_losvd_monitor.py
       │   ├─ bayes_losvd_notebook.ipynb
       │   ├─ bayes_losvd_preproc_data.py

@@ -85,7 +85,7 @@
             
               <p class="caption"><span class="caption-text">Contents</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview &amp; Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="download_installation.html">Download &amp; Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dir_structure.html">Directory structure</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
@@ -350,7 +350,7 @@ The list of available models is listed in the <code class="docutils literal notr
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>These variables will be generated automatically during the preprocessing process. Note that the input spectrum, error spectrum, mean_template and templates are log-rebinned.</p>
+<p>These variables will be generated automatically during the preprocessing process. Note that the input spectrum, error spectrum, mean_template and templates are log-rebinned to the same wavelength and velocity scale.</p>
 <p>In addition, the generated quantites block should contain the following variables:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">generated</span> <span class="n">quantities</span> <span class="p">{</span>
 
@@ -358,12 +358,6 @@ The list of available models is listed in the <code class="docutils literal notr
   <span class="n">vector</span><span class="p">[</span><span class="n">npix_obs</span><span class="p">]</span>  <span class="n">conv_spec</span> <span class="o">=</span> <span class="n">convolve_data</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span><span class="n">losvd</span><span class="p">,</span><span class="n">npix_temp</span><span class="p">,</span><span class="n">nvel</span><span class="p">);</span>
   <span class="n">vector</span><span class="p">[</span><span class="n">npix_obs</span><span class="p">]</span>  <span class="n">poly</span>      <span class="o">=</span> <span class="n">leg_pols</span> <span class="o">*</span> <span class="n">coefs</span><span class="p">;</span>
   <span class="n">vector</span><span class="p">[</span><span class="n">npix_obs</span><span class="p">]</span>  <span class="n">bestfit</span>   <span class="o">=</span> <span class="n">poly</span> <span class="o">+</span> <span class="n">conv_spec</span><span class="p">;</span>
-  <span class="n">vector</span><span class="p">[</span><span class="n">nmask</span><span class="p">]</span>     <span class="n">spec_pred</span><span class="p">;</span>
-  <span class="n">vector</span><span class="p">[</span><span class="n">nmask</span><span class="p">]</span>     <span class="n">log_likelihood</span><span class="p">;</span>
-  <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="ow">in</span> <span class="mi">1</span><span class="p">:</span><span class="n">nmask</span><span class="p">){</span>
-    <span class="n">log_likelihood</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">normal_lpdf</span><span class="p">(</span><span class="n">spec_obs</span><span class="p">[</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">|</span> <span class="n">bestfit</span><span class="p">[</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span>   <span class="n">sigma_obs</span><span class="p">[</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]]);</span>
-    <span class="n">spec_pred</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>      <span class="o">=</span> <span class="n">normal_rng</span><span class="p">(</span><span class="n">bestfit</span><span class="p">[</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">sigma_obs</span><span class="p">[</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]]);</span>
-  <span class="p">}</span>
 
 <span class="p">}</span>
 </pre></div>
