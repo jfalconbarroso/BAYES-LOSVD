@@ -176,29 +176,36 @@
 <div class="section" id="basic-steps">
 <h2>Basic steps<a class="headerlink" href="#basic-steps" title="Permalink to this headline">¶</a></h2>
 <p>Running the code involves the following steps:</p>
-<dl class="simple">
+<dl>
 <dt>Step 1: Compilation of the Stan codes.</dt><dd><ul class="simple">
-<li><p>This step is necessary to run the main fitting code. Stan models will be internally converted into C++ and then compiled. This step only needs to be executed once.</p></li>
+<li><p>This step is necessary to run the main fitting code. Stan models will be</p></li>
 </ul>
+<p>internally converted into C++ and then compiled. This step only needs to be executed once.</p>
 </dd>
 <dt>Step 2: Pre-processing of the input data</dt><dd><ul class="simple">
-<li><p>This is needed to chose, e.g., the wavelength range for the fitting, the level of spatial binning, number of PCA components or template library, among other things.</p></li>
+<li><p>Before execution, the data has to be prepared/preprocessed. This is needed</p></li>
 </ul>
+<p>to chose, e.g., the wavelength range for the fitting, the level of spatial binning,
+number of PCA components or template library, among other things.</p>
 </dd>
 <dt>Step 3: Running the code</dt><dd><ul class="simple">
 <li><p>This is the main step of the process that leads to the extraction of the LOSVD.</p></li>
 </ul>
 </dd>
 <dt>Step 4: Analysis of the outputs</dt><dd><ul class="simple">
-<li><p>In this step the spectral fits, the recovered LOSVD and Stan convergence diagnostics can be checked.</p></li>
+<li><p>In this step the spectral fits, the recovered LOSVD and Stan convergence</p></li>
 </ul>
+<p>diagnostics can be checked.</p>
 </dd>
 </dl>
 </div>
 <div class="section" id="preproc-data-configuration-files">
 <h2>Preproc data configuration files<a class="headerlink" href="#preproc-data-configuration-files" title="Permalink to this headline">¶</a></h2>
-<p>The standard location to place the required configuration file for the preprocessing of a particular dataset is the <code class="docutils literal notranslate"><span class="pre">config_files</span></code> directory.</p>
-<p>The configuration file for the preprocessing follows the <a class="reference external" href="https://en.wikipedia.org/wiki/TOML">TOML (Tom’s Obvius Minimal Language)</a>. An example of such file is provided at  the <code class="docutils literal notranslate"><span class="pre">config_files/example_preproc.properties</span> <span class="pre">file</span></code>:</p>
+<p>The standard location to place the required configuration file for the
+preprocessing of a particular dataset is the <code class="docutils literal notranslate"><span class="pre">config_files</span></code> directory.</p>
+<p>The configuration file for the preprocessing follows the
+<a class="reference external" href="https://en.wikipedia.org/wiki/TOML">TOML (Tom’s Obvius Minimal Language)</a>.
+An example of such file is provided at  the <code class="docutils literal notranslate"><span class="pre">config_files/example_preproc.properties</span> <span class="pre">file</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">NGC000</span><span class="p">]</span>
 <span class="n">filename</span>     <span class="o">=</span> <span class="s2">&quot;NGC000.fits&quot;</span>
 <span class="n">instrument</span>   <span class="o">=</span> <span class="s2">&quot;MUSE-WFM&quot;</span>
@@ -235,8 +242,10 @@
 </div>
 <div class="section" id="instruments-configuration-file">
 <h2>Instruments configuration file<a class="headerlink" href="#instruments-configuration-file" title="Permalink to this headline">¶</a></h2>
-<p>Our current distribution includes reading routines for some of the most popular IFUs/surveys (e.g. CALIFA, MANGA, MUSE-WFM, SAMI, SAURON, FITS2D, …).
-This is defined in a <a class="reference external" href="https://en.wikipedia.org/wiki/TOML">TOML</a> file <code class="docutils literal notranslate"><span class="pre">ìnstruments.properties</span></code> placed in the <code class="docutils literal notranslate"><span class="pre">config_files</span></code>:</p>
+<p>Our current distribution includes reading routines for some of the most popular
+IFUs/surveys (e.g. CALIFA, MANGA, MUSE-WFM, SAMI, SAURON, FITS2D, …). This is
+defined in a <a class="reference external" href="https://en.wikipedia.org/wiki/TOML">TOML</a> file <code class="docutils literal notranslate"><span class="pre">ìnstruments.properties</span></code>
+placed in the <code class="docutils literal notranslate"><span class="pre">config_files</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">CALIFA</span><span class="o">-</span><span class="n">V1200</span><span class="p">]</span>
 <span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;CALIFA.py&#39;</span>
 <span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;CALIFA-V1200.lsf&#39;</span>
@@ -271,7 +280,11 @@ This is defined in a <a class="reference external" href="https://en.wikipedia.or
 </pre></div>
 </div>
 <p>Each instrument is defined with a <code class="docutils literal notranslate"><span class="pre">[&lt;instrument</span> <span class="pre">name&gt;]</span></code> heading.
-This is the name to be used in the <code class="docutils literal notranslate"><span class="pre">instrument</span></code> keyword of the preprocessing configuration file. For each instrument, two files are required: a Python routine to read the instrument data (<code class="docutils literal notranslate"><span class="pre">read_file</span></code>), and an ASCII file describing the Line-Spread Function (i.e. the instrumental resolution as a function of wavelength) for the instrument (<code class="docutils literal notranslate"><span class="pre">lsf_file</span></code>). Both files are placed in the <code class="docutils literal notranslate"><span class="pre">config_files/instruments</span></code> directory for the default instruments.</p>
+This is the name to be used in the <code class="docutils literal notranslate"><span class="pre">instrument</span></code> keyword of the preprocessing configuration
+file. For each instrument, two files are required: a Python routine to read the instrument
+data (<code class="docutils literal notranslate"><span class="pre">read_file</span></code>), and an ASCII file describing the Line-Spread Function (i.e. the
+instrumental resolution as a function of wavelength) for the instrument (<code class="docutils literal notranslate"><span class="pre">lsf_file</span></code>). Both
+files are placed in the <code class="docutils literal notranslate"><span class="pre">config_files/instruments</span></code> directory for the default instruments.</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>Adding new instruments is as simple as including, following the scheme above,  their definition
@@ -283,7 +296,10 @@ the flux values to zero and the errors to a very large value. See SAMI.py for an
 </div>
 <div class="section" id="stan-codes-configuration-file">
 <h2>Stan codes configuration file<a class="headerlink" href="#stan-codes-configuration-file" title="Permalink to this headline">¶</a></h2>
-<p>BAYES-LOSVD allows different Stan models to perform the LOSVD fitting. The different implementations describe the LOSVD in distinct ways: from a pure Simplex definition (with no prior assumptions), to several forms of regularization using priors (e.g. Random Walk, Auto-Regresive, or penalised B-splines). The list of available models is listed in the <code class="docutils literal notranslate"><span class="pre">config_files/codes.properties</span></code> file:</p>
+<p>BAYES-LOSVD allows different Stan models to perform the LOSVD fitting. The different implementations
+describe the LOSVD in distinct ways: from a pure Simplex definition (with no prior assumptions), to
+several forms of regularization using priors (e.g. Random Walk, Auto-Regresive, or penalised B-splines).
+The list of available models is listed in the <code class="docutils literal notranslate"><span class="pre">config_files/codes.properties</span></code> file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">SP</span><span class="p">]</span>
 <span class="n">codefile</span> <span class="o">=</span> <span class="s2">&quot;bayes-losvd_model_SP.stan&quot;</span>
 
@@ -379,7 +395,7 @@ the flux values to zero and the errors to a very large value. See SAMI.py for an
     <p>
         &copy; Copyright 2020, Jesus Falcon-Barroso &amp; Marie Martig; 
       <span class="lastupdated">
-        Last updated on Jul 10, 2020.
+        Last updated on Jul 30, 2020.
       </span>
 
     </p>
