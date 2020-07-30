@@ -7,13 +7,13 @@ BAYES-LOSVD is a python framework for the non-parametric extraction of the Line-
 - Jesús Falcón-Barroso (Instituto de Astrofísica de Canarias, Spain)
 - Marie Martig (John Moores University, UK)
 
-**Installation and documentation**
+### Installation and documentation
 
 Clone this repository in your computer and open the following file in your browser:
 
 BAYES-LOSVD/docs/build/html/index.html
 
-**Acknowledgments**
+### Acknowledgments
 
 If you have found this software useful please consider including the following citation in your work:
 
