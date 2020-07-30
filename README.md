@@ -4,8 +4,8 @@ Non-parametric recovery of the LOSVD in galaxies.
 
 **Authors**
 
-Jesús Falcón-Barroso (Instituto de Astrofísica de Canarias, Spain)
-Marie Martig (John Moores University, UK)
+- Jesús Falcón-Barroso (Instituto de Astrofísica de Canarias, Spain)
+- Marie Martig (John Moores University, UK)
 
 **Installation and documentation**
 
