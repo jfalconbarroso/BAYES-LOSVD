@@ -23,7 +23,7 @@ J. Falcón-Barroso & M. Martig
 
 Astronomy & Astrophysics, 2020, XXX, XX
 
-[bibtex referemce here]
+[bibtex reference here]
 
 ......
 
