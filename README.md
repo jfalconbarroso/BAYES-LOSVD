@@ -2,16 +2,19 @@
 
 Non-parametric recovery of the LOSVD in galaxies.
 
-*Usage*
+*Authors*
+Jesús Falcón-Barroso (Instituto de Astrofísica de Canarias, Spain)
+Marie Martig (John Moores University, UK)
 
-See scripts/bayes_losvd_notebook.ipynb for an example of a workflow
+*Installation and documentation*
 
-*Notes*
+Clone this repository in your computer and open the following file in your browser:
 
-You will see that results are stored differently in the results directory.
+BAYES-LOSVD/docs/build/html/index.html
 
-Data is sotred in HDF5 files with a different structure that allows to collect all the info of the individual bins into a single file.
+*Acknowledgments*
 
-If required, chains can be saved in NETCDF format for further processing with Arviz
+If you have found this software useful please give proper credit by including the following citation in your work:
 
+......
 
