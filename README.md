@@ -2,7 +2,7 @@
 
 BAYES-LOSVD is a python framework for the non-parametric extraction of the Line-Of-Sight Velocity Distributions in galaxies. It makes use of Stan (https://mc-stan.org/) to perform all the computations and provide reliable uncertainties for all the parametes of the model chosen for the fit.
 
-## Authors
+### Authors
 
 - Jesús Falcón-Barroso (Instituto de Astrofísica de Canarias, Spain)
 - Marie Martig (John Moores University, UK)
