@@ -1,4 +1,4 @@
-# This file defines spectral ranges that are masked during the analysis of the PPXF module.
+# This file defines spectral ranges that are masked during the analysis.
 #
 # Lambda [Angst.]    Width [Angst.]    Comment
 3203.15              20                HeII     
