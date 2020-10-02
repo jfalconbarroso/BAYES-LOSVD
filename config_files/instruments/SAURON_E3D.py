@@ -8,7 +8,7 @@ def read_data(filename):
     data = hdu[1].data
     #---------------------------
     spec  = data['DATA_SPE'].T
-    espec = np.sqrt(data['STAT_SPE'].T)
+    espec = np.sqrt(data['STAT_SPE'].T) # SAURON E3D data provides the variance spectrum
     x     = data['XPOS']
     y     = data['YPOS']
     npix  = spec.shape[0]

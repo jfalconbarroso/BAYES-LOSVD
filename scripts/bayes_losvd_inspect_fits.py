@@ -28,8 +28,8 @@ def run_inspect_fits(filename,idx, losvd_file=None, save=0):
     
    # Reading the results
    # --- Input data ----------
-   xbin      = np.array(f['in/xbin'])
-   ybin      = np.array(f['in/ybin'])
+   xbin     = np.array(f['in/xbin'])
+   ybin     = np.array(f['in/ybin'])
    wave_obs = np.exp(np.array(f['in/wave_obs']))
    spec_obs = np.array(f['in/spec_obs'][:,idx])
    xvel     = np.array(f['in/xvel'])
@@ -98,6 +98,9 @@ def run_inspect_fits(filename,idx, losvd_file=None, save=0):
 
    ax2.set_ylabel("Norm. flux")
    ax2.set_xlabel("Wavelength ($\\mathrm{\\AA}$)")
+
+   print(1.0/np.std(res[mask]-mn0-0.1))
+   # exit()
 
    if (save == 1):
       dirname, inputname = os.path.split(filename) 
