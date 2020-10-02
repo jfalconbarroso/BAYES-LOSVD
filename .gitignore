@@ -9,4 +9,5 @@ preproc_data/
 sync_denso.sh
 sync_deimos.sh
 .excludes
+.gitignore
 analysis_scripts/
