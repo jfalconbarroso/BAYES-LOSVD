@@ -21,9 +21,7 @@ If you have found this software useful please consider including the following c
 
 J. Falcón-Barroso & M. Martig
 
-Astronomy & Astrophysics, 2020, XXX, XX
-
-[bibtex reference here]
+Astronomy & Astrophysics, 2020, XXX, XX [To be updated]
 
 ......
 
