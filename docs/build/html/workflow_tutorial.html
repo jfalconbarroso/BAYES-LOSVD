@@ -85,7 +85,7 @@
             
               <p class="caption"><span class="caption-text">Contents</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview &amp; Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="download_installation.html">Download &amp; Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dir_structure.html">Directory structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
@@ -158,7 +158,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="workflow-tutorial">
-<h1>Workflow &amp; Tutorial<a class="headerlink" href="#workflow-tutorial" title="Permalink to this headline">¶</a></h1>
+<span id="tutorial"></span><h1>Workflow &amp; Tutorial<a class="headerlink" href="#workflow-tutorial" title="Permalink to this headline">¶</a></h1>
 <p>As explained in <a class="reference internal" href="usage.html#usage"><span class="std std-ref">Usage</span></a>, the basic workflow of the code consists of 4 steps:</p>
 <ul class="simple">
 <li><p>Step 1: Compilation of the Stan codes.</p></li>
@@ -169,9 +169,9 @@
 <p><strong>Remember that all the codes have to be run from the</strong> <code class="docutils literal notranslate"><span class="pre">scripts</span></code> <strong>directory.</strong></p>
 <p>The sequence of commands to run the code is the following:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">bayes_losvd_compile_codes</span><span class="o">.</span><span class="n">py</span>
-<span class="n">python</span> <span class="n">bayes_losvd_preproc_data</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">c</span> <span class="o">../</span><span class="n">config_files</span><span class="o">/</span><span class="n">examples_preproc</span><span class="o">.</span><span class="n">properties</span>
-<span class="n">python</span> <span class="n">bayes_losvd_run</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">f</span> <span class="o">../</span><span class="n">preproc_data</span><span class="o">/</span><span class="n">NGC000</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">b</span> <span class="nb">all</span> <span class="o">-</span><span class="n">v</span> <span class="mi">1</span> <span class="o">-</span><span class="n">t</span> <span class="n">SP</span>
-<span class="n">python</span> <span class="n">bayes_losvd_inspect_fits</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">r</span> <span class="n">NGC000</span><span class="o">-</span><span class="n">SP</span> <span class="o">-</span><span class="n">b</span> <span class="mi">0</span>
+<span class="n">python</span> <span class="n">bayes_losvd_preproc_data</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">c</span> <span class="o">../</span><span class="n">config_files</span><span class="o">/</span><span class="n">example_preproc</span><span class="o">.</span><span class="n">properties</span>
+<span class="n">python</span> <span class="n">bayes_losvd_run</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">f</span> <span class="o">../</span><span class="n">preproc_data</span><span class="o">/</span><span class="n">NGC0000</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">b</span> <span class="nb">all</span> <span class="o">-</span><span class="n">v</span> <span class="mi">1</span> <span class="o">-</span><span class="n">t</span> <span class="n">SP</span>
+<span class="n">python</span> <span class="n">bayes_losvd_inspect_fits</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">r</span> <span class="n">NGC0000</span><span class="o">-</span><span class="n">SP</span> <span class="o">-</span><span class="n">b</span> <span class="mi">0</span>
 </pre></div>
 </div>
 <p>In order to help the user to understand better the logic of this workflow as well as all the possible switches and options each code has, we have prepared a <a class="reference external" href="https://jupyter.org/">Jupyter Notebook</a>  showing all possibilites. This notebook is located in the <code class="docutils literal notranslate"><span class="pre">scripts/</span></code> directory and can be executed as:</p>
@@ -203,7 +203,7 @@
     <p>
         &copy; Copyright 2020, Jesus Falcon-Barroso &amp; Marie Martig; 
       <span class="lastupdated">
-        Last updated on Jul 02, 2020.
+        Last updated on Oct 08, 2020.
       </span>
 
     </p>

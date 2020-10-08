@@ -27,9 +27,6 @@ Python dependencies
 """""""""""""""""""""""
 
 The code requires the following Python packages to be installed in the system. 
-Most of these packages should be readily avaialble with the standard conda installation, 
-but otherwise use 'conda install' to install them. Independent installations using 'pip' 
-should also work.
 
 +--------------+-----------+
 | Package      | Version   |

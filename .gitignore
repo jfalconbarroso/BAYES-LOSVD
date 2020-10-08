@@ -1,4 +1,4 @@
-data/
+data_old/
 results*/
 scripts/stan_model/cache*.pkl
 scripts/stan_model/old/

@@ -30,6 +30,8 @@ Step 4: Analysis of the outputs
    * In this step the spectral fits, the recovered LOSVD and Stan convergence 
    diagnostics can be checked.
 
+See :ref:`tutorial` for a full example and a Jupyter notebook.
+
 
 Preproc data configuration files
 ---------------------------------------
@@ -41,8 +43,8 @@ The configuration file for the preprocessing follows the
 `TOML (Tom's Obvius Minimal Language) <https://en.wikipedia.org/wiki/TOML>`_. 
 An example of such file is provided at  the ``config_files/example_preproc.properties file``::
 
-  [NGC000]
-  filename     = "NGC000.fits"
+  [NGC0000]
+  filename     = "NGC0000.fits"
   instrument   = "MUSE-WFM"
   redshift     = 0.00
   lmin         = 4825.0
