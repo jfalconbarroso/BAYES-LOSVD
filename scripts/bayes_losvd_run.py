@@ -104,7 +104,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
         if (save_chains == True):
            print("")
            print("# Saving chains in Arviz (NETCDF) format: "+arviz_filename) 
-           arviz_data = az.from_pystan(posterior=fit, observed_data=['spec_masked','mask','spec_obs','sigma_obs'])
+           arviz_data = az.from_pystan(posterior=fit, observed_data=['mask','spec_obs','sigma_obs'])
            az.to_netcdf(arviz_data,arviz_filename)
 
         # Saving Stan's summary of main parameters on disk
