@@ -13,6 +13,10 @@ Clone this repository in your computer and open the following file in your brows
 
 BAYES-LOSVD/docs/build/html/index.html
 
+### New in this release
+
+- This version uses pystan 3.2.
+
 ### Acknowledgments
 
 If you have found this software useful please consider including the following citation in your work:
