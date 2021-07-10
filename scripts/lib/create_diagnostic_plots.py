@@ -37,70 +37,34 @@ def plot_sampler_params(idx,accept_stat,stepsize,treedepth,n_leapfrog,divergent,
    return
 
 #===============================================================================
-def plot_chains(data,pars):
-   
-   npars = len(pars)
-
-   # Plotting the MCMC chains
-   fig, ax = plt.subplots(nrows=npars,ncols=1, sharex=True, figsize=(8,7))
-   ax = ax.ravel()
-   fig.subplots_adjust(left=0.10, bottom=0.07, right=0.98, top=0.95, wspace=0.0, hspace=0.3)   
-
-   for i in range(len(pars)):
-      ax[i].plot(data[pars[i]])
-      ax[i].set_ylabel(pars[i])
-   ax[-1].set_xlabel("Iteration")
-      
-   return
-
-#===============================================================================
-def create_diagnostic_plots(idx,pdf_filename,fit,diag_pars,niter,nchain):
+def create_diagnostic_plots(pdf_filename,samples):
 
     # Converting the Stan FIT object to Arviz InfereceData
-    samples   = fit.extract(permuted=True) # Extracting parameter samples
-    data      = az.from_pystan(fit)
+    data      = az.from_pystan(samples)
     tmp       = data.posterior
     var_names = list(tmp.data_vars)
 
     # Filtering the list of parameters to plot
     unwanted  = {'losvd','spec','conv_spec','poly','bestfit','losvd_','losvd_mod','spec_pred','log_likelihood'}
     vars_main = [e for e in var_names if e not in unwanted]
-   
-    # Reading diagnostic parameters
-    accept_stat, stepsize,  treedepth = np.zeros((niter,nchain)), np.zeros((niter,nchain)) , np.zeros((niter,nchain))
-    n_leapfrog,  divergent, energy    = np.zeros((niter,nchain)), np.zeros((niter,nchain)) , np.zeros((niter,nchain))  
-    for j in range(nchain):
-        accept_stat[:,j] = diag_pars[j]['accept_stat__']
-        stepsize[:,j]    = diag_pars[j]['stepsize__']
-        treedepth[:,j]   = diag_pars[j]['treedepth__']
-        n_leapfrog[:,j]  = diag_pars[j]['n_leapfrog__']
-        divergent[:,j]   = diag_pars[j]['divergent__']
-        energy[:,j]      = diag_pars[j]['energy__']    
- 
-    # Creating the plot in multiple PDF papges
+
     pdf_pages = PdfPages(pdf_filename)
 
-    print(" - Sampler params")
-    plot_sampler_params(idx,accept_stat,stepsize,treedepth,n_leapfrog,divergent,energy)
-    pdf_pages.savefig()
     print(" - Chains")
-    plot_chains(samples,vars_main)
+    az.plot_trace(data, var_names=vars_main, divergences=True)
     pdf_pages.savefig()
-   #  print(" - Trace plot [Main params]")
-   #  az.plot_trace(data, var_names=vars_main)
-   #  pdf_pages.savefig()
-   #  print(" - Trace plot [LOSVD]")
-   #  az.plot_trace(data, var_names=['losvd'])
-   #  pdf_pages.savefig()
+
     print(" - Pair plot")
-    az.plot_pair(data, var_names=vars_main, divergences=True, kind='kde', fill_last=False)
+    az.plot_pair(data,var_names=vars_main,kind='kde',divergences=True)
     pdf_pages.savefig()
+
     print(" - Autocorr plot")
     az.plot_autocorr(data, var_names=vars_main)
     pdf_pages.savefig()
+
     print(" - Energy plot")
     az.plot_energy(data)
     pdf_pages.savefig()
-    pdf_pages.close()   
 
+    pdf_pages.close()   
     return

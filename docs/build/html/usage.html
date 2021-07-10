@@ -5,7 +5,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Usage &mdash; BAYES-LOSVD  documentation</title>
@@ -21,10 +22,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -33,6 +34,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Workflow &amp; Tutorial" href="workflow_tutorial.html" />
@@ -166,14 +169,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="usage">
+  <section id="usage">
 <span id="id1"></span><h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The BAYES-LOSVD package commands have to be executed from the ‘scripts’ directory.</p>
 <p>See <a class="reference internal" href="dir_structure.html#dir-structure"><span class="std std-ref">Directory structure</span></a> for relevant details.</p>
 </div>
-<div class="section" id="basic-steps">
+<section id="basic-steps">
 <h2>Basic steps<a class="headerlink" href="#basic-steps" title="Permalink to this headline">¶</a></h2>
 <p>Running the code involves the following steps:</p>
 <dl>
@@ -199,8 +202,8 @@ number of PCA components or template library, among other things.</p>
 </dd>
 </dl>
 <p>See <a class="reference internal" href="workflow_tutorial.html#tutorial"><span class="std std-ref">Workflow &amp; Tutorial</span></a> for a full example and a Jupyter notebook.</p>
-</div>
-<div class="section" id="preproc-data-configuration-files">
+</section>
+<section id="preproc-data-configuration-files">
 <h2>Preproc data configuration files<a class="headerlink" href="#preproc-data-configuration-files" title="Permalink to this headline">¶</a></h2>
 <p>The standard location to place the required configuration file for the
 preprocessing of a particular dataset is the <code class="docutils literal notranslate"><span class="pre">config_files</span></code> directory.</p>
@@ -240,8 +243,8 @@ An example of such file is provided at  the <code class="docutils literal notran
 <li><p><code class="docutils literal notranslate"><span class="pre">mask_file</span></code>: emission line mask file. Set to “None” if no masking is desired</p></li>
 </ul>
 <p>The same file can have as many <code class="docutils literal notranslate"><span class="pre">[&lt;run</span> <span class="pre">name&gt;]</span></code> configuration blocks as needed.</p>
-</div>
-<div class="section" id="instruments-configuration-file">
+</section>
+<section id="instruments-configuration-file">
 <h2>Instruments configuration file<a class="headerlink" href="#instruments-configuration-file" title="Permalink to this headline">¶</a></h2>
 <p>Our current distribution includes reading routines for some of the most popular
 IFUs/surveys (e.g. CALIFA, MANGA, MUSE-WFM, SAMI, SAURON, FITS2D, …). This is
@@ -294,8 +297,8 @@ in the <code class="docutils literal notranslate"><span class="pre">config_files
 required input and output variables. Please make sure there are no NaNs in the data by setting up
 the flux values to zero and the errors to a very large value. See SAMI.py for an example.</p>
 </div>
-</div>
-<div class="section" id="stan-codes-configuration-file">
+</section>
+<section id="stan-codes-configuration-file">
 <h2>Stan codes configuration file<a class="headerlink" href="#stan-codes-configuration-file" title="Permalink to this headline">¶</a></h2>
 <p>BAYES-LOSVD allows different Stan models to perform the LOSVD fitting. The different implementations
 describe the LOSVD in distinct ways: from a pure Simplex definition (with no prior assumptions), to
@@ -332,7 +335,7 @@ The list of available models is listed in the <code class="docutils literal notr
 </pre></div>
 </div>
 <p>Like previous <a class="reference external" href="https://en.wikipedia.org/wiki/TOML">TOML</a> files the code identification is set in the <code class="docutils literal notranslate"><span class="pre">[&lt;code</span> <span class="pre">name&gt;]</span></code> keyword. We require the <code class="docutils literal notranslate"><span class="pre">codefile</span></code> with the actual name of the file with the Stan model. In addition, it is possible to pass the Stan code other variables for execution (see, e.g.,  AR and Bsplines models above).</p>
-<div class="section" id="adding-new-stan-models">
+<section id="adding-new-stan-models">
 <h3>Adding new Stan models<a class="headerlink" href="#adding-new-stan-models" title="Permalink to this headline">¶</a></h3>
 <p>Adding a new Stan code is as simple as including, following the scheme above,  its definition in the <code class="docutils literal notranslate"><span class="pre">config_files/codes.properties</span> <span class="pre">file</span></code> and adding the required Stan model file to the <code class="docutils literal notranslate"><span class="pre">scripts/stan_model/</span></code> directory. For the new model to work properly, it requires the following input variables in the Stan’s data block:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="p">{</span>
@@ -364,9 +367,9 @@ The list of available models is listed in the <code class="docutils literal notr
 </pre></div>
 </div>
 <p>The parameters of the model can be anything. BAYES-LOSVD will capture them automatically and process them appropiately.</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
@@ -390,7 +393,7 @@ The list of available models is listed in the <code class="docutils literal notr
     <p>
         &copy; Copyright 2020, Jesus Falcon-Barroso &amp; Marie Martig; 
       <span class="lastupdated">
-        Last updated on Oct 08, 2020.
+        Last updated on Jul 10, 2021.
       </span>
 
     </p>

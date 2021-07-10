@@ -13,7 +13,7 @@ Download
 """""""""""""""""""""""
 
 We recommend to install the BAYES-LOSVD package in a separate and new conda 
-environment, using Python3.6. For further instructions on the use and management 
+environment, using Python3.9. For further instructions on the use and management 
 of conda environments, please see the `Conda Documentation <https://conda.io>`_.
 
 The BAYES-LOSVD code is installed by cloning the following `Github <https://github.com>`_ repository 
@@ -31,25 +31,25 @@ The code requires the following Python packages to be installed in the system.
 +--------------+-----------+
 | Package      | Version   |
 +==============+===========+
-| pystan       | 2.19.00   | 
+| pystan       | 3.2.0     | 
 +--------------+-----------+
-| astropy      | 3.1.2     |
+| astropy      | 4.2.1     |
 +--------------+-----------+
-| arviz        | 0.6.1     |
+| arviz        | 0.11.2    |
 +--------------+-----------+
-| numpy        | 1.18.1    |
+| numpy        | 1.20.2    |
 +--------------+-----------+
-| matplotlib   | 3.1.3     |
+| matplotlib   | 3.3.4     |
 +--------------+-----------+
-| scipy        | 1.4.1     |
+| scipy        | 1.6.2     |
 +--------------+-----------+
-| h5py         | 2.10.0    |
+| h5py         | 1.10.6    |
 +--------------+-----------+
-| scikit_learn | 0.23.1    |
+| scikit_learn | 0.24.2    |
 +--------------+-----------+
-| tqdm         | 4.46.1    |
+| tqdm         | 4.61.2    |
 +--------------+-----------+
-| toml         | 0.10.1    |
+| toml         | 0.10.2    |
 +--------------+-----------+
 
 No additional configuration (e.g. environmental paths, etc) is required to run the code.

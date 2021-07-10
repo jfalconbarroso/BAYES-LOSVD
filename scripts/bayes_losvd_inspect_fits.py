@@ -99,9 +99,6 @@ def run_inspect_fits(filename,idx, losvd_file=None, save=0):
    ax2.set_ylabel("Norm. flux")
    ax2.set_xlabel("Wavelength ($\\mathrm{\\AA}$)")
 
-   print(1.0/np.std(res[mask]-mn0-0.1))
-   # exit()
-
    if (save == 1):
       dirname, inputname = os.path.split(filename) 
       basename = os.path.splitext(inputname)[0]

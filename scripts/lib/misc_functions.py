@@ -5,6 +5,7 @@ import h5py
 import toml
 import arviz                 as az
 import numpy                 as np
+import pandas                as pd
 import matplotlib.pyplot     as plt
 from   astropy.io            import fits, ascii
 from   astropy.convolution   import convolve
@@ -197,12 +198,12 @@ def log_unbinning(lamRange, spec, oversample=1, flux=True):
     return( specNew, lamNew )
 
 #==============================================================================
-def save_stan_summary(fit, unwanted=None, summary_filename=None, verbose=None):
+def save_stan_summary(samples, unwanted=None, summary_filename=None, verbose=None):
 
-    samples   = fit.extract(permuted=True) # Extracting parameter samples
+    # samples   = fit.extract(permuted=True) # Extracting parameter samples
     var_all   = list(samples.keys())
     var_names = [e for e in var_all if e not in unwanted]
-    stan_summary = fit.stansummary(pars=var_names)
+    stan_summary = az.summary(samples,var_names=var_names)
     if (verbose == True):
         print("")
         print(stan_summary)
@@ -210,20 +211,8 @@ def save_stan_summary(fit, unwanted=None, summary_filename=None, verbose=None):
     if os.path.exists(summary_filename):
        os.remove(summary_filename)
     f = open(summary_filename, 'w')
-    f.write(stan_summary)
+    f.write(stan_summary.to_string())
     f.close()       
-
-    return
-#==============================================================================
-def save_stan_chains(samples, chains_filename=None):
-
-    if os.path.exists(chains_filename):
-       os.remove(chains_filename)
-
-    f = h5py.File(chains_filename, "w")
-    for key, val in samples.items():
-        f.create_dataset(key, data=val, compression="gzip")
-    f.close()
 
     return
 #==============================================================================
@@ -272,7 +261,7 @@ def process_stan_output_hdp(struct, samples, outhdf5=None, stridx=None):
 
     # Adding all the processed outputs
     for key in samples.keys():
-        result = compute_hdp(np.array(samples[key]), lims)
+        result = compute_hdp(np.array(samples[key]).T, lims)
         if not (key == 'lp__'):
            f.create_dataset("out/"+stridx+"/"+key, data=result, compression="gzip")               
 
@@ -291,7 +280,8 @@ def compute_hdp(samples,lims):
 
     if ndim == 1:
        for i in range(len(lims)):
-           kk = az.hpd(samples, credible_interval=lims[i])
+           kk = az.hdi(samples, hdi_prob=lims[i])
+        #    kk = az.hpd(samples, credible_interval=lims[i])
            if i == 0:
                result[2] = np.mean(kk)
            elif i == 1:
@@ -303,7 +293,8 @@ def compute_hdp(samples,lims):
     else:
        for j in range(size[1]): 
            for i in range(len(lims)):
-               kk = az.hpd(samples[:,j], credible_interval=lims[i])
+               kk = az.hdi(samples[:,j], hdi_prob=lims[i])
+            #    kk = az.hpd(samples[:,j], credible_interval=lims[i])
                if i == 0:
                    result[2,j] = np.mean(kk)
                elif i == 1:

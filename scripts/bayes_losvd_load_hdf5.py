@@ -69,3 +69,5 @@ if (__name__ == '__main__'):
     filename = options.filename
 
     tab = load_hdf5(filename)
+
+    print(tab[0]['losvd'].shape)

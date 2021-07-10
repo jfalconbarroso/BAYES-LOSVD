@@ -3,9 +3,9 @@ import sys
 import glob
 import h5py
 import pickle
-import pystan
+import stan
 import optparse
-# import threading
+import threading
 import warnings
 import traceback
 import arviz                           as az
@@ -14,7 +14,7 @@ import matplotlib.pyplot               as plt
 import lib.misc_functions              as misc
 from   lib.create_diagnostic_plots     import create_diagnostic_plots 
 from   hashlib                         import md5
-from   multiprocessing                 import Queue, Process, cpu_count
+from   multiprocessing                 import Queue, Process, cpu_count, set_start_method
 #==============================================================================
 def worker(inQueue, outQueue):
 
@@ -22,33 +22,14 @@ def worker(inQueue, outQueue):
     Defines the worker process of the parallelisation with multiprocessing.Queue
     and multiprocessing.Process.
     """
-    for i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, verbose, save_chains, save_plots, fit_type in iter(inQueue.get, 'STOP'):
+    for i, bin_list, runname, nsamples, nchain, adapt_delta, max_treedepth, verbose, save_chains, save_plots, fit_type in iter(inQueue.get, 'STOP'):
 
-        status = run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, verbose, save_chains, save_plots, fit_type)
+        status = run(i, bin_list, runname, nsamples, nchain, adapt_delta, max_treedepth, verbose, save_chains, save_plots, fit_type)
 
         outQueue.put(( status ))
 
 #==============================================================================
-def stan_cache(model_code, model_name=None, codefile=None, **kwargs):
-
-    """Use just as you would `stan`"""
-    code_hash = md5(model_code.encode('ascii')).hexdigest()
-    if model_name is None:
-        cache_fn = 'stan_model/cached-model-{}.pkl'.format(code_hash)
-    else:
-        cache_fn = 'stan_model/cached-{}-{}.pkl'.format(model_name, code_hash)
-    try:
-        sm = pickle.load(open(cache_fn, 'rb'))
-    except:
-        sm = pystan.StanModel(model_code=model_code)
-        with open(cache_fn, 'wb') as f:
-            pickle.dump(sm, f)
-    else:
-        print("Using cached StanModel for "+codefile)
-
-    return sm
-#==============================================================================
-def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth, 
+def run(i, bin_list, runname, nsamples, nchain, adapt_delta, max_treedepth, 
         verbose=False, save_chains=False, save_plots=False, fit_type=None):
 
     idx = bin_list[i]
@@ -92,26 +73,21 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
         # Running the model
         with open(codefile, 'r') as myfile:
            code = myfile.read()
-        model   = stan_cache(model_code=code, codefile=codefile) 
-        fit     = model.sampling(data=data, iter=niter, chains=nchain, 
-                  control={'adapt_delta':adapt_delta, 'max_treedepth':max_treedepth}, 
-                  sample_file=sample_filename, check_hmc_diagnostics=True)
-
-        samples   = fit.extract(permuted=True) # Extracting parameter samples
-        diag_pars = fit.get_sampler_params()   # Getting sampler diagnostic params
+        posterior = stan.build(code, data=data)
+        samples = posterior.sample(num_chains=nchain, num_samples=nsamples)
         
         # If requested, saving sample chains
         if (save_chains == True):
            print("")
            print("# Saving chains in Arviz (NETCDF) format: "+arviz_filename) 
-           arviz_data = az.from_pystan(posterior=fit,observed_data=['mask','spec_obs','sigma_obs'])
+           arviz_data = az.from_pystan(posterior=samples,observed_data=['mask','spec_obs','sigma_obs'])
            az.to_netcdf(arviz_data,arviz_filename)
 
         # Saving Stan's summary of main parameters on disk
         print("")
         print("# Saving Stan summary: "+summary_filename)         
         unwanted = {'spec','conv_spec','poly','bestfit','a','losvd_'}
-        misc.save_stan_summary(fit, unwanted=unwanted, verbose=verbose, summary_filename=summary_filename)
+        misc.save_stan_summary(samples, unwanted=unwanted, verbose=verbose, summary_filename=summary_filename)
 
         # Processing output and saving results
         print("")
@@ -124,7 +100,7 @@ def run(i, bin_list, runname, niter, nchain, adapt_delta, max_treedepth,
               os.remove(pdf_filename)    
             print("")
             print("# Saving diagnostic plots: "+pdf_filename) 
-            create_diagnostic_plots(idx, pdf_filename, fit, diag_pars, niter, nchain)
+            create_diagnostic_plots(pdf_filename, samples)
     
         # Removing progess files
         print("")
@@ -159,8 +135,8 @@ if (__name__ == '__main__'):
     # Capturing the command line arguments
     parser = optparse.OptionParser(usage="%prog -f file")
     parser.add_option("-f", "--preproc_file",  dest="preproc_file",  type="string", default="",     help="Filename of the preprocessed file")
-    parser.add_option("-i", "--niter",         dest="niter",         type="int",    default=500,    help="Number of iterations in stan")
-    parser.add_option("-c", "--nchain",        dest="nchain",        type="int",    default=1,      help="Number of simultaneous chains to run")
+    parser.add_option("-i", "--nsamples",      dest="nsamples",      type="int",    default=500,    help="Number of iterations in stan")
+    parser.add_option("-c", "--nchain",        dest="nchain",        type="int",    default=2,      help="Number of simultaneous chains to run")
     parser.add_option("-a", "--adapt_delta",   dest="adapt_delta",   type="float",  default=0.99,   help="Stan Adapt_delta")
     parser.add_option("-d", "--max_treedepth", dest="max_treedepth", type="int",    default=18,     help="Stan maximum tree depth")
     parser.add_option("-b", "--bin",           dest="bin",           type="string", default="all",  help="Bin ID for spectrum run [all,odd,even,bin_list]")
@@ -174,7 +150,7 @@ if (__name__ == '__main__'):
 
     (options, args) = parser.parse_args()
     preproc_file    = options.preproc_file
-    niter           = options.niter
+    nsamples        = options.nsamples
     nchain          = options.nchain
     adapt_delta     = options.adapt_delta
     max_treedepth   = options.max_treedepth
@@ -237,7 +213,8 @@ if (__name__ == '__main__'):
     if njobs*nchain > cpu_count():
         misc.printWARNING("The chosen number of NJOBS and NCHAIN seems to be larger than the number of CPUs in the system!")
 
-    # Create Queues
+    # # Create Queues
+    # set_start_method("fork")
     inQueue  = Queue()
     outQueue = Queue()
 
@@ -249,7 +226,7 @@ if (__name__ == '__main__'):
 
     # Fill the queue
     for i in range(nbins):
-        inQueue.put( ( i, bin_list, runname, niter, nchain, adapt_delta, 
+        inQueue.put( ( i, bin_list, runname, nsamples, nchain, adapt_delta, 
                        max_treedepth, verbose, save_chains, save_plots, fit_type) )
 
     # Now running the processes
@@ -259,11 +236,21 @@ if (__name__ == '__main__'):
     for _ in range(njobs): inQueue.put('STOP')
 
     # Stop processes
-    for p in ps: p.join()
+    for p in ps: 
+        p.join(timeout=1)
+        p.terminate()
+    inQueue.close()
+    outQueue.close()    
 
     # Pack all results into a single file if everything went OK
     if 'ERROR' not in run_tmp:
        print("")
        print("# Packing all results into a single HDF5 file.")
        misc.pack_results(runname+"-"+fit_type)
-  
+
+    # END: If we are here, we are done.
+    misc.printDONE()
+    sys.exit()
+
+
+
