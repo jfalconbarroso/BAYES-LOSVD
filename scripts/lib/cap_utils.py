@@ -1,5 +1,5 @@
 from __future__ import print_function
-from time import clock
+from time import perf_counter
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial import distance, cKDTree
@@ -633,7 +633,7 @@ def voronoi_2d_binning(x, y, signal, noise, targetSN, cvt=True,
     if np.min(signal/noise) > targetSN:
         raise ValueError('All pixels have enough S/N and binning is not needed')
 
-    t = clock()
+    t = perf_counter()
     if not quiet:
         print('Bin-accretion...')
     classe, pixelsize = _accretion(
@@ -659,7 +659,7 @@ def voronoi_2d_binning(x, y, signal, noise, targetSN, cvt=True,
     if not quiet:
         print('Unbinned pixels: ', np.sum(w), ' / ', x.size)
         print('Fractional S/N scatter (%):', np.std(sn[~w] - targetSN, ddof=1)/targetSN*100)
-        print('Elapsed time: %.2f seconds' % (clock() - t))
+        print('Elapsed time: %.2f seconds' % (perf_counter() - t))
 
     if plot:
         plt.clf()
@@ -958,7 +958,7 @@ def display_pixels(x, y, val, pixelsize=None, vmin=None, vmax=None,
     ax = plt.gca()
 
     if (angle is None) or (angle == 0):
-        
+
         if cmap == None:
            cmap=kwargs.get("cmap", sauron)
 
