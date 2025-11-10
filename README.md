@@ -1,6 +1,6 @@
 # BAYES-LOSVD
 
-BAYES-LOSVD is a python framework for the non-parametric extraction of the Line-Of-Sight Velocity Distributions in galaxies. It makes use of Stan (https://mc-stan.org/) to perform all the computations and provide reliable uncertainties for all the parametes of the model chosen for the fit. The code comes with a large number of features, including read-in routines for some of the most popular IFU spectrographs and surveys: ATLAS3D, CALIFA, MaNGA, MUSE-WFM, SAMI, SAURON. 
+BAYES-LOSVD is a python framework for the non-parametric extraction of the Line-Of-Sight Velocity Distributions in galaxies. It makes use of Numpyro/JAX to perform the Bayesian inference and thus provide reliable uncertainties for all the parametes of the model chosen for the fit. The code comes with a large number of features, including read-in routines for some of the most popular IFU spectrographs and surveys: ATLAS3D, CALIFA, MaNGA, MUSE-WFM, SAMI, SAURON. 
 
 ### Authors
 
@@ -18,6 +18,7 @@ BAYES-LOSVD/docs/build/html/index.html
 - This version is a major release changing the Inference backend
 - Instead of STAN, this codes uses Numpyro/Jax
  (see bayes-losvd_packages.yaml for all the necessary packages)
+- This new implementation allows for GPU computations seemesly 
 
 ### Acknowledgments
 
