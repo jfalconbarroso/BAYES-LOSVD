@@ -1,0 +1,12 @@
+results/
+run_scripts/
+preproc_data/
+analysis_scripts/
+templates/INDOUS
+templates/XSL_Stars
+templates/EMILES_SSP
+templates/MILES_mid
+templates/MILES_small
+data/FCC*
+data/fcc*
+
