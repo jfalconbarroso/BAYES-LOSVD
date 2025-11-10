@@ -9,4 +9,4 @@ templates/MILES_mid
 templates/MILES_small
 data/FCC*
 data/fcc*
-
+update_git.sh
