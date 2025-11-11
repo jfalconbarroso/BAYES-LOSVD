@@ -16,6 +16,7 @@ dependencies:
   - tensorboard
   - ipykernel
   - requests
+  - sphinx
   - conda-forge::scikit-learn
   - pip:
       - corner==2.2.3
