@@ -1,4 +1,4 @@
-name: kinpop3d
+name: bayes_losvd
 channels:
   - conda-forge
   - defaults

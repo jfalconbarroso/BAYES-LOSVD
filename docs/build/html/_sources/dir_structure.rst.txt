@@ -37,23 +37,14 @@ We provide below the basic directory structure of the package along with the mai
       ├─ results/
       |
       ├─ scripts/
-      │   ├─ bayes_losvd_compile_codes.py
-      │   ├─ bayes_losvd_ghfit.py
       │   ├─ bayes_losvd_inspect_fits.py
-      │   ├─ bayes_losvd_inspect_ghfit.py
-      │   ├─ bayes_losvd_load_hdf5.py
-      │   ├─ bayes_losvd_monitor.py
       │   ├─ bayes_losvd_notebook.ipynb
       │   ├─ bayes_losvd_preproc_data.py
       │   ├─ bayes_losvd_run.py
       │   ├─ lib/
-      │   └─ stan_model/
-      |         ├─ bayes-losvd_ghfit.stan
-      |         ├─ bayes-losvd_model_AR.stan
-      |         ├─ bayes-losvd_model_Bsplines.stan
-      |         ├─ bayes-losvd_model_GH_full_series.stan
-      |         ├─ bayes-losvd_model_RW.stan
-      |         └─ bayes-losvd_model_SP.stan
+      │   └─ models/
+      |         ├─ bayes_losvd_model_GP.py
+      |         └─ bayes_losvd_model_SP.py
       |
       └─ templates/
           ├─ MILES_Stars/

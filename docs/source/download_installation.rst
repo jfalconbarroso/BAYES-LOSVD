@@ -26,31 +26,12 @@ from the command line::
 Python dependencies
 """""""""""""""""""""""
 
-The code requires the following Python packages to be installed in the system. 
+The code requires the Python packages indicated in the YAML file: bayes_losvd_packages.yaml 
 
-+--------------+-----------+
-| Package      | Version   |
-+==============+===========+
-| pystan       | 3.2.0     | 
-+--------------+-----------+
-| astropy      | 4.2.1     |
-+--------------+-----------+
-| arviz        | 0.11.2    |
-+--------------+-----------+
-| numpy        | 1.20.2    |
-+--------------+-----------+
-| matplotlib   | 3.3.4     |
-+--------------+-----------+
-| scipy        | 1.6.2     |
-+--------------+-----------+
-| h5py         | 1.10.6    |
-+--------------+-----------+
-| scikit_learn | 0.24.2    |
-+--------------+-----------+
-| tqdm         | 4.61.2    |
-+--------------+-----------+
-| toml         | 0.10.2    |
-+--------------+-----------+
+This file can be used to install all those packages within your environment::
+
+   conda env create -f bayes_losvd.yaml
+   conda activate bayes_losvd
 
 No additional configuration (e.g. environmental paths, etc) is required to run the code.
 
@@ -58,9 +39,7 @@ Parallelisation
 """""""""""""""""""""""
 The parallelisation of the pipeline uses the multiprocessing module of Python's Standard Library. In particular, it uses
 multiprocessing.Queue and multiprocessing.Process providing a maximum of stability and control over the parallel
-processes.  In addition, the threading/parallelisation of other Python native modules, such as numpy or scipy, is
-suppressed. Thus, the number of active processes should never exceed the number of cores defined in the configuration
-file, nor should any process be able to claim more than 100% CPU usage. 
+processes. 
 
 The drawback of the Python multiprocessing module is that it does not natively support the use of multiple nodes on
 large computing clusters. However, at this point the use of one node (with e.g. 32 cores) should be sufficient for most

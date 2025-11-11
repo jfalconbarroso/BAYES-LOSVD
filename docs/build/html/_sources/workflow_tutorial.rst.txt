@@ -5,19 +5,17 @@ Workflow & Tutorial
 
 As explained in :ref:`usage`, the basic workflow of the code consists of 4 steps:
 
-* Step 1: Compilation of the Stan codes. 
-* Step 2: Pre-processing of the input data
-* Step 3: Running the code
-* Step 4: Analysis of the outputs
+* Step 1: Pre-processing of the input data
+* Step 2: Running the code
+* Step 3: Analysis of the outputs
 
 **Remember that all the codes have to be run from the** ``scripts`` **directory.**
 
 The sequence of commands to run the code is the following::
 
-  python bayes_losvd_compile_codes.py
   python bayes_losvd_preproc_data.py -c ../config_files/example_preproc.properties
-  python bayes_losvd_run.py -f ../preproc_data/NGC0000.hdf5 -b all -v 1 -t SP
-  python bayes_losvd_inspect_fits.py -r NGC0000-SP -b 0
+  python bayes_losvd_run.py -f ../preproc_data/NGC0000.hdf5 -l all -t SP
+  python bayes_losvd_inspect_fits.py -f ../results/NGC0000_SP_results.hdf5 -l 0
   
 In order to help the user to understand better the logic of this workflow as well as all the possible switches and options each code has, we have prepared a `Jupyter Notebook <https://jupyter.org/>`_  showing all possibilites. This notebook is located in the ``scripts/`` directory and can be executed as::
   

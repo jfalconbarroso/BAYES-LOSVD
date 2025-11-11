@@ -14,20 +14,16 @@ Basic steps
 
 Running the code involves the following steps:
 
-Step 1: Compilation of the Stan codes. 
-   * This step is necessary to run the main fitting code. Stan models will be 
-   internally converted into C++ and then compiled. This step only needs to be executed once.
-
-Step 2: Pre-processing of the input data
+Step 1: Pre-processing of the input data
    * Before execution, the data has to be prepared/preprocessed. This is needed 
    to chose, e.g., the wavelength range for the fitting, the level of spatial binning, 
    number of PCA components or template library, among other things.
 
-Step 3: Running the code
+Step 2: Running the code
    * This is the main step of the process that leads to the extraction of the LOSVD.
 
-Step 4: Analysis of the outputs
-   * In this step the spectral fits, the recovered LOSVD and Stan convergence 
+Step 3: Analysis of the outputs
+   * In this step the spectral fits, the recovered LOSVD and model convergence 
    diagnostics can be checked.
 
 See :ref:`tutorial` for a full example and a Jupyter notebook.
@@ -53,10 +49,10 @@ An example of such file is provided at  the ``config_files/example_preproc.prope
   velscale     = 60.0
   snr          = 50.0
   snr_min      = 3.0
-  porder       = 5
   template_lib = "MILES_SSP"
   npca         = 5
-  mask_file    = "emission_lines.mask"
+ <xcen         = 50>
+ <ycen         = 50>
 
 * ``[<run name>]``: name to identify the run
 * ``filename`` filename in data dir
@@ -68,10 +64,9 @@ An example of such file is provided at  the ``config_files/example_preproc.prope
 * ``velscale``: desired velocity scale km/s/pix
 * ``snr``: target signal-to-noise ratio (Note: if not required set to 0 or a * negative value)
 * ``snr_min``: minimum signal-to-noise to use for the spatial binning
-* ``porder``: polynomial order to be used in spectral fitting
 * ``template_lib``: template library to use from those available in 'templates' directory
 * ``npca``: number of PCA components to use as templates
-* ``mask_file``: emission line mask file. Set to "None" if no masking is desired
+* ``xcen,ycen``: are optional to indicate the central pixel coordinates of the dacube (in pixels)
 
 The same file can have as many ``[<run name>]`` configuration blocks as needed.
 
@@ -129,78 +124,49 @@ files are placed in the ``config_files/instruments`` directory for the default i
    required input and output variables. Please make sure there are no NaNs in the data by setting up
    the flux values to zero and the errors to a very large value. See SAMI.py for an example.
 
-Stan codes configuration file
+Models configuration file
 -----------------------------
 
-BAYES-LOSVD allows different Stan models to perform the LOSVD fitting. The different implementations 
-describe the LOSVD in distinct ways: from a pure Simplex definition (with no prior assumptions), to 
-several forms of regularization using priors (e.g. Random Walk, Auto-Regresive, or penalised B-splines). 
-The list of available models is listed in the ``config_files/codes.properties`` file::
+This BAYES-LOSVD allows different Numpyro/JAX models to perform the LOSVD fitting. The different implementations 
+describe the LOSVD in distinct ways: (1) a pure Simplex definition (with no prior assumptions), (2) a Gaussian Process
+with a Wedland kernel. The list of available models is listed in the ``config_files/codes.properties`` file::
 
   [SP]
-  codefile = "bayes-losvd_model_SP.stan"
+  codefile = "bayes_losvd_model_SP.py"
   
-  [RW]
-  codefile = "bayes-losvd_model_RW.stan"
+  [GP]
+  codefile = "bayes_losvd_model_GP.py"
   
-  [AR1]
-  codefile = "bayes-losvd_model_AR.stan"
-  order    = 1
-  
-  [AR2]
-  codefile = "bayes-losvd_model_AR.stan"
-  order    = 2
-  
-  [AR3]
-  codefile = "bayes-losvd_model_AR.stan"
-  order    = 3
-  
-  [Bsplines3]
-  codefile = "bayes-losvd_model_Bsplines.stan"
-  spline_order = 3
-  
-  [Bsplines4]
-  codefile = "bayes-losvd_model_Bsplines.stan"
-  spline_order = 4
-  
-  [GHfree]
-  codefile = "bayes-losvd_model_GH_full_series.stan"
+Like previous `TOML  <https://en.wikipedia.org/wiki/TOML>`_ files the code identification is set in the ``[<code name>]`` keyword. 
 
-Like previous `TOML  <https://en.wikipedia.org/wiki/TOML>`_ files the code identification is set in the ``[<code name>]`` keyword. We require the ``codefile`` with the actual name of the file with the Stan model. In addition, it is possible to pass the Stan code other variables for execution (see, e.g.,  AR and Bsplines models above).
+We require the ``codefile`` with the actual name of the file with the Numpyro/JAX model. In addition, it is possible to pass the other variables to the mdel for execution through the 'extra-params' keyword in bayes_losvd_run.py.
 
 
-Adding new Stan models
+Adding new models
 """"""""""""""""""""""
 
-Adding a new Stan code is as simple as including, following the scheme above,  its definition in the ``config_files/codes.properties file`` and adding the required Stan model file to the ``scripts/stan_model/`` directory. For the new model to work properly, it requires the following input variables in the Stan's data block::
+Adding a new  code is as simple as including, following the scheme above,  its definition in the ``config_files/codes.properties file`` and adding the required model file to the ``scripts/models/`` directory. For the new model to work properly, it requires that the main function has the same name as the filename of the code::
 
-  data {
-     int<lower=1> npix_obs;      // Number of pixels of input spectrum
-     int<lower=1> ntemp;         // Number of PC components
-     int<lower=1> npix_temp;     // Number of pixels of each PC components
-     int<lower=1> nvel;          // Number of pixels of the LOSVD
-     int<lower=1> nmask;         // Number of pixels of the mask
-     int<lower=1> mask[nmask];   // Mask with pixels to be fitted
-     int<lower=0> porder;        // Polynomial order to be used
-     vector[npix_obs]            spec_obs;      // Array with observed spectrum 
-     vector<lower=0.0>[npix_obs] sigma_obs;     // Array with error spectrum
-     matrix[npix_temp,ntemp]     templates;     // Array with PC components spectra
-     vector[npix_temp]           mean_template; // Array with mean template of the  PCA decomposion
-     vector[nmask]               spec_masked;   // masked input spectrum
-  }  
+The user needs to make sure the model accepts a 'data' dictionary. By default the dictionary contains the following keys:: 
 
-These variables will be generated automatically during the preprocessing process. Note that the input spectrum, error spectrum, mean_template and templates are log-rebinned to the same wavelength and velocity scale.
+   def <model name>(data):
 
-In addition, the generated quantites block should contain the following variables::
+       # Loading all the necessary data
+       mean_template = data['mean_template']
+       templates     = data['templates']
+       spec_obs      = data['spec_obs']
+       sigma_obs     = data['sigma_obs']
+       porder        = data['porder']
+       mask          = data['mask']
+       xvel          = data['xvel']
+       snr_input     = data['snr']
+       NPCA          = data['npca']
+       params        = data['params'] 
+       Npix, Ntemp   = templates.shape
+       xcont         = jnp.linspace(-1, 1, Npix)
+       vscale        = xvel[1]-xvel[0]
 
-  generated quantities {
-  
-    vector[npix_temp] spec      = mean_template + templates * weights;
-    vector[npix_obs]  conv_spec = convolve_data(spec,losvd,npix_temp,nvel);
-    vector[npix_obs]  poly      = leg_pols * coefs;
-    vector[npix_obs]  bestfit   = poly + conv_spec;
-    
-  }
+Note that the input spectrum, error spectrum, mean_template and templates are log-rebinned to the same wavelength and velocity scale.
 
 The parameters of the model can be anything. BAYES-LOSVD will capture them automatically and process them appropiately.
 
