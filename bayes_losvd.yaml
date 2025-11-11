@@ -17,6 +17,7 @@ dependencies:
   - ipykernel
   - requests
   - sphinx
+  - sphinx_rtd_theme
   - conda-forge::scikit-learn
   - pip:
       - corner==2.2.3
