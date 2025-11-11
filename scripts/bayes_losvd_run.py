@@ -16,18 +16,18 @@ from   lib.gauss_hermite_fit import gauss_hermite_fit
 # from   lib.lmoments_fit      import lmoments_fit
 mp.set_start_method("spawn", force=True)
 #==============================================================================
-def run_fit(runname, preproc_file, bin_list, mask, porder, outdir, nsamples, nchain, njobs, save_chains, fit_type, extra_params, gh_flag, lmom_flag):
+def run_fit(runname, preproc_file, bin_list, mask, porder, outdir, nsamples, nchain, njobs, save_chains, fit_type, extra_params):
 
     with mp.Pool(processes=njobs) as pool:
            results = pool.starmap(
                run_model,
-               [(runname, preproc_file, i, mask, porder, outdir, nsamples, nchain, save_chains, fit_type, extra_params, gh_flag, lmom_flag) for i in bin_list]
+               [(runname, preproc_file, i, mask, porder, outdir, nsamples, nchain, save_chains, fit_type, extra_params) for i in bin_list]
            )
 
     return 'OK'
 
 #------------------------------------------------------------------------------
-def run_model(runname, preproc_file, idx, mask, porder, outdir, nsamples, nchain, save_chains, fit_type, extra_params, gh_flag, lmom_flag):
+def run_model(runname, preproc_file, idx, mask, porder, outdir, nsamples, nchain, save_chains, fit_type, extra_params):
 
     misc.printRUNNING(runname+" - Fit type: "+fit_type+" - Bin: "+str(idx)) 
 
@@ -67,19 +67,17 @@ def run_model(runname, preproc_file, idx, mask, porder, outdir, nsamples, nchain
         nuts_kernel = NUTS(model, target_accept_prob=0.90, dense_mass=False, max_tree_depth=10)
         mcmc = MCMC(nuts_kernel, num_warmup=nsamples, num_samples=nsamples, num_chains=nchain, chain_method="sequential")
         mcmc.run(rng_key, data)
+
+        # Saving results into arrays
         idata = az.from_numpyro(posterior=mcmc)
+        samples = mcmc.get_samples(group_by_chain=True)
+        losvd_samples = samples['losvd'].reshape(-1, samples['losvd'].shape[-1])
 
-        # If requested, do Gauss-Hermite fits
-        if gh_flag:
-            samples = mcmc.get_samples(group_by_chain=True)
-            losvd_samples = samples['losvd'].reshape(-1, samples['losvd'].shape[-1])
-            idata = gauss_hermite_fit(data['xvel'], losvd_samples, idata, n_chains=nchain)
+        # Gauss-Hermite fits
+        idata = gauss_hermite_fit(data['xvel'], losvd_samples, idata, n_chains=nchain)
 
-        # If requested, do L-moments fits
-        # if lmom_flag:
-        #     samples = mcmc.get_samples(group_by_chain=True)
-        #     losvd_samples = samples['losvd'].reshape(-1, samples['losvd'].shape[-1])
-        #     idata = lmoments_fit(data['xvel'], losvd_samples, idata, n_chains=nchain)
+        # L-moments fits
+        # idata = lmoments_fit(data['xvel'], losvd_samples, idata, n_chains=nchain)
 
         # Processing outputs
         print("")
@@ -173,8 +171,6 @@ if (__name__ == '__main__'):
     parser.add_argument("-o", "--outdir",       type=str, default="../results/", help="Output directory for results")
     parser.add_argument("-t", "--fit_type",     type=str, default="GP",          help="type of fit to be performed")
     parser.add_argument("-s", "--save_chains",  action="store_true",             help="If set, save MCMC chains")
-    parser.add_argument("-g", "--gh_flag",      action="store_true",             help="If set, run Gauss-Hermit fits")
-    parser.add_argument("-k", "--lmom_flag",    action="store_true",             help="If set, run L-moments computation")
     parser.add_argument("--extra_params", type=misc.parse_kv_pairs,              help="Extra parameters as key=value pairs, e.g. alpha=0.1,beta=0.9,flag=True")
 
     # Parse arguments
@@ -204,8 +200,7 @@ if (__name__ == '__main__'):
     print("# Getting ready ...")
     run_tmp = run_fit(runname, args.preproc_file, bin_list, mask, args.porder, \
                       args.outdir, args.nsamples, args.nchain, args.njobs, \
-                      args.save_chains, args.fit_type, args.extra_params, \
-                      args.gh_flag, args.lmom_flag)
+                      args.save_chains, args.fit_type, args.extra_params)
     
     if 'ERROR' in run_tmp:
        misc.printFAILED("ERROR: Something went wrong during fit")
