@@ -15,10 +15,9 @@ BAYES-LOSVD/docs/build/html/index.html
 
 ### New in this release
 
-- This version is a major release changing the Inference backend
-- Instead of STAN, this codes uses Numpyro/Jax
- (see bayes-losvd_packages.yaml for all the necessary packages)
-- This new implementation allows for GPU computations seemesly 
+- This is a major release introducing a new inference backend.
+- The code now uses NumPyro/JAX (see bayes-losvd_packages.yaml for the required packages).
+- This implementation enables seamless CPU and GPU computations for improved performance.
 
 ### Acknowledgments
 
