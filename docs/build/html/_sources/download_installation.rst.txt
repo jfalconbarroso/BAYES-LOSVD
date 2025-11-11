@@ -26,7 +26,7 @@ from the command line::
 Python dependencies
 """""""""""""""""""""""
 
-The code requires the Python packages indicated in the YAML file: bayes_losvd_packages.yaml 
+The code requires the Python packages indicated in the YAML file: bayes_losvd.yaml 
 
 This file can be used to install all those packages within your environment::
 
