@@ -88,17 +88,10 @@
 <section id="example-figures">
 <h2>Example figures<a class="headerlink" href="#example-figures" title="Link to this heading"></a></h2>
 <figure class="align-default" id="id1">
-<a class="reference internal image-reference" href="_images/example_figure1.png"><img alt="_images/example_figure1.png" src="_images/example_figure1.png" style="width: 300px;" />
+<a class="reference internal image-reference" href="_images/bayes-losvd_fig_snr.png"><img alt="_images/bayes-losvd_fig_snr.png" src="_images/bayes-losvd_fig_snr.png" style="width: 300px;" />
 </a>
 <figcaption>
-<p><span class="caption-text">LOSVD recovery for no regularisation and an auto-regressive (order 2) prior. Black line on main panels are the input test data with S/N of 100, while the red line shows the best fitting model. Residuals are indicated in green. The spectral fits are carried out with 5 PCA templates. In the insets, the input LOSVD is a Gaussian centred at zero and a velocity dispersion of 150 km/s (indicated in red). The recovered median values of the LOSVDs are indicated with a thick black line. 16%-84% and 1%-99% confidence limits at each point are indicated in dark and light blue, respectively.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
-</figcaption>
-</figure>
-<figure class="align-default" id="id2">
-<a class="reference internal image-reference" href="_images/example_figure2.png"><img alt="_images/example_figure2.png" src="_images/example_figure2.png" style="width: 800px;" />
-</a>
-<figcaption>
-<p><span class="caption-text">LOSVD recovery for different input LOSVDs and types of regularisation. Colors as figure above. Each row represents a particular LOSVD shape for different types of regularisation. These are solutions for input spectra with S/N=50. All panels are plotted on the same scale.</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+<p><span class="caption-text">LOSVD recovery for no regularisation with a Simplex (v1 of the code) and a Gaussian Process (this version). Red line on all panels are the input test LOSVD. The recovered median values of the LOSVDs are indicated with a thick black line. 16%-84% and 1%-99% confidence limits at each point are indicated in dark and light blue, respectively. Our new approach with Gaussian Processes overcomes the inherent limitations of defining the LOSVD with a Simplex (i.e. prone to jumpy solutions).</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>

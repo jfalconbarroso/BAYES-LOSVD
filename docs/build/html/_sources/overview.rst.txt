@@ -6,13 +6,8 @@ BAYES-LOSVD is a python framework for the non-parametric extraction of the Line-
 
 Example figures
 """""""""""""""""""""""
-.. figure:: example_figure1.png
+.. figure:: bayes-losvd_fig_snr.png
    :width: 300
   
-   LOSVD recovery for no regularisation and an auto-regressive (order 2) prior. Black line on main panels are the input test data with S/N of 100, while the red line shows the best fitting model. Residuals are indicated in green. The spectral fits are carried out with 5 PCA templates. In the insets, the input LOSVD is a Gaussian centred at zero and a velocity dispersion of 150 km/s (indicated in red). The recovered median values of the LOSVDs are indicated with a thick black line. 16%-84% and 1%-99% confidence limits at each point are indicated in dark and light blue, respectively. 
+   LOSVD recovery for no regularisation with a Simplex (v1 of the code) and a Gaussian Process (this version). Red line on all panels are the input test LOSVD. The recovered median values of the LOSVDs are indicated with a thick black line. 16%-84% and 1%-99% confidence limits at each point are indicated in dark and light blue, respectively. Our new approach with Gaussian Processes overcomes the inherent limitations of defining the LOSVD with a Simplex (i.e. prone to jumpy solutions). 
 
-
-.. figure:: example_figure2.png
-   :width: 800
-
-   LOSVD recovery for different input LOSVDs and types of regularisation. Colors as figure above. Each row represents a particular LOSVD shape for different types of regularisation. These are solutions for input spectra with S/N=50. All panels are plotted on the same scale.
