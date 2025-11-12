@@ -15,9 +15,7 @@ Basic steps
 Running the code involves the following steps:
 
 Step 1: Pre-processing of the input data
-   * Before execution, the data has to be prepared/preprocessed. This is needed 
-   to chose, e.g., the wavelength range for the fitting, the level of spatial binning, 
-   number of PCA components or template library, among other things.
+   * Before execution, the data has to be prepared/preprocessed. This is needed to chose, e.g., the wavelength range for the fitting, the level of spatial binning, number of PCA components or template library, among other things.
 
 Step 2: Running the code
    * This is the main step of the process that leads to the extraction of the LOSVD.
