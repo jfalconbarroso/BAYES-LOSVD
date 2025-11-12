@@ -229,7 +229,7 @@ with a Wedland kernel. The list of available models is listed in the <code class
 <section id="adding-new-models">
 <h3>Adding new models<a class="headerlink" href="#adding-new-models" title="Link to this heading"></a></h3>
 <p>Adding a new  code is as simple as including, following the scheme above,  its definition in the <code class="docutils literal notranslate"><span class="pre">config_files/codes.properties</span> <span class="pre">file</span></code> and adding the required model file to the <code class="docutils literal notranslate"><span class="pre">scripts/models/</span></code> directory. For the new model to work properly, it requires that the main function has the same name as the filename of the code:</p>
-<p>The user needs to make sure the model accepts a ‘data’ dictionary. By default the dictionary contains the following keys:</p>
+<p>The user needs to make sure the model accepts a ‘data’ dictionary. By default the dictionary must contain the following keys:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="o">&lt;</span><span class="n">model</span> <span class="n">name</span><span class="o">&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="c1"># Loading all the necessary data</span>
     <span class="n">mean_template</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;mean_template&#39;</span><span class="p">]</span>
