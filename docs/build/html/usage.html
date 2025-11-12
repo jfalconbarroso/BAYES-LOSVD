@@ -1,107 +1,350 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
-<head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Usage &mdash; BAYES-LOSVD  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Usage &#8212; BAYES-LOSVD  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-      <script src="_static/jquery.js?v=5d32c60e"></script>
-      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/js/theme.js"></script>
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'usage';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Workflow &amp; Tutorial" href="workflow_tutorial.html" />
-    <link rel="prev" title="Directory structure" href="dir_structure.html" /> 
-</head>
+    <link rel="prev" title="Directory structure" href="dir_structure.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Nov 12, 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
-          
-          
-          <a href="index.html" class="icon icon-home">
-            BAYES-LOSVD
-              <img src="_static/bayes_losvd_logo.png" class="logo" alt="Logo"/>
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
-<ul class="current">
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/bayes_losvd_logo.png" class="logo__image only-light" alt="BAYES-LOSVD  documentation - Home"/>
+    <script>document.write(`<img src="_static/bayes_losvd_logo.png" class="logo__image only-dark" alt="BAYES-LOSVD  documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="download_installation.html">Download &amp; Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dir_structure.html">Directory structure</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#basic-steps">Basic steps</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#preproc-data-configuration-files">Preproc data configuration files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#instruments-configuration-file">Instruments configuration file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#models-configuration-file">Models configuration file</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#adding-new-models">Adding new models</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#output-files-format">Output files format</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#output-results-from-bayes-losvd-run-py">Output results from bayes_losvd_run.py</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#output-chains-from-bayes-losvd-run-py">Output chains from bayes_losvd_run.py</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="workflow_tutorial.html">Workflow &amp; Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contact.html">Contact</a></li>
 </ul>
 
-        </div>
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
       </div>
-    </nav>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">BAYES-LOSVD</a>
-      </nav>
+<div class="sbt-scroll-pixel-helper"></div>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Usage</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
-      </li>
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/usage.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
   </ul>
-  <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Usage</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-steps">Basic steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preproc-data-configuration-files">Preproc data configuration files</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instruments-configuration-file">Instruments configuration file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models-configuration-file">Models configuration file</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-new-models">Adding new models</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#output-files-format">Output files format</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#output-results-from-bayes-losvd-run-py">Output results from bayes_losvd_run.py</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#output-chains-from-bayes-losvd-run-py">Output chains from bayes_losvd_run.py</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
   <section id="usage">
-<span id="id1"></span><h1>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h1>
+<span id="id1"></span><h1>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h1>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The BAYES-LOSVD package commands have to be executed from the ‘scripts’ directory.</p>
 <p>See <a class="reference internal" href="dir_structure.html#dir-structure"><span class="std std-ref">Directory structure</span></a> for relevant details.</p>
 </div>
 <section id="basic-steps">
-<h2>Basic steps<a class="headerlink" href="#basic-steps" title="Link to this heading"></a></h2>
+<h2>Basic steps<a class="headerlink" href="#basic-steps" title="Link to this heading">#</a></h2>
 <p>Running the code involves the following steps:</p>
 <dl class="simple">
 <dt>Step 1: Pre-processing of the input data</dt><dd><ul class="simple">
@@ -124,7 +367,7 @@
 <p>See <a class="reference internal" href="workflow_tutorial.html#tutorial"><span class="std std-ref">Workflow &amp; Tutorial</span></a> for a full example and a Jupyter notebook.</p>
 </section>
 <section id="preproc-data-configuration-files">
-<h2>Preproc data configuration files<a class="headerlink" href="#preproc-data-configuration-files" title="Link to this heading"></a></h2>
+<h2>Preproc data configuration files<a class="headerlink" href="#preproc-data-configuration-files" title="Link to this heading">#</a></h2>
 <p>The standard location to place the required configuration file for the
 preprocessing of a particular dataset is the <code class="docutils literal notranslate"><span class="pre">config_files</span></code> directory.</p>
 <p>The configuration file for the preprocessing follows the
@@ -164,7 +407,7 @@ An example of such file is provided at  the <code class="docutils literal notran
 <p>The same file can have as many <code class="docutils literal notranslate"><span class="pre">[&lt;run</span> <span class="pre">name&gt;]</span></code> configuration blocks as needed.</p>
 </section>
 <section id="instruments-configuration-file">
-<h2>Instruments configuration file<a class="headerlink" href="#instruments-configuration-file" title="Link to this heading"></a></h2>
+<h2>Instruments configuration file<a class="headerlink" href="#instruments-configuration-file" title="Link to this heading">#</a></h2>
 <p>Our current distribution includes reading routines for some of the most popular
 IFUs/surveys (e.g. CALIFA, MANGA, MUSE-WFM, SAMI, SAURON, FITS2D, …). This is
 defined in a <a class="reference external" href="https://en.wikipedia.org/wiki/TOML">TOML</a> file <code class="docutils literal notranslate"><span class="pre">ìnstruments.properties</span></code>
@@ -218,7 +461,7 @@ the flux values to zero and the errors to a very large value. See SAMI.py for an
 </div>
 </section>
 <section id="models-configuration-file">
-<h2>Models configuration file<a class="headerlink" href="#models-configuration-file" title="Link to this heading"></a></h2>
+<h2>Models configuration file<a class="headerlink" href="#models-configuration-file" title="Link to this heading">#</a></h2>
 <p>This BAYES-LOSVD allows different Numpyro/JAX models to perform the LOSVD fitting. The different implementations
 describe the LOSVD in distinct ways: (1) a pure Simplex definition (with no prior assumptions), (2) a Gaussian Process
 with a Wedland kernel. The list of available models is listed in the <code class="docutils literal notranslate"><span class="pre">config_files/codes.properties</span></code> file:</p>
@@ -232,7 +475,7 @@ with a Wedland kernel. The list of available models is listed in the <code class
 <p>Like previous <a class="reference external" href="https://en.wikipedia.org/wiki/TOML">TOML</a> files the code identification is set in the <code class="docutils literal notranslate"><span class="pre">[&lt;code</span> <span class="pre">name&gt;]</span></code> keyword.</p>
 <p>We require the <code class="docutils literal notranslate"><span class="pre">codefile</span></code> with the actual name of the file with the Numpyro/JAX model. In addition, it is possible to pass the other variables to the mdel for execution through the ‘extra-params’ keyword in bayes_losvd_run.py.</p>
 <section id="adding-new-models">
-<h3>Adding new models<a class="headerlink" href="#adding-new-models" title="Link to this heading"></a></h3>
+<h3>Adding new models<a class="headerlink" href="#adding-new-models" title="Link to this heading">#</a></h3>
 <p>Adding a new  code is as simple as including, following the scheme above,  its definition in the <code class="docutils literal notranslate"><span class="pre">config_files/codes.properties</span> <span class="pre">file</span></code> and adding the required model file to the <code class="docutils literal notranslate"><span class="pre">scripts/models/</span></code> directory. For the new model to work properly, it requires that the main function has the same name as the filename of the code:</p>
 <p>The user needs to make sure the model accepts a ‘data’ dictionary. By default the dictionary must contain the following keys:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="o">&lt;</span><span class="n">model</span> <span class="n">name</span><span class="o">&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
@@ -258,9 +501,9 @@ with a Wedland kernel. The list of available models is listed in the <code class
 </section>
 </section>
 <section id="output-files-format">
-<h2>Output files format<a class="headerlink" href="#output-files-format" title="Link to this heading"></a></h2>
+<h2>Output files format<a class="headerlink" href="#output-files-format" title="Link to this heading">#</a></h2>
 <section id="output-results-from-bayes-losvd-run-py">
-<h3>Output results from bayes_losvd_run.py<a class="headerlink" href="#output-results-from-bayes-losvd-run-py" title="Link to this heading"></a></h3>
+<h3>Output results from bayes_losvd_run.py<a class="headerlink" href="#output-results-from-bayes-losvd-run-py" title="Link to this heading">#</a></h3>
 <p>The output file with the results is an HDF5 file with the following structure and variables:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Group</span> <span class="p">[</span><span class="s1">&#39;in&#39;</span><span class="p">]:</span> <span class="c1"># Generated during preprocessing</span>
    <span class="o">-</span> <span class="n">binID</span>
@@ -320,7 +563,7 @@ with a Wedland kernel. The list of available models is listed in the <code class
 </div>
 </section>
 <section id="output-chains-from-bayes-losvd-run-py">
-<h3>Output chains from bayes_losvd_run.py<a class="headerlink" href="#output-chains-from-bayes-losvd-run-py" title="Link to this heading"></a></h3>
+<h3>Output chains from bayes_losvd_run.py<a class="headerlink" href="#output-chains-from-bayes-losvd-run-py" title="Link to this heading">#</a></h3>
 <p>If –save_chains is activated in bayes_losvd_run.py then NETCDF files will be stored in the ‘results’ directory for each spectrum. These files can be opened and manipulated seamesly with Arviz:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">arviz</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">az</span>
 <span class="n">idata</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">from_netcdf</span><span class="p">(</span><span class="s2">&quot;../results/NGC0000_GP/NGC0000_GP_chains_bin0.netcdf&quot;</span><span class="p">)</span>
@@ -331,36 +574,117 @@ with a Wedland kernel. The list of available models is listed in the <code class
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="dir_structure.html" class="btn btn-neutral float-left" title="Directory structure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="workflow_tutorial.html" class="btn btn-neutral float-right" title="Workflow &amp; Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+                </article>
+              
 
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2020, Jesus Falcon-Barroso &amp; Marie Martig; .
-      <span class="lastupdated">Last updated on Nov 12, 2025.
-      </span></p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
-        </div>
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="dir_structure.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Directory structure</p>
       </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class="right-next"
+       href="workflow_tutorial.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Workflow &amp; Tutorial</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-</body>
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-steps">Basic steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preproc-data-configuration-files">Preproc data configuration files</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instruments-configuration-file">Instruments configuration file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models-configuration-file">Models configuration file</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-new-models">Adding new models</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#output-files-format">Output files format</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#output-results-from-bayes-losvd-run-py">Output results from bayes_losvd_run.py</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#output-chains-from-bayes-losvd-run-py">Output chains from bayes_losvd_run.py</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jesus Falcon-Barroso & Marie Martig
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2020, Jesus Falcon-Barroso &amp; Marie Martig; .
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Nov 12, 2025.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
 </html>
