@@ -165,7 +165,7 @@ if (__name__ == '__main__'):
     parser.add_argument("-l", "--bin_option",   type=str, default="all",         help="BinID for spectrum run [all,odd,even,bin_list]")
     parser.add_argument("-m", "--maskfile",     type=str, default=None,          help="Filename with lines to mask [<filename> or None]")
     parser.add_argument("-p", "--porder",       type=int, default=5,             help="Legendre polynomial order")
-    parser.add_argument("-n", "--nsamples",     type=int, default=1000,          help="Number of samples")
+    parser.add_argument("-n", "--nsamples",     type=int, default=500,           help="Number of samples")
     parser.add_argument("-c", "--nchain",       type=int, default=2,             help="Number of chains")
     parser.add_argument("-j", "--njobs",        type=int, default=1,             help="Number of jobs to run in parallel")
     parser.add_argument("-o", "--outdir",       type=str, default="../results/", help="Output directory for results")

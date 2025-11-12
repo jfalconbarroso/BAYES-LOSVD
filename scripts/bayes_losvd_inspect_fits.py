@@ -131,7 +131,6 @@ if (__name__ == '__main__'):
     )
 
     parser.add_argument("-f", "--filename", type=str,            default=None,          help="File with the results")
-    parser.add_argument("-d", "--dir",      type=str,            default='../results/', help="(Optional) The directory with results")
     parser.add_argument("-l", "--bin",      type=int,            default=0,             help="Bin ID for spectrum display")
     parser.add_argument("-s", "--save",     action="store_true",                        help="(Optional) Save figure")
 
