@@ -16,7 +16,7 @@ BAYES-LOSVD/docs/build/html/index.html
 ### New in this release
 
 - This is a major release introducing a new inference backend.
-- The code now uses NumPyro/JAX (see bayes-losvd.yaml for the required packages).
+- The code now uses NumPyro/JAX (see bayes-losvd_packages_XXX.yaml for the required packages).
 - This implementation enables seamless CPU and GPU computations for improved performance.
 
 ### Acknowledgments

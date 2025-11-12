@@ -1,0 +1,47 @@
+name: bayes_losvd
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - absl-py=2.3.1
+  - arviz=0.21.0
+  - astropy=6.1.7
+  - astropy-iers-data=0.2025.6.9.0.39.3
+  - h5py=3.12.1
+  - hdf5=1.14.4
+  - jax=0.5.2
+  - jaxlib=0.5.2
+  - numpy=2.2.6
+  - pandas=2.3.1
+  - scipy=1.15.2
+  - matplotlib=3.10.1
+  - seaborn=0.13.2
+  - scikit-learn=1.7.2
+  - statsmodels=0.14.5
+  - xarray=2025.6.1
+  - xarray-einstats=0.8.0
+  - ipykernel=6.29.5   # <- linux-available; 7.0.0 in old file was an osx build
+  - jupyter_client=8.6.3
+  - jupyter_core=5.8.1
+  - pyyaml=6.0.2
+  - requests=2.32.5
+  - tqdm=4.67.1
+  - toml=0.10.2
+  - numpyro=0.18.0
+  - patsy=1.0.1
+  - matplotlib-inline=0.1.7
+  - pillow=11.3.0
+  - pip
+  - tk
+  - zstandard
+  - pip:
+      - corner==2.2.3
+      - equinox==0.13.2
+      - funsor==0.4.5
+      - jaxopt==0.8.4
+      - jaxtyping==0.3.3
+      - plotbin==3.1.7
+      - powerbin==1.1.9
+      - tinygp==0.3.0
+      - wadler-lindig==0.1.7

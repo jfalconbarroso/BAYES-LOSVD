@@ -26,11 +26,14 @@ from the command line::
 Python dependencies
 """""""""""""""""""""""
 
-The code requires the Python packages indicated in the YAML file: bayes_losvd.yaml 
+The code requires the Python packages indicated in the YAML files (depending on your operating system)::
+
+   bayes_losvd_packages_osx.yaml 
+   bayes_losvd_packages_linux.yaml 
 
 This file can be used to install all those packages within your environment::
 
-   conda env create -f bayes_losvd.yaml
+   conda env create -f bayes_losvd_packages_<XXX>.yaml
    conda activate bayes_losvd
 
 No additional configuration (e.g. environmental paths, etc) is required to run the code.
