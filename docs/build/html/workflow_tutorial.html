@@ -86,12 +86,14 @@
 <li><p>Step 1: Pre-processing of the input data</p></li>
 <li><p>Step 2: Running the code</p></li>
 <li><p>Step 3: Analysis of the outputs</p></li>
+<li><p>Step 4: Checking the outputs</p></li>
 </ul>
 <p><strong>Remember that all the codes have to be run from the</strong> <code class="docutils literal notranslate"><span class="pre">scripts</span></code> <strong>directory.</strong></p>
 <p>The sequence of commands to run the code is the following:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">bayes_losvd_preproc_data</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">c</span> <span class="o">../</span><span class="n">config_files</span><span class="o">/</span><span class="n">example_preproc</span><span class="o">.</span><span class="n">properties</span>
 <span class="n">python</span> <span class="n">bayes_losvd_run</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">f</span> <span class="o">../</span><span class="n">preproc_data</span><span class="o">/</span><span class="n">NGC0000</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">l</span> <span class="nb">all</span> <span class="o">-</span><span class="n">t</span> <span class="n">SP</span>
-<span class="n">python</span> <span class="n">bayes_losvd_inspect_fits</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">f</span> <span class="o">../</span><span class="n">results</span><span class="o">/</span><span class="n">NGC0000_SP_results</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">l</span> <span class="mi">0</span>
+<span class="n">python</span> <span class="n">bayes_losvd_inspect_fits</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">f</span> <span class="o">../</span><span class="n">results</span><span class="o">/</span><span class="n">NGC0000_SP</span><span class="o">/</span><span class="n">NGC0000_SP_results</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">l</span> <span class="mi">0</span>
+<span class="n">python</span> <span class="n">bayes_losvd_check_results</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">d</span> <span class="o">../</span><span class="n">results</span><span class="o">/</span><span class="n">NGC0000_SP</span>
 </pre></div>
 </div>
 <p>In order to help the user to understand better the logic of this workflow as well as all the possible switches and options each code has, we have prepared a <a class="reference external" href="https://jupyter.org/">Jupyter Notebook</a>  showing all possibilites. This notebook is located in the <code class="docutils literal notranslate"><span class="pre">scripts/</span></code> directory and can be executed as:</p>
@@ -113,7 +115,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2020, Jesus Falcon-Barroso &amp; Marie Martig; .
-      <span class="lastupdated">Last updated on Nov 11, 2025.
+      <span class="lastupdated">Last updated on Nov 12, 2025.
       </span></p>
   </div>
 

@@ -23,8 +23,10 @@ Step 2: Running the code
    * This is the main step of the process that leads to the extraction of the LOSVD.
 
 Step 3: Analysis of the outputs
-   * In this step the spectral fits, the recovered LOSVD and model convergence 
-   diagnostics can be checked.
+   * In this step the spectral fits, the recovered LOSVD and model convergence diagnostics can be checked.
+
+Step 4: Checking the outputs
+   * In this step the output .txt files with the results of the inference are analysed. Bins exhibiting non-convergenced are flagged.
 
 See :ref:`tutorial` for a full example and a Jupyter notebook.
 
