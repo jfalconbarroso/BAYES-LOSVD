@@ -178,7 +178,7 @@ Output results from bayes_losvd_run.py
 
 The output file with the results is an HDF5 file with the following structure and variables::
 
-   Group ['in']: (Generated during preprocessing)
+   Group ['in']: # Generated during preprocessing
       - binID
       - bin_flux
       - bin_snr
@@ -213,7 +213,7 @@ The output file with the results is an HDF5 file with the following structure an
       - y
       - ybin
 
-   Group ['out']: (for the GP model case)
+   Group ['out']: # for the GP model case
       - coeffs
       - continuum
       - ell_gp

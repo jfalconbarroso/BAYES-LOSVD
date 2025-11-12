@@ -262,7 +262,7 @@ with a Wedland kernel. The list of available models is listed in the <code class
 <section id="output-results-from-bayes-losvd-run-py">
 <h3>Output results from bayes_losvd_run.py<a class="headerlink" href="#output-results-from-bayes-losvd-run-py" title="Link to this heading"></a></h3>
 <p>The output file with the results is an HDF5 file with the following structure and variables:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Group</span> <span class="p">[</span><span class="s1">&#39;in&#39;</span><span class="p">]:</span> <span class="p">(</span><span class="n">Generated</span> <span class="n">during</span> <span class="n">preprocessing</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Group</span> <span class="p">[</span><span class="s1">&#39;in&#39;</span><span class="p">]:</span> <span class="c1"># Generated during preprocessing</span>
    <span class="o">-</span> <span class="n">binID</span>
    <span class="o">-</span> <span class="n">bin_flux</span>
    <span class="o">-</span> <span class="n">bin_snr</span>
@@ -297,7 +297,7 @@ with a Wedland kernel. The list of available models is listed in the <code class
    <span class="o">-</span> <span class="n">y</span>
    <span class="o">-</span> <span class="n">ybin</span>
 
-<span class="n">Group</span> <span class="p">[</span><span class="s1">&#39;out&#39;</span><span class="p">]:</span> <span class="p">(</span><span class="k">for</span> <span class="n">the</span> <span class="n">GP</span> <span class="n">model</span> <span class="n">case</span><span class="p">)</span>
+<span class="n">Group</span> <span class="p">[</span><span class="s1">&#39;out&#39;</span><span class="p">]:</span> <span class="c1"># for the GP model case</span>
    <span class="o">-</span> <span class="n">coeffs</span>
    <span class="o">-</span> <span class="n">continuum</span>
    <span class="o">-</span> <span class="n">ell_gp</span>
