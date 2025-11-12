@@ -26,9 +26,7 @@ If you have found this software useful please consider including the following c
 
 *BAYES-LOSVD: a bayesian framework for non-parametric extraction of the LOSVD*
 
-J. Falcón-Barroso & M. Martig
-
-Astronomy & Astrophysics, 2021, 646, A31
+J. Falcón-Barroso & M. Martig, Astronomy & Astrophysics, 2021, 646, A31
 (https://ui.adsabs.harvard.edu/abs/2021A%26A...646A..31F/abstract)
 
 ......
