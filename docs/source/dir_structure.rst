@@ -37,6 +37,7 @@ We provide below the basic directory structure of the package along with the mai
       ├─ results/
       |
       ├─ scripts/
+      │   ├─ bayes_losvd_load_hdf5.py
       │   ├─ bayes_losvd_check_results.py
       │   ├─ bayes_losvd_inspect_fits.py
       │   ├─ bayes_losvd_notebook.ipynb

@@ -66,7 +66,7 @@ An example of such file is provided at  the ``config_files/example_preproc.prope
 * ``snr_min``: minimum signal-to-noise to use for the spatial binning
 * ``template_lib``: template library to use from those available in 'templates' directory
 * ``npca``: number of PCA components to use as templates
-* ``xcen,ycen``: are optional to indicate the central pixel coordinates of the dacube (in pixels)
+* ``<xcen,ycen>``: are optional to indicate the central pixel coordinates of the dacube (in pixels)
 
 The same file can have as many ``[<run name>]`` configuration blocks as needed.
 
@@ -170,3 +170,73 @@ Note that the input spectrum, error spectrum, mean_template and templates are lo
 
 The parameters of the model can be anything. BAYES-LOSVD will capture them automatically and process them appropiately.
 
+Output files format
+-------------------
+
+Output results from bayes_losvd_run.py
+""""""""""""""""""""""""""""""""""""""
+
+The output file with the results is an HDF5 file with the following structure and variables::
+
+   Group ['in']:
+      - binID
+      - bin_flux
+      - bin_snr
+      - flux
+      - lmax
+      - lmin
+      - lwave_temp
+      - mask
+      - mean_template
+      - nbins
+      - ndim
+      - npca
+      - npix
+      - npix_obs
+      - npix_temp
+      - nspec
+      - ntemp
+      - nvel
+      - porder
+      - psize
+      - redshift
+      - sigma_obs
+      - snr
+      - spec_obs
+      - templates
+      - velscale
+      - wave
+      - wave_obs
+      - x
+      - xbin
+      - xvel
+      - y
+      - ybin
+
+   Group ['out']: (for the GP model case)
+      - coeffs
+      - continuum
+      - ell_gp
+      - eta
+      - h3_star
+      - h4_star
+      - losvd
+      - model_spec
+      - sigma_gp
+      - sigma_star
+      - snr_real
+      - vel_star
+      - weights
+
+This information can be loaded into a dictionary using the bayes_losvd_load_hdf5.py script::
+
+   from bayes_losvd_load_hdf5 import load_hdf5
+   tab = load_hdf5("../results/NGC0000_GP/NGC0000_GP_results.hdf5")
+
+Output chains from bayes_losvd_run.py
+"""""""""""""""""""""""""""""""""""""
+
+If --save_chains is activated in bayes_losvd_run.py then NETCDF files will be stored in the 'results' directory for each spectrum. These files can be opened and manipulated seamesly with Arviz::
+
+   import arviz as az
+   idata = az.from_netcdf("../results/NGC0000_GP/NGC0000_GP_chains_bin0.netcdf")
