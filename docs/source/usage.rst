@@ -150,6 +150,7 @@ Adding a new  code is as simple as including, following the scheme above,  its d
 The user needs to make sure the model accepts a 'data' dictionary. By default the dictionary must contain the following keys:: 
 
    def <model name>(data):
+   
        # Loading all the necessary data
        mean_template = data['mean_template']
        templates     = data['templates']
