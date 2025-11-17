@@ -65,4 +65,7 @@ if (__name__ == '__main__'):
 
     parser.add_argument("-f", "--filename", type=str, default=None, help="File with the results")
 
-    tab = load_hdf5(filename)
+    # Parse arguments
+    args = parser.parse_args()
+  
+    tab = load_hdf5(args.filename)

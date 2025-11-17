@@ -174,8 +174,8 @@ def spectral_masking(preproc_file, maskfile):
         for i in range( mask.shape[0] ):
         
             # Check for sky-lines (correcting for redshift because data has already been de-redshifted)
-            if maskComment[i] == 'sky'  or  maskComment[i] == 'SKY'  or  maskComment[i] == 'Sky':
-                mask[i,0] = mask[i,0] / (1+redshift)
+            # if maskComment[i] == 'sky'  or  maskComment[i] == 'SKY'  or  maskComment[i] == 'Sky':
+            #     mask[i,0] = mask[i,0] / (1+redshift)
 
             # Define masked pixel range
             minimumPixel = int( np.round( ( np.log( mask[i,0] - mask[i,1]/2. ) - logLam[0] ) / (logLam[1] - logLam[0]) ) )
