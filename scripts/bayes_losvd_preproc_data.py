@@ -56,6 +56,7 @@ def run_preproc_data(rname, struct):
     print("- Min SNR:          "+str(struct['snr_min']))
     print("- Target SNR:       "+str(struct['snr']))
     print("- Velscale:         "+str(struct['velscale']))
+    print("- Vmax:             "+str(struct['vmax']))
     print("- Template library: "+str(struct['template_lib']))
     if struct['npca'] > 0:
         print("- Number of PCA:    "+str(struct['npca']))
@@ -77,7 +78,7 @@ def run_preproc_data(rname, struct):
     print("") 
     print("# Creating the LOSVD velocity vector")
     print("") 
-    xvel, nvel = misc.create_xvel_vector(1000.0, struct['velscale'])
+    xvel, nvel = misc.create_xvel_vector(struct['vmax'], struct['velscale'])
 
     # Saving preprocessed information
     print("# Saving preproc data: "+outhdf5)
@@ -123,7 +124,7 @@ def run_preproc_data(rname, struct):
           ax0.axvline(0.0, ls=":", color='gray')
           ax0.axhline(0.0, ls=":", color='gray')
 
-       pdf_pages.savefig(fig)
+       pdf_pages.savefig(fig, dpi=300)
        plt.close()
 
 
