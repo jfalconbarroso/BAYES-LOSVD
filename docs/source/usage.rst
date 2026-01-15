@@ -117,12 +117,27 @@ data (``read_file``), and an ASCII file describing the Line-Spread Function (i.e
 instrumental resolution as a function of wavelength) for the instrument (``lsf_file``). Both 
 files are placed in the ``config_files/instruments`` directory for the default instruments. 
 
+Templates configuration file
+------------------------------
+
+Our current distribution includes reading routines for some of the MILES template libraries. 
+This is defined in a `TOML  <https://en.wikipedia.org/wiki/TOML>`_ file ``templates.properties`` 
+placed in the ``config_files``::
+
+  [MILES_SSP]
+  read_file = 'MILES_SSP.py'
+  lsf_file  = 'MILES_SSP.lsf'
+  
+  [MILES_Stars]
+  read_file = 'MILES_Stars.py'
+  lsf_file  = 'MILES_Stars.lsf'
+
 .. hint::
-   Adding new instruments is as simple as including, following the scheme above,  their definition 
-   in the ``config_files/instruments.properties`` file and adding the required two new files to the 
-   ``config_files/instruments/`` directory. The user should use existing files for reference on the 
-   required input and output variables. Please make sure there are no NaNs in the data by setting up
-   the flux values to zero and the errors to a very large value. See SAMI.py for an example.
+   Adding new instruments or template libraries is as simple as including, following the scheme above, their definition 
+   in the ``config_files/instruments.properties`` and ``config_files/templates.properties`` file and adding the required 
+   two new files to the ``config_files/instruments/`` and ``config_files/templates/`` directory respectively. The user 
+   should use existing files for reference on the required input and output variables. Please make sure there are no 
+   NaNs in the data by setting up the flux values to zero and the errors to a very large value.
 
 Models configuration file
 -----------------------------
@@ -145,7 +160,7 @@ We require the ``codefile`` with the actual name of the file with the Numpyro/JA
 Adding new models
 """"""""""""""""""""""
 
-Adding a new  code is as simple as including, following the scheme above,  its definition in the ``config_files/codes.properties file`` and adding the required model file to the ``scripts/models/`` directory. For the new model to work properly, it requires that the main function has the same name as the filename of the code::
+Adding a new code is as simple as including, following the scheme above, its definition in the ``config_files/codes.properties file`` and adding the required model file to the ``scripts/models/`` directory. For the new model to work properly, it requires that the main function has the same name as the filename of the code::
 
 The user needs to make sure the model accepts a 'data' dictionary. By default the dictionary must contain the following keys:: 
 
@@ -165,6 +180,7 @@ The user needs to make sure the model accepts a 'data' dictionary. By default th
        Npix, Ntemp   = templates.shape
        xcont         = jnp.linspace(-1, 1, Npix)
        vscale        = xvel[1]-xvel[0]
+       params        = data['params']
 
 Note that the input spectrum, error spectrum, mean_template and templates are log-rebinned to the same wavelength and velocity scale.
 
@@ -227,6 +243,8 @@ The output file with the results is an HDF5 file with the following structure an
       - snr_real
       - vel_star
       - weights
+  if npa = 0 the group will contain:
+      - mean_params
 
 This information can be loaded into a dictionary using the bayes_losvd_load_hdf5.py script::
 

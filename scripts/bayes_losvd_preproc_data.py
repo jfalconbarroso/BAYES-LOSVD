@@ -96,6 +96,8 @@ def run_preproc_data(rname, struct):
           f.create_dataset("in/"+key, data=val, compression="gzip")
     #------------
     for key, val in temp_struct.items():
+       if val is None:
+          continue
        if (np.size(val) < 2):
           f.create_dataset("in/"+key, data=val)
        else:

@@ -7,7 +7,7 @@ import matplotlib.pyplot  as plt
 import lib.misc_functions as misc
 import lib.cap_utils      as cap
 from   tqdm.auto          import trange
-from   powerbin import PowerBin
+from   powerbin           import PowerBin
 #===============================================================================
 def load_data(struct):
 

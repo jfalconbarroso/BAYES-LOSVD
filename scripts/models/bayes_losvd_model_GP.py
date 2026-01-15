@@ -32,10 +32,11 @@ def bayes_losvd_model_GP(data):
     xvel          = data['xvel']
     snr_input     = data['snr']
     NPCA          = data['npca']
-    params        = data['params'] 
+    pars          = data['pars'] 
     Npix, Ntemp   = templates.shape
     xcont         = jnp.linspace(-1, 1, Npix)
     vscale        = xvel[1]-xvel[0]
+    params        = data['params']
 
     # Adjusting input SNR and error spectrum (using SNR as better estimate)
     # Note: I don't believe anything with an error below 1% (i.e. SNR=100)
@@ -44,8 +45,8 @@ def bayes_losvd_model_GP(data):
 
     # --- Defining the priors for the template weights ---
     if NPCA == 0:
-        if "tau" in params:    
-            tau = numpyro.deterministic("tau", params['tau'])
+        if "tau" in pars:    
+            tau = numpyro.deterministic("tau", pars['tau'])
         else:
             tau = numpyro.sample("tau", dist.TruncatedNormal(1.5, 0.5, low=0.5, high=2.5))
         z = numpyro.sample("z", dist.Normal(0, tau).expand([Ntemp]))
@@ -57,13 +58,13 @@ def bayes_losvd_model_GP(data):
     # --- Create non-parametric LOSVD ---
 
     # .... Hyperpriors ....
-    if "ell_gp" in params:
-        ell_gp   = numpyro.deterministic("ell_gp", params['ell_gp']) 
+    if "ell_gp" in pars:
+        ell_gp   = numpyro.deterministic("ell_gp", pars['ell_gp']) 
     else:     
         ell_gp   = numpyro.sample("ell_gp", dist.TruncatedNormal(3.5, 0.5, low=1.0, high=6.0))
 
-    if "sigma_gp" in params:     
-        sigma_gp = numpyro.deterministic("sigma_gp", params['sigma_gp']) 
+    if "sigma_gp" in pars:     
+        sigma_gp = numpyro.deterministic("sigma_gp", pars['sigma_gp']) 
     else:
         sigma_gp = numpyro.sample("sigma_gp", dist.LogNormal(-2.0, 0.7)) 
     
@@ -107,6 +108,14 @@ def bayes_losvd_model_GP(data):
 
     # --- Real SNR ---
     numpyro.deterministic("snr_real", 1.0 / jnp.std(spec_obs[mask] - model_spec[mask]))
+
+    # --- Mean values for input template parameters (generic; stored in `params`) ---
+    # For NPCA==0, `weights` are simplex weights over the original templates.
+    # For NPCA>0, `weights` are PCA coefficients; `q_params` and `params_mean` provide
+    # an affine map from PCA-coefficient space to the mean of each parameter row.
+    if (params is not None) &  (NPCA == 0):
+        mean_params = jnp.dot(params, weights)  # (nparams,)
+        numpyro.deterministic("mean_params", mean_params)
 
     # --- Likelihood ---
     numpyro.sample("obs", dist.Normal(model_spec[mask], sigma_obs[mask]), obs=spec_obs[mask])

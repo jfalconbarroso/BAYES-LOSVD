@@ -13,7 +13,7 @@ Download
 """""""""""""""""""""""
 
 We recommend to install the BAYES-LOSVD package in a separate and new conda 
-environment, using Python3.9. For further instructions on the use and management 
+environment, using Python3.9 or above. For further instructions on the use and management 
 of conda environments, please see the `Conda Documentation <https://conda.io>`_.
 
 The BAYES-LOSVD code is installed by cloning the following `Github <https://github.com>`_ repository 

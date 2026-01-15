@@ -16,39 +16,41 @@ from   lib.gauss_hermite_fit import gauss_hermite_fit
 # from   lib.lmoments_fit      import lmoments_fit
 mp.set_start_method("spawn", force=True)
 #==============================================================================
-def run_fit(runname, preproc_file, bin_list, mask, porder, outdir, nsamples, nchain, njobs, save_chains, fit_type, extra_params):
+def run_fit(runname, preproc_file, bin_list, mask, porder, outdir, nsamples, nchain, njobs, save_chains, fit_type, extra_pars):
 
     with mp.Pool(processes=njobs) as pool:
            results = pool.starmap(
                run_model,
-               [(runname, preproc_file, i, mask, porder, outdir, nsamples, nchain, save_chains, fit_type, extra_params) for i in bin_list]
+               [(runname, preproc_file, i, mask, porder, outdir, nsamples, nchain, save_chains, fit_type, extra_pars) for i in bin_list]
            )
 
     return 'OK'
 
 #------------------------------------------------------------------------------
-def run_model(runname, preproc_file, idx, mask, porder, outdir, nsamples, nchain, save_chains, fit_type, extra_params):
+def run_model(runname, preproc_file, idx, mask, porder, outdir, nsamples, nchain, save_chains, fit_type, extra_pars):
 
     misc.printRUNNING(runname+" - Fit type: "+fit_type+" - Bin: "+str(idx)) 
 
     try:
 
         # Creating the basic structure with the data for Numpyro model
-        if extra_params == None:
-            extra_params = {}
+        if extra_pars == None:
+            extra_pars = {}
+
         with h5py.File(preproc_file, "r") as struct:
             data = {
-                    'xvel':          np.array(struct['in/xvel']),
-                    'spec_obs':      np.array(struct['in/spec_obs'][:,idx]),
-                    'sigma_obs':     np.array(struct['in/sigma_obs'][:,idx]),
-                    'mean_template': np.array(struct['in/mean_template']),
-                    'templates':     np.array(struct['in/templates']),
-                    'snr':           np.array(struct['in/bin_snr'][idx]),
-                    'nbins':         np.array(struct['in/nbins']),
-                    'npca':          np.array(struct['in/npca']),
+                    'xvel':          struct['in/xvel'][...],
+                    'spec_obs':      struct['in/spec_obs'][:,idx],
+                    'sigma_obs':     struct['in/sigma_obs'][:,idx],
+                    'mean_template': struct['in/mean_template'][...],
+                    'templates':     struct['in/templates'][...],
+                    'snr':           struct['in/bin_snr'][idx],
+                    'nbins':         struct['in/nbins'][()],
+                    'npca':          struct['in/npca'][()],
                     'porder':        porder,
                     'mask':          mask,
-                    'params':        extra_params
+                    'pars':          extra_pars,
+                    'params':        struct['in/params'][...]
             }
         struct.close()
         
@@ -171,7 +173,7 @@ if (__name__ == '__main__'):
     parser.add_argument("-o", "--outdir",       type=str, default="../results/", help="Output directory for results")
     parser.add_argument("-t", "--fit_type",     type=str, default="GP",          help="type of fit to be performed")
     parser.add_argument("-s", "--save_chains",  action="store_true",             help="If set, save MCMC chains")
-    parser.add_argument("--extra_params", type=misc.parse_kv_pairs,              help="Extra parameters as key=value pairs, e.g. alpha=0.1,beta=0.9,flag=True")
+    parser.add_argument("--extra_pars",   type=misc.parse_kv_pairs,              help="Extra pars as key=value pairs, e.g. alpha=0.1,beta=0.9,flag=True")
 
     # Parse arguments
     args = parser.parse_args()
@@ -200,7 +202,7 @@ if (__name__ == '__main__'):
     print("# Getting ready ...")
     run_tmp = run_fit(runname, args.preproc_file, bin_list, mask, args.porder, \
                       args.outdir, args.nsamples, args.nchain, args.njobs, \
-                      args.save_chains, args.fit_type, args.extra_params)
+                      args.save_chains, args.fit_type, args.extra_pars)
     
     if 'ERROR' in run_tmp:
        misc.printFAILED("ERROR: Something went wrong during fit")
