@@ -50,8 +50,7 @@ We provide below the basic directory structure of the package along with the mai
       |
       └─ templates/
           ├─ MILES_Stars/
-          ├─ MILES_SSP/
-          └─ EMILES_SSP/
+          └─ MILES_SSP/
 
 
 The main purposes of each directory are:

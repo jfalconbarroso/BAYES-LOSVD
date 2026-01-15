@@ -47,7 +47,7 @@
     <link rel="prev" title="Directory structure" href="dir_structure.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Nov 12, 2025"/>
+    <meta name="docbuild:last-update" content="Jan 15, 2026"/>
   </head>
   
   
@@ -316,6 +316,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-steps">Basic steps</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preproc-data-configuration-files">Preproc data configuration files</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instruments-configuration-file">Instruments configuration file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#templates-configuration-file">Templates configuration file</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models-configuration-file">Models configuration file</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-new-models">Adding new models</a></li>
 </ul>
@@ -451,13 +452,28 @@ file. For each instrument, two files are required: a Python routine to read the 
 data (<code class="docutils literal notranslate"><span class="pre">read_file</span></code>), and an ASCII file describing the Line-Spread Function (i.e. the
 instrumental resolution as a function of wavelength) for the instrument (<code class="docutils literal notranslate"><span class="pre">lsf_file</span></code>). Both
 files are placed in the <code class="docutils literal notranslate"><span class="pre">config_files/instruments</span></code> directory for the default instruments.</p>
+</section>
+<section id="templates-configuration-file">
+<h2>Templates configuration file<a class="headerlink" href="#templates-configuration-file" title="Link to this heading">#</a></h2>
+<p>Our current distribution includes reading routines for some of the MILES template libraries.
+This is defined in a <a class="reference external" href="https://en.wikipedia.org/wiki/TOML">TOML</a> file <code class="docutils literal notranslate"><span class="pre">templates.properties</span></code>
+placed in the <code class="docutils literal notranslate"><span class="pre">config_files</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">MILES_SSP</span><span class="p">]</span>
+<span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;MILES_SSP.py&#39;</span>
+<span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;MILES_SSP.lsf&#39;</span>
+
+<span class="p">[</span><span class="n">MILES_Stars</span><span class="p">]</span>
+<span class="n">read_file</span> <span class="o">=</span> <span class="s1">&#39;MILES_Stars.py&#39;</span>
+<span class="n">lsf_file</span>  <span class="o">=</span> <span class="s1">&#39;MILES_Stars.lsf&#39;</span>
+</pre></div>
+</div>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>Adding new instruments is as simple as including, following the scheme above,  their definition
-in the <code class="docutils literal notranslate"><span class="pre">config_files/instruments.properties</span></code> file and adding the required two new files to the
-<code class="docutils literal notranslate"><span class="pre">config_files/instruments/</span></code> directory. The user should use existing files for reference on the
-required input and output variables. Please make sure there are no NaNs in the data by setting up
-the flux values to zero and the errors to a very large value. See SAMI.py for an example.</p>
+<p>Adding new instruments or template libraries is as simple as including, following the scheme above, their definition
+in the <code class="docutils literal notranslate"><span class="pre">config_files/instruments.properties</span></code> and <code class="docutils literal notranslate"><span class="pre">config_files/templates.properties</span></code> file and adding the required
+two new files to the <code class="docutils literal notranslate"><span class="pre">config_files/instruments/</span></code> and <code class="docutils literal notranslate"><span class="pre">config_files/templates/</span></code> directory respectively. The user
+should use existing files for reference on the required input and output variables. Please make sure there are no
+NaNs in the data by setting up the flux values to zero and the errors to a very large value.</p>
 </div>
 </section>
 <section id="models-configuration-file">
@@ -476,7 +492,7 @@ with a Wedland kernel. The list of available models is listed in the <code class
 <p>We require the <code class="docutils literal notranslate"><span class="pre">codefile</span></code> with the actual name of the file with the Numpyro/JAX model. In addition, it is possible to pass the other variables to the mdel for execution through the ‘extra-params’ keyword in bayes_losvd_run.py.</p>
 <section id="adding-new-models">
 <h3>Adding new models<a class="headerlink" href="#adding-new-models" title="Link to this heading">#</a></h3>
-<p>Adding a new  code is as simple as including, following the scheme above,  its definition in the <code class="docutils literal notranslate"><span class="pre">config_files/codes.properties</span> <span class="pre">file</span></code> and adding the required model file to the <code class="docutils literal notranslate"><span class="pre">scripts/models/</span></code> directory. For the new model to work properly, it requires that the main function has the same name as the filename of the code:</p>
+<p>Adding a new code is as simple as including, following the scheme above, its definition in the <code class="docutils literal notranslate"><span class="pre">config_files/codes.properties</span> <span class="pre">file</span></code> and adding the required model file to the <code class="docutils literal notranslate"><span class="pre">scripts/models/</span></code> directory. For the new model to work properly, it requires that the main function has the same name as the filename of the code:</p>
 <p>The user needs to make sure the model accepts a ‘data’ dictionary. By default the dictionary must contain the following keys:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="o">&lt;</span><span class="n">model</span> <span class="n">name</span><span class="o">&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
 
@@ -494,6 +510,7 @@ with a Wedland kernel. The list of available models is listed in the <code class
     <span class="n">Npix</span><span class="p">,</span> <span class="n">Ntemp</span>   <span class="o">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">xcont</span>         <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Npix</span><span class="p">)</span>
     <span class="n">vscale</span>        <span class="o">=</span> <span class="n">xvel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">xvel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">params</span>        <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Note that the input spectrum, error spectrum, mean_template and templates are log-rebinned to the same wavelength and velocity scale.</p>
@@ -505,55 +522,57 @@ with a Wedland kernel. The list of available models is listed in the <code class
 <section id="output-results-from-bayes-losvd-run-py">
 <h3>Output results from bayes_losvd_run.py<a class="headerlink" href="#output-results-from-bayes-losvd-run-py" title="Link to this heading">#</a></h3>
 <p>The output file with the results is an HDF5 file with the following structure and variables:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Group</span> <span class="p">[</span><span class="s1">&#39;in&#39;</span><span class="p">]:</span> <span class="c1"># Generated during preprocessing</span>
-   <span class="o">-</span> <span class="n">binID</span>
-   <span class="o">-</span> <span class="n">bin_flux</span>
-   <span class="o">-</span> <span class="n">bin_snr</span>
-   <span class="o">-</span> <span class="n">flux</span>
-   <span class="o">-</span> <span class="n">lmax</span>
-   <span class="o">-</span> <span class="n">lmin</span>
-   <span class="o">-</span> <span class="n">lwave_temp</span>
-   <span class="o">-</span> <span class="n">mask</span>
-   <span class="o">-</span> <span class="n">mean_template</span>
-   <span class="o">-</span> <span class="n">nbins</span>
-   <span class="o">-</span> <span class="n">ndim</span>
-   <span class="o">-</span> <span class="n">npca</span>
-   <span class="o">-</span> <span class="n">npix</span>
-   <span class="o">-</span> <span class="n">npix_obs</span>
-   <span class="o">-</span> <span class="n">npix_temp</span>
-   <span class="o">-</span> <span class="n">nspec</span>
-   <span class="o">-</span> <span class="n">ntemp</span>
-   <span class="o">-</span> <span class="n">nvel</span>
-   <span class="o">-</span> <span class="n">porder</span>
-   <span class="o">-</span> <span class="n">psize</span>
-   <span class="o">-</span> <span class="n">redshift</span>
-   <span class="o">-</span> <span class="n">sigma_obs</span>
-   <span class="o">-</span> <span class="n">snr</span>
-   <span class="o">-</span> <span class="n">spec_obs</span>
-   <span class="o">-</span> <span class="n">templates</span>
-   <span class="o">-</span> <span class="n">velscale</span>
-   <span class="o">-</span> <span class="n">wave</span>
-   <span class="o">-</span> <span class="n">wave_obs</span>
-   <span class="o">-</span> <span class="n">x</span>
-   <span class="o">-</span> <span class="n">xbin</span>
-   <span class="o">-</span> <span class="n">xvel</span>
-   <span class="o">-</span> <span class="n">y</span>
-   <span class="o">-</span> <span class="n">ybin</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">Group</span> <span class="p">[</span><span class="s1">&#39;in&#39;</span><span class="p">]:</span> <span class="c1"># Generated during preprocessing</span>
+    <span class="o">-</span> <span class="n">binID</span>
+    <span class="o">-</span> <span class="n">bin_flux</span>
+    <span class="o">-</span> <span class="n">bin_snr</span>
+    <span class="o">-</span> <span class="n">flux</span>
+    <span class="o">-</span> <span class="n">lmax</span>
+    <span class="o">-</span> <span class="n">lmin</span>
+    <span class="o">-</span> <span class="n">lwave_temp</span>
+    <span class="o">-</span> <span class="n">mask</span>
+    <span class="o">-</span> <span class="n">mean_template</span>
+    <span class="o">-</span> <span class="n">nbins</span>
+    <span class="o">-</span> <span class="n">ndim</span>
+    <span class="o">-</span> <span class="n">npca</span>
+    <span class="o">-</span> <span class="n">npix</span>
+    <span class="o">-</span> <span class="n">npix_obs</span>
+    <span class="o">-</span> <span class="n">npix_temp</span>
+    <span class="o">-</span> <span class="n">nspec</span>
+    <span class="o">-</span> <span class="n">ntemp</span>
+    <span class="o">-</span> <span class="n">nvel</span>
+    <span class="o">-</span> <span class="n">porder</span>
+    <span class="o">-</span> <span class="n">psize</span>
+    <span class="o">-</span> <span class="n">redshift</span>
+    <span class="o">-</span> <span class="n">sigma_obs</span>
+    <span class="o">-</span> <span class="n">snr</span>
+    <span class="o">-</span> <span class="n">spec_obs</span>
+    <span class="o">-</span> <span class="n">templates</span>
+    <span class="o">-</span> <span class="n">velscale</span>
+    <span class="o">-</span> <span class="n">wave</span>
+    <span class="o">-</span> <span class="n">wave_obs</span>
+    <span class="o">-</span> <span class="n">x</span>
+    <span class="o">-</span> <span class="n">xbin</span>
+    <span class="o">-</span> <span class="n">xvel</span>
+    <span class="o">-</span> <span class="n">y</span>
+    <span class="o">-</span> <span class="n">ybin</span>
 
-<span class="n">Group</span> <span class="p">[</span><span class="s1">&#39;out&#39;</span><span class="p">]:</span> <span class="c1"># for the GP model case</span>
-   <span class="o">-</span> <span class="n">coeffs</span>
-   <span class="o">-</span> <span class="n">continuum</span>
-   <span class="o">-</span> <span class="n">ell_gp</span>
-   <span class="o">-</span> <span class="n">eta</span>
-   <span class="o">-</span> <span class="n">h3_star</span>
-   <span class="o">-</span> <span class="n">h4_star</span>
-   <span class="o">-</span> <span class="n">losvd</span>
-   <span class="o">-</span> <span class="n">model_spec</span>
-   <span class="o">-</span> <span class="n">sigma_gp</span>
-   <span class="o">-</span> <span class="n">sigma_star</span>
-   <span class="o">-</span> <span class="n">snr_real</span>
-   <span class="o">-</span> <span class="n">vel_star</span>
-   <span class="o">-</span> <span class="n">weights</span>
+ <span class="n">Group</span> <span class="p">[</span><span class="s1">&#39;out&#39;</span><span class="p">]:</span> <span class="c1"># for the GP model case</span>
+    <span class="o">-</span> <span class="n">coeffs</span>
+    <span class="o">-</span> <span class="n">continuum</span>
+    <span class="o">-</span> <span class="n">ell_gp</span>
+    <span class="o">-</span> <span class="n">eta</span>
+    <span class="o">-</span> <span class="n">h3_star</span>
+    <span class="o">-</span> <span class="n">h4_star</span>
+    <span class="o">-</span> <span class="n">losvd</span>
+    <span class="o">-</span> <span class="n">model_spec</span>
+    <span class="o">-</span> <span class="n">sigma_gp</span>
+    <span class="o">-</span> <span class="n">sigma_star</span>
+    <span class="o">-</span> <span class="n">snr_real</span>
+    <span class="o">-</span> <span class="n">vel_star</span>
+    <span class="o">-</span> <span class="n">weights</span>
+<span class="k">if</span> <span class="n">npa</span> <span class="o">=</span> <span class="mi">0</span> <span class="n">the</span> <span class="n">group</span> <span class="n">will</span> <span class="n">contain</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">mean_params</span>
 </pre></div>
 </div>
 <p>This information can be loaded into a dictionary using the bayes_losvd_load_hdf5.py script:</p>
@@ -621,6 +640,7 @@ with a Wedland kernel. The list of available models is listed in the <code class
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-steps">Basic steps</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preproc-data-configuration-files">Preproc data configuration files</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instruments-configuration-file">Instruments configuration file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#templates-configuration-file">Templates configuration file</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models-configuration-file">Models configuration file</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-new-models">Adding new models</a></li>
 </ul>
@@ -663,7 +683,7 @@ By Jesus Falcon-Barroso & Marie Martig
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Nov 12, 2025.
+  Last updated on Jan 15, 2026.
   <br/>
 </p>
   </div>
