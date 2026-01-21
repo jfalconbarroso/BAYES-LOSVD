@@ -527,19 +527,19 @@ def log_unbinning(lamRange, spec, oversample=1, flux=True):
     return( specNew, lamNew )
 
 #===============================================================================
-def pack_results(rootname, suffix='', dir='../results/', **kwargs):
+def pack_results(rootname, dir='../results/', **kwargs):
 
-    file_list = sorted(glob.glob(f"{dir}{rootname}_{suffix}/{rootname}_{suffix}_results_bin*.hdf5"))
+    file_list = sorted(glob.glob(f"{dir}{rootname}/{rootname}_results_bin*.hdf5"))
     nfiles = len(file_list)
 
     if nfiles == 0:
         print(" - Nothing to pack!")
-        print(f"   No {dir}{rootname}_{suffix}/{rootname}_{suffix}_results_bin*.hdf5 found")
+        print(f"   No {dir}{rootname}/{rootname}_results_bin*.hdf5 found")
         return
     else:
         print(f" - {nfiles} files found.")
 
-    outfile = f"{dir}{rootname}_{suffix}/{rootname}_{suffix}_results.hdf5"
+    outfile = f"{dir}{rootname}/{rootname}_results.hdf5"
     if os.path.exists(outfile):
         os.remove(outfile)
     g = h5py.File(outfile, 'w')

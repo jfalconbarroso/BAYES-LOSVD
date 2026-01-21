@@ -53,7 +53,7 @@ def read_templates(template_lib):
     # NOTE 2: The array must have size (nparam, ntemp)
     params = np.zeros((2,ntemp))
     age, met = extract_ages_and_metallicities(filelist)
-    params[0,:] = np.log10(age)
+    params[0,:] = age
     params[1,:] = met
 
     return wave, temp, ntemp, npix, params

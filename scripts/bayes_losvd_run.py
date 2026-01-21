@@ -102,7 +102,7 @@ def process_outputs(preproc_file, numpyro_data, idx, runname, fit_type, outdir, 
     if not os.path.exists(outdir):
         os.mkdir(outdir)
 
-    rootname = runname+'_'+fit_type
+    rootname = runname
     rundir   = outdir+rootname
     if not os.path.exists(rundir):
         os.mkdir(rundir)
