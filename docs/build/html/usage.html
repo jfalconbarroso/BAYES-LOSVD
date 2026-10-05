@@ -537,26 +537,27 @@ with a Wedland kernel. The list of available models is listed in the <code class
 <section id="adding-new-models">
 <h3>Adding new models<a class="headerlink" href="#adding-new-models" title="Link to this heading">#</a></h3>
 <p>Adding a new code is as simple as including, following the scheme above, its definition in the <code class="docutils literal notranslate"><span class="pre">config_files/codes.properties</span> <span class="pre">file</span></code> and adding the required model file to the <code class="docutils literal notranslate"><span class="pre">scripts/models/</span></code> directory. For the new model to work properly, it requires that the main function has the same name as the filename of the code:</p>
-<p>The user needs to make sure the model accepts a ‘data’ dictionary. By default the dictionary must contain the following keys:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="o">&lt;</span><span class="n">model</span> <span class="n">name</span><span class="o">&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-
-    <span class="c1"># Loading all the necessary data</span>
-    <span class="n">mean_template</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;mean_template&#39;</span><span class="p">]</span>
-    <span class="n">templates</span>     <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;templates&#39;</span><span class="p">]</span>
-    <span class="n">spec_obs</span>      <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;spec_obs&#39;</span><span class="p">]</span>
-    <span class="n">sigma_obs</span>     <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;sigma_obs&#39;</span><span class="p">]</span>
-    <span class="n">porder</span>        <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;porder&#39;</span><span class="p">]</span>
-    <span class="n">mask</span>          <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;mask&#39;</span><span class="p">]</span>
-    <span class="n">xvel</span>          <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;xvel&#39;</span><span class="p">]</span>
-    <span class="n">snr_input</span>     <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;snr&#39;</span><span class="p">]</span>
-    <span class="n">NPCA</span>          <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;npca&#39;</span><span class="p">]</span>
-    <span class="n">params</span>        <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
-    <span class="n">Npix</span><span class="p">,</span> <span class="n">Ntemp</span>   <span class="o">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">shape</span>
-    <span class="n">xcont</span>         <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Npix</span><span class="p">)</span>
-    <span class="n">vscale</span>        <span class="o">=</span> <span class="n">xvel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">xvel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">params</span>        <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
+<dl>
+<dt>The user needs to make sure the model accepts a ‘data’ dictionary. By default the dictionary must contain the following keys::</dt><dd><p>def &lt;model name&gt;(data):</p>
+<blockquote>
+<div><p># Loading all the necessary data
+mean_template = data[‘mean_template’]
+templates     = data[‘templates’]
+spec_obs      = data[‘spec_obs’]
+sigma_obs     = data[‘sigma_obs’]
+porder        = data[‘porder’]
+mask          = data[‘mask’]
+xvel          = data[‘xvel’]
+snr_input     = data[‘snr’]
+NPCA          = data[‘npca’]
+params        = data[‘params’]
+Npix, Ntemp   = templates.shape
+xcont         = jnp.linspace(-1, 1, Npix)
+vscale        = xvel[1]-xvel[0]
+params        = data[‘params’]</p>
+</div></blockquote>
+</dd>
+</dl>
 <p>Note that the input spectrum, error spectrum, mean_template and templates are log-rebinned to the same wavelength and velocity scale.</p>
 <p>The parameters of the model can be anything. BAYES-LOSVD will capture them automatically and process them appropiately.</p>
 </section>
