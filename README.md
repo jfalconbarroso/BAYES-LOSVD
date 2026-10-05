@@ -32,7 +32,7 @@ J. Falcón-Barroso & M. Martig, Astronomy & Astrophysics, 2021, 646, A31
 
 *- Recovering complex non-parametric LOSVDs with Bayes-LOSVD: The FCC 47 nuclear star cluster*
 
-J. Lamprecht, J. Falcón-Barroso, T. Jerabkova, P. Jethwa, K. Fahrion, M. Lyubenova, and M. Martig, Astronomy & Astrophysics, submitted
+J. Lamprecht, et al., Astronomy & Astrophysics, submitted
 
 ......
 
