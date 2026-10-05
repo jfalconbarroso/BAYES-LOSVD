@@ -1,0 +1,40 @@
+name: bayes_losvd_gpu
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.12
+
+  # Core numerical stack
+  - numpy
+  - scipy
+  - pandas
+  - xarray
+  - h5py
+
+  # Bayesian inference
+  # JAX itself is installed below with CUDA support
+  - numpyro
+  - arviz
+
+  # Astronomy
+  - astropy
+
+  # Plotting
+  - matplotlib
+
+  # Analysis / utilities
+  - scikit-learn
+  - tqdm
+  - toml
+
+  # Interactive use
+  - ipython
+  - ipykernel
+
+  # GPU JAX + pip-only dependencies
+  - pip
+  - pip:
+      - "jax[cuda13]"
+      - powerbin==1.1.9

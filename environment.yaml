@@ -1,0 +1,39 @@
+name: bayes_losvd
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.12
+
+  # Core numerical stack
+  - numpy
+  - scipy
+  - pandas
+  - xarray
+  - h5py
+
+  # Bayesian inference / JAX
+  - jax
+  - numpyro
+  - arviz
+
+  # Astronomy
+  - astropy
+
+  # Plotting
+  - matplotlib
+
+  # Analysis / utilities
+  - scikit-learn
+  - tqdm
+  - toml
+
+  # Interactive use
+  - ipython
+  - ipykernel
+
+  # Packages installed through pip
+  - pip
+  - pip:
+      - powerbin==1.1.9
