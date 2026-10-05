@@ -38,7 +38,7 @@ def check_results(filelist, RHAT_MAX, ESS_MIN):
         elif ncols == 9:
             colnames = ["variable", "mean", "sd", "mcse_mean", "mcse_sd", "ess_bulk", "ess_tail", "r_hat", "extra"]
         elif ncols == 10:
-            colnames = ["variable", "mean", "sd", "mcse_mean", "mcse_sd", "hdi_3%", "hdi_97%", "ess_bulk", "ess_tail", "r_hat"]
+            colnames = ["variable", "mean", "sd", "hdi_3%", "hdi_97%", "mcse_mean", "mcse_sd", "ess_bulk", "ess_tail", "r_hat"]
         df.columns = colnames[:ncols]
 
         # Convert numeric columns

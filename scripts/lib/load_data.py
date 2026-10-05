@@ -128,13 +128,13 @@ def load_data(struct):
            k = np.where( binNum == ubins[i] )[0]
            valbin = len(k)
            if valbin == 1:
-              av_spec     = spec[:,k]
-              av_err_spec = espec[:,k]
+              av_spec     = spec[:,k].ravel()
+              av_err_spec = espec[:,k].ravel()
            else:
-              av_spec     = np.nanmean(spec[:,k],axis=1)
-              av_err_spec = np.sqrt(np.nansum(espec[:,k]**2,axis=1))
+              av_spec     = np.nanmean(spec[:,k],axis=1).ravel()
+              av_err_spec = np.sqrt(np.nansum(espec[:,k]**2,axis=1)).ravel()
     
-           bin_flux[i]    = np.nanmean(av_spec,axis=0)
+           bin_flux[i]    = np.nanmean(av_spec)
            bin_spec[:,i]  = np.ravel(av_spec)
            bin_espec[:,i] = np.ravel(av_err_spec)
            

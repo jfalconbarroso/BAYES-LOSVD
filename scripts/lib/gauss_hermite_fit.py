@@ -4,17 +4,16 @@ from scipy.optimize import curve_fit
 from numpy.polynomial.hermite import hermval
 #==============================================================================
 def gauss_hermite(v, V, sigma, h3, h4):
-    x = (v - V) / sigma
-    L = np.exp(-0.5 * x**2) / (sigma * np.sqrt(2 * np.pi))
-    # Physicists' Hermite polynomials
-    H3 = hermval(x, [0,0,0,1])
-    H4 = hermval(x, [0,0,0,0,1])
+    x  = (v - V) / sigma
+    L  = np.exp(-0.5 * x**2) / (sigma * np.sqrt(2 * np.pi))
+    H3 = 2.0 * x**3 - 3.0*x
+    H4 = 4.0 * x**4 - 12*x**2 + 3
 
     return L * (1 + h3 * H3 / np.sqrt(6) + h4 * H4 / np.sqrt(24))
 
 #------------------------------------------------------------------------------
 def fit_gauss_hermite(v, losvd, p0=None):
-    losvd = losvd / np.trapz(losvd, v)
+    losvd = losvd / np.trapezoid(losvd, v)
     if p0 is None:
         V0 = np.average(v, weights=losvd)
         sigma0 = np.sqrt(np.average((v - V0)**2, weights=losvd))

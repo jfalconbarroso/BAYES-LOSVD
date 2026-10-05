@@ -213,6 +213,7 @@ The output file with the results is an HDF5 file with the following structure an
       - nspec
       - ntemp
       - nvel
+      - params
       - porder
       - psize
       - redshift
@@ -249,7 +250,7 @@ The output file with the results is an HDF5 file with the following structure an
 This information can be loaded into a dictionary using the bayes_losvd_load_hdf5.py script::
 
    from bayes_losvd_load_hdf5 import load_hdf5
-   tab = load_hdf5("../results/NGC0000_GP/NGC0000_GP_results.hdf5")
+   tab = load_hdf5("../results/NGC0000/NGC0000_results.hdf5")
 
 Output chains from bayes_losvd_run.py
 """""""""""""""""""""""""""""""""""""
@@ -257,4 +258,4 @@ Output chains from bayes_losvd_run.py
 If --save_chains is activated in bayes_losvd_run.py then NETCDF files will be stored in the 'results' directory for each spectrum. These files can be opened and manipulated seamesly with Arviz::
 
    import arviz as az
-   idata = az.from_netcdf("../results/NGC0000_GP/NGC0000_GP_chains_bin0.netcdf")
+   idata = az.from_netcdf("../results/NGC0000/NGC0000_chains_bin0.netcdf")

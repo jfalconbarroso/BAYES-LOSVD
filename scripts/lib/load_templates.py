@@ -75,6 +75,7 @@ def load_templates(struct, data_struct):
         # Build PCA in wavelength space: templates are samples, pixels are features
         X   = temp.T  # (ntemp, npix)
         pca = PCA(n_components=ntemp)
+        pca.fit(X)
         eigenspectra = pca.components_   # (ntemp, npix)
         mean_temp    = pca.mean_         # (npix,)
 
