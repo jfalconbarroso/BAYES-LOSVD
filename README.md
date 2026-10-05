@@ -25,12 +25,12 @@ BAYES-LOSVD/docs/build/html/index.html
 
 If you have found this software useful please consider including the following citation in your work:
 
-*BAYES-LOSVD: a bayesian framework for non-parametric extraction of the LOSVD*
+*- BAYES-LOSVD: a bayesian framework for non-parametric extraction of the LOSVD*
 
 J. Falcón-Barroso & M. Martig, Astronomy & Astrophysics, 2021, 646, A31
 (https://ui.adsabs.harvard.edu/abs/2021A%26A...646A..31F/abstract)
 
-*Recovering complex non-parametric LOSVDs with Bayes-LOSVD: The FCC 47 nuclear star cluster*
+*- Recovering complex non-parametric LOSVDs with Bayes-LOSVD: The FCC 47 nuclear star cluster*
 
 J. Lamprecht, J. Falcón-Barroso, T. Jerabkova, P. Jethwa, K. Fahrion, M. Lyubenova, and M. Martig, Astronomy & Astrophysics, submitted
 
