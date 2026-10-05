@@ -160,7 +160,7 @@ We require the ``codefile`` with the actual name of the file with the Numpyro/JA
 Adding new models
 """"""""""""""""""""""
 
-Adding a new code is as simple as including, following the scheme above, its definition in the ``config_files/codes.properties file`` and adding the required model file to the ``scripts/models/`` directory. For the new model to work properly, it requires that the main function has the same name as the filename of the code::
+Adding a new code is as simple as including, following the scheme above, its definition in the ``config_files/codes.properties file`` and adding the required model file to the ``scripts/models/`` directory. For the new model to work properly, it requires that the main function has the same name as the filename of the code.
 
 The user needs to make sure the model accepts a 'data' dictionary. By default the dictionary must contain the following keys:: 
    def <model name>(data):
