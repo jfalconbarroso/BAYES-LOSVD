@@ -9,7 +9,7 @@ def gauss_hermite(v, V, sigma, h3, h4):
     H3 = 2.0 * x**3 - 3.0*x
     H4 = 4.0 * x**4 - 12*x**2 + 3
 
-    return L * (1 + h3 * H3 / np.sqrt(6) + h4 * H4 / np.sqrt(24))
+    return L * (1 + h3 * H3 / np.sqrt(3) + h4 * H4 / np.sqrt(24))
 
 #------------------------------------------------------------------------------
 def fit_gauss_hermite(v, losvd, p0=None):
