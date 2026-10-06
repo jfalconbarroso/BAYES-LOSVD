@@ -6,7 +6,7 @@ channels:
 dependencies:
   - python=3.12
 
-  # Core numerical stack
+  # Core numerical/data stack
   - numpy
   - scipy
   - pandas
@@ -21,19 +21,21 @@ dependencies:
   # Astronomy
   - astropy
 
-  # Plotting
+  # Plotting and visualization
   - matplotlib
+  - plotly
 
   # Analysis / utilities
   - scikit-learn
   - tqdm
   - toml
 
-  # Interactive use
+  # Interactive environment
   - ipython
   - ipykernel
+  - ipywidgets
 
-  # Packages installed through pip
+  # pip-only dependencies
   - pip
   - pip:
       - powerbin==1.1.9
