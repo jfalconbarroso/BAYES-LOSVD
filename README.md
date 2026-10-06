@@ -23,7 +23,7 @@ BAYES-LOSVD/docs/build/html/index.html
 
 ### Acknowledgments
 
-If you have found this software useful please consider including the following citation in your work:
+If you have found this software useful please consider including the following citations in your work:
 
 - *BAYES-LOSVD: a bayesian framework for non-parametric extraction of the LOSVD*
 
