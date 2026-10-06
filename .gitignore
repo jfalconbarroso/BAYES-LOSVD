@@ -10,6 +10,7 @@ templates/SINFONI
 templates/sMILES_SSP
 templates/sMILES_mid
 data/*
+!/data/NGC0000.fits
 plots/
 scripts/preproc_testdata.py
 scripts/__pycache__

@@ -1,0 +1,8 @@
+Acknowledgements
+================
+
+The authors thank Michele Cappellari for their permission to distribute some of his codes together with this software package. We further thank Andres Asensio-Ramos, Ignacio Martin-Navarro, Prashin Jethwa, Glenn van de Ven, Michela Rubino, and Julia Lamprecht for many suggestions and discussions that have helped us to test and improved this package. 
+
+The pipeline makes use of Astropy, a community-developed core Python package for Astronomy (Astropy Collaboration et al. 2013, 2018), as well as NumPy, SciPy and Matplotlib.
+
+We are greatful to the Numpyro (https://num.pyro.ai/en/stable/) and JAX (https://docs.jax.dev/en/latest/) developers for their efforts to make bayesian inference so accesible to the scientific community. 

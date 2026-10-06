@@ -1,7 +1,7 @@
 # LOSVD Explorer
 
 Interactive viewer and batch plotter for Bayes-LOSVD `*_results.hdf5` products.
-Replaces `../bayes_losvd_inspect_fits.py`.
+Provides a newer alternative to `../bayes_losvd_inspect_fits.py`; the original script remains available.
 
 Per spatial bin it shows
 
@@ -30,7 +30,7 @@ conda install -c conda-forge plotly ipywidgets anywidget voila
 
 ```bash
 ./start_explorer.sh                                   # scans the nearest results/ directory
-./start_explorer.sh ../../results/NGC0000_GP           # scans one directory
+./start_explorer.sh ../../results/NGC0000           # scans one directory
 ./start_explorer.sh path/to/RUN_results.hdf5          # opens one run directly
 ```
 
@@ -41,7 +41,7 @@ Inside Jupyter/VS Code you can also run
 
 ```python
 from losvd_explorer_app import launch_app
-app = launch_app("../../results/NGC0000_GP")
+app = launch_app("../../results/NGC0000")
 ```
 
 Controls: **Path** + Enter/**Scan** → **File** → the run loads with the central bin selected.
@@ -73,3 +73,12 @@ Output names match the old script: `<file stem>_bin<N>.<fmt>` next to the HDF5 f
 | `interactive_losvd_explorer.ipynb` | Voila entry point. |
 | `start_explorer.sh` | Launcher. |
 
+
+## Existing pipeline conventions
+
+The unchanged inference runner writes `results/<run>/<run>_results.hdf5`;
+the model key is not appended automatically. Separate GP/SP runs need distinct
+preprocessing/run names. Directory scanning expects a base `*_results.hdf5`.
+For unpacked loading, retain that base input file alongside the adjacent per-bin
+files; automatic discovery of standalone interrupted-run bin files is not
+guaranteed. Do not assume a partial inference rerun preserves earlier packed bins.

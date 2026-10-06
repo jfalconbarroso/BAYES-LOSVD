@@ -21,6 +21,6 @@ The sequence of commands to run the code is the following::
   
 In order to help the user to understand better the logic of this workflow as well as all the possible switches and options each code has, we have prepared a `Jupyter Notebook <https://jupyter.org/>`_  showing all possibilites. This notebook is located in the ``scripts/`` directory and can be executed as::
   
-  jupyter-notebook bayes_losvd_notebook.ipynb
+  jupyter-notebook bayes_losvd_workflow.ipynb
 
 Note that Jupyter tools have to be installed in the system for this to work.
